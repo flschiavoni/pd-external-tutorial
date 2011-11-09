@@ -13,9 +13,9 @@
 \usepackage{xspace}
 \usepackage{colortbl}
 \usepackage{listings}             % Include the listings-package
-\lstset{numbers=left, stepnumber=1, frame=single, rulesepcolot=\color{blue}, language=C}
+\lstset{numbers=left, stepnumber=1, frame=single, rulesepcolor=\color{blue}, language=C}
 
-\graphicspath{{./images}}
+\graphicspath{{./../images/}}
 
 \begin{document}
 
@@ -26,9 +26,18 @@
 % ------------------------------------------------------------------------------------------------
  
 \chapter{Apresentação}
-O Pure Data á um ambiente visual de programação musical que permite criarmos aplicações musicais complexas a partir da combinação de componentes visuais. Apesar do Pure Data conter vários componentes prontos há a possibilidade de criarmos novos objetos em C/C++. Estes objetos são chamados de externals.
 
-Este é um tutorial prático para escrita de externals em C para o Pure Data. A iniciativa de escrever tal documento surgiu na disciplina de Computação Musical do Instituto de Matemática e Estatísticas da Universidade de São Paulo no primeiro semestre de 2011 ministrada pelo professor Marcelo Gomes de Queiroz. A intenção deste tutorial é tentar auxiliar programadores a desenvolver externals de maneira bastante simples.
+O Pure Data á um ambiente visual de programação musical que permite criarmos
+aplicações musicais complexas a partir da combinação de componentes visuais.
+Apesar do Pure Data conter vários componentes prontos há a possibilidade de
+criarmos novos objetos em C/C++. Estes objetos são chamados de externals.
+
+Este é um tutorial prático para escrita de externals em C para o Pure Data. A
+iniciativa de escrever tal documento surgiu na disciplina de Computação
+Musical do Instituto de Matemática e Estatísticas da Universidade de São Paulo
+no primeiro semestre de 2011 ministrada pelo professor Marcelo Gomes de
+Queiroz. A intenção deste tutorial é tentar auxiliar programadores a
+desenvolver externals de maneira bastante simples.
 
 Mais do que ampliar a gama de objetos do Pure Data e criar novos objetos, o objetivo deste trabalho é também permitir ao pesquisador de computação musical a implementação e testes de algoritmos de processamento de áudio para caráter de estudo. Isto significa que podemos reimplementar várias coisas que já existem no Pure Data simplesmente porque é didático programar e colocar algoritmos para funcionar.
 
@@ -65,7 +74,7 @@ Há a possibilidade de associarmos a cada external outros arquivos que não siga
 Se você executar o Pure Data na mesma pasta aonde está seu external compilado, o mesmo irá funcionar. Caso não esteja executando o pure data via terminal deverá colocar a pasta aonde o external se encontra no caminho de busca do Pure Data.
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/path}
+	\includegraphics[width=0.7\textwidth]{path}
 	\caption{Adicionando o diretório do seu external no Pure Data.}
 \end{figure}
 
@@ -80,7 +89,7 @@ Ou
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/startup}
+	\includegraphics[width=0.7\textwidth]{startup}
 	\caption{Adicionando sua biblioteca no Pure Data.}
 \end{figure}
 
@@ -160,7 +169,7 @@ Se tudo foi feito corretamente, compilado e colocado no PD, temos o resultado.
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/example1}
+	\includegraphics[width=0.7\textwidth]{example1}
 	\caption{Nosso primeiro external do PD. Ainda inútil.:-)}
 \end{figure}
 
@@ -198,7 +207,7 @@ Se o arquivo foi feito corretamente, compilado corretamente e adicionado ao cami
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/example3}
+	\includegraphics[width=0.7\textwidth]{example3}
 	\caption{Nosso primeiro external do PD. Ainda inútil.:-)}
 \end{figure}
 
@@ -230,7 +239,7 @@ void * example16_new(void) {
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/example16}
+	\includegraphics[width=0.7\textwidth]{example16}
 	\caption{Repare no output da janela principal.}
 \end{figure}
 
@@ -274,7 +283,7 @@ O Construtor de um objeto pode receber parâmetros. Estes parâmetros são ilust
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/example2}
+	\includegraphics[width=0.7\textwidth]{example2}
 	\caption{External recebendo parâmetros. Note a tela de saída no fundo da imagem.}
 \end{figure}
 
@@ -350,7 +359,7 @@ Quando utilizamos o A\_GIMME a função construtora trabalha como um programa ma
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/example9}
+	\includegraphics[width=0.7\textwidth]{example9}
 	\caption{Diferente da linguagem C, o primeiro parâmetro não é o nome do external.}
 \end{figure}
 
@@ -423,7 +432,7 @@ O inlet passivo depende que a variável que irá armazenar o valor seja do mesmo
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/example4}
+	\includegraphics[width=0.7\textwidth]{example4}
 	\caption{Inlets passivos}
 \end{figure}
 
@@ -457,7 +466,7 @@ Este é o resultado:
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/example5}
+	\includegraphics[width=0.7\textwidth]{example5}
 	\caption{Inlets.}
 \end{figure}
 
@@ -468,12 +477,12 @@ Os tipos definidos na criação de inlets dependem da função que irá receber 
 \begin{tabular}{ll}
 \hline
 \hline
-void class\_addbang(t\_class *c, t\_method fn); 	& void my\_bang\_method(t\_mydata *x);&
-void class\_addfloat(t\_class *c, t\_method fn);	& void my\_float\_method(t\_mydata *x, t\_floatarg f); &
-void class\_addsymbol(t\_class *c, t\_method fn);	& void my\_symbol\_method(t\_mydata *x,t\_symbol *s); &
-void class\_addpointer(t\_class *c, t\_method fn);	& void my\_pointer\_method(t\_mydata *x, t\_gpointer *pt); & 
-void class\_addlist(t\_class *c, t\_method fn);		& void my\_list\_method(t\_mydata *x, t\_symbol *s, int argc, t\_atom *argv); &
-void class\_addanything(t\_class *c, t\_method fn);	& void my\_any\_method(t\_mydata *x, t\_symbol *s, int argc, t\_atom *argv); &
+void class\_addbang(t\_class *c, t\_method fn); 	& void my\_bang\_method(t\_mydata *x); \\
+void class\_addfloat(t\_class *c, t\_method fn);	& void my\_float\_method(t\_mydata *x, t\_floatarg f); \\
+void class\_addsymbol(t\_class *c, t\_method fn);	& void my\_symbol\_method(t\_mydata *x,t\_symbol *s); \\
+void class\_addpointer(t\_class *c, t\_method fn);	& void my\_pointer\_method(t\_mydata *x, t\_gpointer *pt); \\
+void class\_addlist(t\_class *c, t\_method fn);		& void my\_list\_method(t\_mydata *x, t\_symbol *s, int argc, t\_atom *argv); \\
+void class\_addanything(t\_class *c, t\_method fn);	& void my\_any\_method(t\_mydata *x, t\_symbol *s, int argc, t\_atom *argv); \\
 \hline
 \hline
 \end{tabular}
@@ -534,7 +543,7 @@ Desta forma não precisamos tratar a mensagem que o inlet recebe mas definí-las
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/example8}
+	\includegraphics[width=0.7\textwidth]{example8}
 	\caption{Mais inlets.}
 \end{figure}
 
@@ -590,7 +599,7 @@ Um outlet deve ser definido na estrutura do objeto e instanciado pela função o
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/example6}
+	\includegraphics[width=0.7\textwidth]{example6}
 	\caption{Um external bem útil que recebe um bang e envia um bang.}
 \end{figure}
 
@@ -607,7 +616,7 @@ Um outlet deve ser definido na estrutura do objeto e instanciado pela função o
 Enfim chegamos no processamento de áudio propriamente dito. Digital Signal Processing ou processamento de sinal digital. O PD tem inlets especiais para o processamento de sinal. É fácil reconhecer. Eles são pintados de preto.
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/example10}
+	\includegraphics[width=0.7\textwidth]{example10}
 	\caption{Primeiro Inlet DSP}
 \end{figure}
 
@@ -720,7 +729,7 @@ static t_int * example11_perform(t_int *w){
 Nosso external pronto deverá ter a seguinte aparência:
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/example11}
+	\includegraphics[width=0.7\textwidth]{example11}
 	\caption{Vários inlets DSP.}
 \end{figure}
 
@@ -765,7 +774,7 @@ static t_int * example12_perform(t_int *w){
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/example12}
+	\includegraphics[width=0.7\textwidth]{example12}
 	\caption{Primeiro Outlet DSP.}
 \end{figure}
 
@@ -816,7 +825,7 @@ static t_int * example13_perform(t_int *w){
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/example13}
+	\includegraphics[width=0.7\textwidth]{example13}
 	\caption{Vários inlets e outlets DSP.}
 \end{figure}
 
@@ -844,7 +853,7 @@ External GUIs - Using Tk/Tcl (Look the tk folder)
 Example 14 - My First external with GUI
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=180]{./images/example14}
+	\includegraphics[width=0.7\textwidth]{example14}
 	\caption{Adicionando GUI tk.}
 \end{figure}
 
@@ -856,9 +865,9 @@ Example 15 - Adding GUI components
 
 \chapter{Miscelâneas}
 Como saber se um objeto existe?
-pd_findbyclass
+pd\_findbyclass
 
-Exemplo: http://pure-data.svn.sourceforge.net/viewvc/pure-data/trunk/pd/src/d_array.c?revision=10432&view=markup 
+Exemplo: http://pure-data.svn.sourceforge.net/viewvc/pure-data/trunk/pd/src/d\_array.c?revision=10432\&view=markup 
 
 Linha 82
 
