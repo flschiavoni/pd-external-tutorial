@@ -1,0 +1,3 @@
+#N canvas 333 142 450 300 10;
+#X obj 97 92 example10;
+#X text 29 16 Example of signal inlet;
