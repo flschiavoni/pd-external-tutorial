@@ -1,0 +1,7 @@
+#N canvas 1024 19 621 732 10;
+#X text 28 15 Different from the c language the first argument will
+not be the name;
+#X text 174 87 <- 0 parameters;
+#X obj 61 88 ../obj/example09;
+#X obj 58 125 ../obj/example09 a s d f g;
+#X obj 55 157 ../obj/example09 123 xxx 45.5;

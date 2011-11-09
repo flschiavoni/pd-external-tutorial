@@ -1,0 +1,3 @@
+#N canvas 1024 19 621 732 10;
+#X text 29 16 Creating 4 DSP outlets;
+#X obj 97 92 ../obj/example12;

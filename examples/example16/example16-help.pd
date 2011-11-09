@@ -1,6 +1,0 @@
-#N canvas 0 24 450 300 10;
-#X obj 102 112 example1;
-#X text 95 39 This example does nothing!;
-#X text 100 60 Maybe is stupid to do an external that does nothing.
-;
-#X text 98 82 But was really nice to do this.;

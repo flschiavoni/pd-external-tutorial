@@ -1,0 +1,14 @@
+#N canvas 1024 19 621 732 10;
+#X floatatom 216 82 5 0 0 0 - - -;
+#X floatatom 272 82 5 0 0 0 - - -;
+#X msg 98 49 start;
+#X msg 167 35 open test.txt;
+#X msg 146 0 bang;
+#X msg 102 2 stop;
+#X obj 191 139 ../obj/example08;
+#X connect 0 0 6 1;
+#X connect 1 0 6 2;
+#X connect 2 0 6 0;
+#X connect 3 0 6 0;
+#X connect 4 0 6 0;
+#X connect 5 0 6 0;
