@@ -1,0 +1,269 @@
+% ----------------------------------------------------------------------------
+% DSP
+% ----------------------------------------------------------------------------
+
+\chapter{DSP}
+ (Precisa mudar o nome dos exemplos para exemplo~. Neste caso, a função setup deve ser renomeada para "tilde\_setup")
+
+Enfim chegamos no processamento de áudio propriamente dito. Digital Signal Processing ou processamento de sinal digital. O PD tem inlets especiais para o processamento de sinal. É fácil reconhecer. Eles são pintados de preto.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\textwidth]{example10}
+	\caption{Primeiro Inlet DSP}
+\end{figure}
+
+\section{Primeiro inlet para DSP}
+Para trabalharmos com DSP no Pure Data é necessário alguns cuidados. (Veja o
+exemplo10) Primeiramente, temos de ter na estrutura de dados um atributo do
+tipo t\_float para armazenar o valor de entrada do inlet.
+
+\begin{lstlisting}
+typedef struct _example10 {
+    t_object x_obj;
+    t_float x_f;
+/* place to hold inlet's value if it's set by message */
+} t_example10;
+\end{lstlisting}
+
+Caso trabalhemos com apenas um inlet de DSP, o mesmo pode utilizar o atributo
+"mágico" do primeiro inlet da esquerda. Isto pode ser feito com a atribuição do
+atributo ao inlet DSP no método setup(). Para isto temos de utilizar o tipo de
+classe padrão do Pure Data (CLASS\_DEFAULT). Também é necessário definirmos
+qual será o método chamado quando o DSP é iniciado. Este método é adicionado
+como os métodos dos inlets vistos anteriormente tendo porém sua mensagem
+associada ao tipo "dsp".
+
+\begin{lstlisting}
+void example10_setup(void) {
+    example10_class = class_new(gensym("example10"),
+            (t_newmethod) example10_new, // Constructor
+            (t_method) example10_destroy, // Destructor
+            sizeof (t_example10),
+	    CLASS_DEFAULT,
+	    A_GIMME, // Allows various parameters
+            0); // LAST argument is ALWAYS zero
+
+  /* this is magic to declare that the leftmost, "main" inlet
+     takes signals; other signal inlets are done differently...*/
+     CLASS_MAINSIGNALIN(example10_class, t_example10, x_f);
+
+   // This method will add a signal inlet and associate a method to do this
+    class_addmethod(example10_class, (t_method) example10_dsp, 
+	gensym("dsp"), 0); 
+
+}
+\end{lstlisting}
+ 
+A declaração de outros inlets DSP será vista logo adiante.
+
+O próximo passo é definirmos o método DSP definido no setup().
+
+\begin{lstlisting}
+static void example10_dsp(t_example10 *x, t_signal **sp){
+  dsp_add(example10_perform, 3, sp[0]->s_vec, sp[0]->s_n, x); 
+}
+\end{lstlisting}
+
+O método associado ao DSP será chamado TODA VEZ QUE O DSP FOR INICIADO. Por
+isto, cuidado com alocações de memória, inicialização de variáveis e estas
+coisas. Neste método definiremos quem será chamado em cada laço de execução de
+processamento de áudio do PD. Neste cado é a função example10\_perform. Este
+método recebe o array de sinal que a conexão deste inlet traz. Este sinal está
+na variável **sp. Na atribuição acima, passamos para o método perform os
+atributos:
+
+\begin{itemize}
+\item método perform
+\item quantidade de atributos do método
+\item vetor de saída
+\item tamanho do vetor (tamanho do bloco)
+\item instância do nosso external
+\end{itemize}
+
+Podemos passar para o método perform quaisquer parâmetros em qualquer ordem. Só
+é importante e óbvio que devemos lembrar quais parâmetros foram passados e em
+qual ordem. O próximo passo é criar o método perform propriamente dito.
+
+\begin{lstlisting}
+static t_int * example10_perform(t_int *w){
+   t_float *in = (t_float *)(w[1]);
+   int n = (int)(w[2]);
+   t_example10 *x = (t_example10 *)(w[3]);
+
+  //(... DO SOMETHING)
+
+  return (w + 4); // proximo bloco
+}
+\end{lstlisting}
+
+O método perform receberá como parâmetro um array com os dados que definimos no
+método anterior. Neste caso na posição 0 algo que eu não sei o que é, na
+posição 1 o vetor de saída, na posição 2 o tamanho do vetor de saída e na
+posição 3 a nossa estrutura de dados. Este método deve retornar a próxima
+posição do vetor, ou seja, o atributo de entrada + quantidade de atributos do
+método + 1.
+
+\section{Vários Inlets DSP}
+Podemos ter vários inlets de DSP no nosso external (Veja o exemplo 11). A
+criação de inlets adicionais não é feita no método setup() mas sim no
+construtor. Só será necessário criar o primeiro inlet se a classe não for do
+tipo CLASS\_DEFAULT.
+
+\begin{lstlisting}
+// Constructos of the class
+void * example11_new(t_symbol *s, int argc, t_atom * argv) {
+    t_example11 *x = (t_example11 *) pd_new(example11_class);
+    inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal); // second
+    inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal); // third
+    inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal); // fourth
+    return (void *) x;
+}
+\end{lstlisting}
+
+Nosso método class\_addmethod é exatamente igual ao anterior mas temos uma
+mudança na quantidade de parâmetros por causa da quantidade de inlets.
+
+\begin{lstlisting}
+static void example11_dsp(t_example11 *x, t_signal **sp){
+  dsp_add(example11_perform, 6, sp[0]->s_vec, sp[0]->s_n, x);
+}
+\end{lstlisting}
+
+Note que precisamos agora alterar a quantidade de parâmetros passadas ao método
+perform. O método perform ficará assim:
+\begin{lstlisting}
+static t_int * example11_perform(t_int *w){
+   t_float *in1 = (t_float *)(w[1]);
+   t_float *in2 = (t_float *)(w[2]);
+   t_float *in3 = (t_float *)(w[3]);
+   t_float *in4 = (t_float *)(w[4]);
+   int n = (int)(w[5]);
+   t_example11 *x = (t_example11 *)(w[6]);
+   // DO SOMETHING...
+  return (w + 7); // proximo bloco
+}
+\end{lstlisting}
+
+Nosso external pronto deverá ter a seguinte aparência:
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\textwidth]{example11}
+	\caption{Vários inlets DSP.}
+\end{figure}
+
+\section{Primeiro outlet DSP}
+
+A criação dos outlets é feita no construtor do external (Veja o exemplo12) e
+não é necessário termos adicionado os outlets a estrutura da classe.
+
+\begin{lstlisting}
+// Constructos of the class
+void * example12_new(t_symbol *s, int argc, t_atom * argv) {
+    t_example12 *x = (t_example12 *) pd_new(example12_class);
+    outlet_new(&x->x_obj, &s_signal); // first signal outlet
+    outlet_new(&x->x_obj, &s_signal); // second signal outlet
+    outlet_new(&x->x_obj, &s_signal); // third signal outlet
+    outlet_new(&x->x_obj, &s_signal); // fourth signal outlet
+    return (void *) x;
+}
+\end{lstlisting}
+
+Sabendo que temos 4 outlets, a definição do nosso método perform será idêntica
+ao da criação de 4 inlets.
+
+\begin{lstlisting}
+static void example12_dsp(t_example12 *x, t_signal **sp){
+  dsp_add(example12_perform, 6, sp[0]->s_vec, sp[0]->s_n, x);
+}
+\end{lstlisting}
+
+O método perform também será idêntico ao do exemplo com 4 inlets, porém o mesmo
+receberá 4 outlets.
+
+\begin{lstlisting}
+static t_int * example12_perform(t_int *w){
+   t_float *out1 = (t_float *)(w[1]);
+   t_float *out2 = (t_float *)(w[2]);
+   t_float *out3 = (t_float *)(w[3]);
+   t_float *out4 = (t_float *)(w[4]);
+   int n = (int)(w[5]);
+   t_example12 *x = (t_example12 *)(w[6]);
+  // DO SOMETHING
+  return (w + 7); // proximo bloco
+}
+\end{lstlisting}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\textwidth]{example12}
+	\caption{Primeiro Outlet DSP.}
+\end{figure}
+
+\section{Inlets e outlets DSP}
+Nosso próximo exemplo (Veja o exemplo 13) mistura no mesmo objeto inlets e
+outlets DSP. Uma coisa bastante comum. Acredito que seja óbvio a construção do
+mesmo. Não precisamos associar estes inlets e outlets a nossa estrutura de
+dados. Precisamos apenas criar os inlets e outlets no construtor (lembre-se que
+o primeiro inlet já foi criado no método setup. Ele é mágico!).
+
+\begin{lstlisting}
+static t_int * example13_perform(t_int *w){
+   t_float *in1 = (t_float *)(w[1]);
+   t_float *in2 = (t_float *)(w[2]);
+   t_float *in3 = (t_float *)(w[3]);
+   t_float *in4 = (t_float *)(w[4]);
+   t_float *out1 = (t_float *)(w[5]);
+   t_float *out2 = (t_float *)(w[6]);
+   t_float *out3 = (t_float *)(w[7]);
+   t_float *out4 = (t_float *)(w[8]);
+   int n = (int)(w[9]);
+   t_example13 *x = (t_example13 *)(w[10]);
+  return (w + 11); // proximo bloco
+}
+\end{lstlisting}
+
+No método seguinte avisamos o método perform do tamanho dos dados.
+\begin{lstlisting}
+static void example13_dsp(t_example13 *x, t_signal **sp){
+  dsp_add(example13_perform, 10, sp[0]->s_vec, sp[0]->s_n, x);
+}
+\end{lstlisting}
+
+No método perform teremos primeiro os buffers de entrada e depois os buffers de
+saída.
+
+\begin{lstlisting}
+static t_int * example13_perform(t_int *w){
+   t_float *in1 = (t_float *)(w[1]);
+   t_float *in2 = (t_float *)(w[2]);
+   t_float *in3 = (t_float *)(w[3]);
+   t_float *in4 = (t_float *)(w[4]);
+   t_float *out1 = (t_float *)(w[5]);
+   t_float *out2 = (t_float *)(w[6]);
+   t_float *out3 = (t_float *)(w[7]);
+   t_float *out4 = (t_float *)(w[8]);
+   int n = (int)(w[9]);
+   t_example13 *x = (t_example13 *)(w[10]);
+   //DO IT!
+  return (w + 11); // proximo bloco
+}
+\end{lstlisting}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\textwidth]{example13}
+	\caption{Vários inlets e outlets DSP.}
+\end{figure}
+
+\section{Inlets e outlets DSP criados dinamicamente}
+
+Podemos definir um parâmetro no construtor que nos diga a quantidade de inlets
+e/ou de outlets DSP que um external terá. Neste caso, temos algumas
+possibilidades. A primeira é usarmos uma variável para dizer quantos inlets e
+outlets teremos na função dsp.
+
+Exemplo 17
+
+A segunda é usar outro método. Exemplo 18 - abordagem da medusa.
+
+
