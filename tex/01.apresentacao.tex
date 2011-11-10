@@ -33,81 +33,103 @@ algoritmos para funcionar.
 O código fonte do Pure Data é organizado de acordo com convenções de
 programação orientada a objetos. Para o desenvolvimento de \externals, é
 necessário seguir estas convenções e fornecer ao ambiente uma nova classe com
-alguns métodos específicos, como veremos mais adiante.
+alguns métodos específicos, como veremos mais adiante. Para desenvolver para o
+Pure Data, é necessário importar o arquivo de cabeçalho
+\texttt{m\_pd.h}\footnote{http://pure-data.git.sourceforge.net/git/gitweb.cgi?p=pure-data/pure-data;a=blob\_plain;f=src/m\_pd.h;hb=HEAD},
+que contém definições de constantes, tipos e funções.
 
-Para desenvolver para o Pure Data, é necessário importar a biblioteca
-m\_pd.h\footnote{Disponível em
-http://compbio.cs.toronto.edu/repos/snowflock/mpich-1.2.7/mpid/mpd/mpd.h}. Há
-um tutorial para escrever \externals feito pelo IOHannes, um dos programadores
-do Pure Data\footnote{Disponível em
-http://iem.at/pd/externals-HOWTO/pd-externals-HOWTO.pdf}. Apesar deste
-documento ter sido meu ponto de partida, boa parte do que contém no presente
-tutorial foi aprendido lendo o código-fonte de \externals do repositório do
-próprio Pure Data
-(http://pure-data.svn.sourceforge.net/viewvc/pure-data/trunk/\externals/).
+Uma boa fonte de informação é o tutorial de
+\externals\footnote{http://iem.at/pd/externals-HOWTO/pd-externals-HOWTO.pdf}
+escrito pelo IOHannes\footnote{http://puredata.info/author/zmoelnig}, um dos
+programadores do Pure Data. Apesar de ter utilizado este documento como ponto
+de partida, boa parte do que está incluso no presente tutorial foi aprendido a
+partir da leitura do código-fonte de \externals contidos no repositório
+oficial do Pure
+Data\footnote{http://pure-data.svn.sourceforge.net/viewvc/pure-data/trunk/externals/}.
 
-\section{Organizando seus \externals}
+\section{Organização do código-fonte e do objeto compilado}
 
-É praxe que o arquivo do \external tenha o mesmo nome que o \external. Se
-fossemos fazer, por exemplo, um trigger, o mesmo estaria em um arquivo chamado
-trigger.c e seria compilado em um \external chamado trigger.pd\_linux ou
-trigger.dll ou trigger.pd\_irix5 ou trigger.pd\_darwin. Isto não é obrigatório
-mas é uma convenção que facilita a busca do código-fonte deste \external no
-repositório.
+Um novo \external corresponde a uma nova classe na arquitetura orientada a
+objetos do Pure Data. Para que o carregamento da biblioteca dinâmica
+em tempo de execução funcione corretamente, é necessário que o
+arquivo binário produzido possua o mesmo nome que a classe correspondente ao
+\external.
 
-\section{Compilando seus \externals}
+Para criar, por exemplo, um \external chamado ``passa-baixas", podemos
+escrever seu código-fonte em um arquivo chamado \texttt{passa-baixas.c}, e em
+seguida compilar um objeto de biblioteca compartilhada chamado
+\texttt{passa-baixas.pd\_linux}, no caso do sistema GNU/Linux. Outras
+arquiteturas de sistema utilizam outras extensões para o nome do objeto com a
+biblioteca compartilhada do \external, como por exemplo \texttt{.dll} (M\$
+Windows), \texttt{.pd\_irix5} (SGI Irix) ou \texttt{.pd\_darwin} (Mac OS X).
 
-Um \external precisa ser compilado e depois linkado como \external. A versão
-Linux pode ser feita com os comandos:
+\textbf{Importante:} O nome do arquivo com o código-fonte não possui formato
+obrigatório, mas o nome do objeto compilado com a biblioteca dinâmica deve
+sempre corresponder ao nome da classe, assim como sua extensão deve sempre
+corresponder à arquitetura do sistema utilizado.
 
+\section{Compilação}
+
+Um \external precisa ser primeiro compilado e em seguida transformado em
+objeto compartilhado, para poder ser carregado em tempo de execução pelo Pure
+Data. A versão Linux pode ser feita com os comandos:
+
+\vspace{1em}
 \begin{lstlisting}
-cc -DPD -O2 -fPIC -funroll-loops -fomit-frame-pointer 
-	-Wall -W -Wshadow -Wstrict-prototypes -Werror 
-	-Wno-unused -Wno-parentheses -Wno-switch 
-	-o example1.o -c example1.c
-ld -export_dynamic  -shared -o example1.pd_linux 
-	example1.o -lc -lm
+EXTNAME=meu-external
+cc -DPD -fPIC -Wall -o ${EXTNAME}.o -c ${EXTNAME}.c
+ld -shared -lc -lm -o ${EXTNAME}.pd_linux ${EXTNAME}.o
 rm example1.o
 \end{lstlisting}
 
-Para compilar, o ideal é criarmos um Makefile. Todas as pastas de exemplos
-deste tutorial estão acompanhadas de um makefile feito pelo Marcelo Queiroz.
+Para facilitar a compilação, o ideal é utilizar um \texttt{makefile}. Os
+exemplos deste tutorial estão acompanhadas de um \texttt{makefile} produzido
+pelo professor Marcelo Queiroz, adaptado para esta ocasião.
 
-\section{Criando help para seus \externals}
+\section{Arquivos de ajuda}
 
-O arquivo de help deve ter o mesmo nome que o \external. Por exemplo, para o
-exemplo1.c com o objeto exemplo1 temos o arquivo example1-help.pd. Este
-arquivo do Pure Data com exemplo deve acompanhar o \external na instalação,
-ficando na mesma pasta que o \external compilado.  Há a possibilidade de
-associarmos a cada \external outros arquivos que não sigam esta convenção e a
-mesma será apresentada no próximo capítulo.
+Como convenção, o arquivo de ajuda deve ter o mesmo nome que o \external. Por
+exemplo, para o código fonte \texttt{example01.c}, que gera o objeto
+\texttt{example01.pd\_linux}, escrevemos também o arquivo
+\texttt{example01-help.pd}. Este arquivo do Pure Data com exemplos deve
+acompanhar o \external na instalação, residindo na mesma pasta que objeto
+compilado com a biblioteca compartilhada.  Há também a possibilidade de
+associação de outros arquivos que não sigam esta convenção a um \external.
+Esta possibilidade será apresentada no próximo capítulo.
 
-\section{Executando seu \external}
+\section{Utilizando \externals}
 
-Se você executar o Pure Data na mesma pasta aonde está seu \external compilado,
-o mesmo irá funcionar. Caso não esteja executando o Pure Data via terminal
-deverá colocar a pasta aonde o \external se encontra no caminho de busca do
-Pure Data.
+Para carregar um \external em um \texttt{patch} do Pure Data em tempo de
+execução, basta criar um objeto (com \texttt{CTRL+1} ou acessando o menu
+\texttt{Put} $\rightarrow$ \texttt{Object}) com o caminho (relativo ou
+absoluto) para o objeto compilado com a biblioteca compartilhada, omitindo a
+extensão.
+
+É possível adicionar o diretório que contém o arquivo binário do \external ao
+caminho de busca do Pure Data, de forma que para acessá-lo de dentro de um
+\patch não seja necessário digitar o caminho inteiro até o objeto. Isto pode
+ser feito através da passagem de um parâmetro na linha de comando do Pure Data
+com a opção \texttt{-path <caminho>}, ou de forma gráfica acessando a opção
+\texttt{File} $\rightarrow$ \texttt{Path...} no menu do Pure Data,
+como pode ser visto na figura \ref{fig:search-path}.
 
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.7\textwidth]{path}
-	\caption{Adicionando o diretório do seu \external no Pure Data.}
+  \centering
+  \includegraphics[width=0.7\textwidth]{path}
+  \caption{Adicionando o diretório de um \external ao caminho de busca do Pure Data.}
+  \label{fig:search-path}
 \end{figure}
 
 Para carregar uma biblioteca de \externals (mais de um \external no mesmo
-arquivo-fonte), é necessário adicionar a biblioteca no Pure Data:
-
-\begin{lstlisting}
-pdextended  -lib medusa medusa-help.pd 
-\end{lstlisting}
-
-Ou 
+arquivo-fonte), é possível indicar o nome da bibliotecai na linha
+de comando do Pure Data utilizando a opção \texttt{-lib <biblioteca>}, ou
+também graficamente através do menu \texttt{File} $\rightarrow$
+\texttt{Startup...}, como pode ser visto na figura \ref{fig:lib}.
 
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.7\textwidth]{startup}
-	\caption{Adicionando sua biblioteca no Pure Data.}
+  \centering
+  \includegraphics[width=0.7\textwidth]{startup}
+  \caption{Adicionando uma biblioteca ao Pure Data.}
+  \label{fig:lib}
 \end{figure}
-
 
