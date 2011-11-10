@@ -1,0 +1,127 @@
+%-----------------------------------------------------------------------------
+% cabeçalho
+%-----------------------------------------------------------------------------
+\documentclass{beamer}
+
+% para criar um documento para acompanhamento, comente a linha acima e
+% descomente as linhas abaixo.
+%\documentclass[handout]{beamer}
+%\usepackage{pgfpages}
+%\pgfpagesuselayout{4 on 1}[a4paper,border shrink=5mm]
+
+
+% localização
+\usepackage[utf8x]{inputenc}
+\usepackage[brazil]{babel}
+%\usepackage{abntex}
+
+% embelezamento
+\usepackage{amssymb,amsmath,amsfonts}
+\numberwithin{equation}{section}
+\usepackage{enumerate}
+\usepackage{xspace}
+%\usetheme{Goettingen} % <---- so com crane
+%\usetheme{sidebar}   % <---- com crane fica bom
+%\usecolortheme{crane} % <---- Goettingen com crane
+\usepackage{colortbl}
+\usepackage{url}
+\usepackage{color}
+
+% figuras
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+% Sumário no início de cada seção
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>{Estrutura da apresentação}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+% comandos
+\definecolor{meuvermelho}{RGB}{200,40,40}
+\definecolor{meuazul}{RGB}{40,40,140}
+\newcommand{\enfase}[1]{{\color{meuvermelho}#1}}
+\newcommand{\enfasel}[1]{{\color{meuazul}#1}}
+\newcommand{\Pe}{{\color{meuazul}\ensuremath{P}}\xspace}
+\newcommand{\Petil}{{\color{meuazul}\ensuremath{\tilde{P}}}\xspace}
+\newcommand{\Ve}{{\color{meuvermelho}\ensuremath{V}}\xspace}
+\newcommand{\inlet}{\emph{inlet}}
+\newcommand{\inlets}{\emph{inlets}}
+\newcommand{\outlet}{\emph{outlet}}
+\newcommand{\outlets}{\emph{outlets}}
+\newcommand{\Inlet}{\emph{Inlet}}
+\newcommand{\Inlets}{\emph{Inlets}}
+\newcommand{\Outlet}{\emph{Outlet}}
+\newcommand{\Outlets}{\emph{Outlets}}
+
+
+%-----------------------------------------------------------------------------
+% Dados para o primeiro slide
+%-----------------------------------------------------------------------------
+
+\title
+{Como escrever \emph{externals} em C para estender o Pure Data}
+
+%\subtitle
+%{}
+
+\author
+{Flávio Luiz Schiavoni\\
+\footnotesize{fls@ime.usp.br}}
+
+\institute
+[Universidade de São Paulo]
+{
+  Departamento de Ciência da Computação\\
+  Instituto de Matemática e Estatística \\
+  Universidade de São Paulo
+}
+
+\date{\today}
+
+
+%-----------------------------------------------------------------------------
+% Documento
+%-----------------------------------------------------------------------------
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%-----------------------------------------------------------------------------
+\begin{frame}{Objetivo da apresentação}
+
+Introduzir à escrita de \emph{externals} para Pure Data, considerando:
+\begin{itemize}
+  \item Como escrever.
+  \item Como compilar.
+  \item Exemplos.
+\end{itemize}
+\end{frame}
+
+%-----------------------------------------------------------------------------
+\begin{frame}{Estrutura da apresentação}
+  \tableofcontents
+\end{frame}
+
+% Since this a solution template for a generic talk, very little can
+% be said about how it should be structured. However, the talk length
+% of between 15min and 45min and the theme suggest that you stick to
+% the following rules:  
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+%-----------------------------------------------------------------------------
+% Seções
+%-----------------------------------------------------------------------------
+\input{intro}
+\input{conclusao}
+
+
+\end{document}
