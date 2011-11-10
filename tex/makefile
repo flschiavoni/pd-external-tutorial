@@ -2,7 +2,7 @@ pdfname = pd-external-tutorial.pdf
 
 all: $(pdfname)
 
-$(pdfname): $(subst .pdf,.tex,$(pdfname))
+$(pdfname): $(subst .pdf,.tex,$(pdfname)) *.tex
 	pdflatex -halt-on-error -jobname $(@:.pdf=) $^
 #	bibtex `basename $@ .pdf`
 #	makeglossaries `basename $@ .pdf`
