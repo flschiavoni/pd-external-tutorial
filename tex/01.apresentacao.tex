@@ -89,14 +89,16 @@ pelo professor Marcelo Queiroz, adaptado para esta ocasião.
 
 \section{Arquivos de ajuda}
 
-Como convenção, o arquivo de ajuda deve ter o mesmo nome que o \external. Por
-exemplo, para o código fonte \texttt{example01.c}, que gera o objeto
-\texttt{example01.pd\_linux}, escrevemos também o arquivo
-\texttt{example01-help.pd}. Este arquivo do Pure Data com exemplos deve
-acompanhar o \external na instalação, residindo na mesma pasta que objeto
-compilado com a biblioteca compartilhada.  Há também a possibilidade de
-associação de outros arquivos que não sigam esta convenção a um \external.
-Esta possibilidade será apresentada no próximo capítulo.
+É importante distribuir, junto com novos \externals, um arquivo de ajuda do
+Pure Data com instruções e exemplos de utilização. Como convenção, o arquivo
+de ajuda deve ter o mesmo nome que o \external, acrescido do sufixo
+\texttt{-help.pd}. Por exemplo, para o código fonte \texttt{example01.c}, que
+gera o objeto \texttt{example01.pd\_linux}, escrevemos também o arquivo
+\texttt{example01-help.pd}.
+
+No próximo capítulo veremos uma forma de associar o arquivo de ajuda com a
+opção de ajuda que aparece no menu contextual com um clique do botão direito
+no objeto do external dentro do Pure Data.
 
 \section{Utilizando \externals}
 \label{sec:using}

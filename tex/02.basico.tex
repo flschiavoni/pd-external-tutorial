@@ -13,20 +13,21 @@ mostrar os passos da escrita de um \external.
 Como dissemos anteriormente, a arquitetura do Pure Data é organizada de acordo
 com o paradigma de orientação a objetos: cada objeto gráfico do Pure Data
 corresponde a uma instância de uma classe. Neste sentido, um \external está
-associado a uma estrutura de dados que representa uma classe em C. Para cada
-classe é necessário haver métodos de instanciação, destruição, processamento
-de sinais, tratamento de mensagens, etc.
+associado a um conjunto de estruturas de dados que representam classes em C.
+Para cada classe é necessário haver métodos de instanciação, destruição,
+processamento de sinais, tratamento de mensagens, etc.
 
-A infraestrutura mínima para o funcionamento de uma classe consiste em uma
-estrutura de dados para a representação da classe, que deve ser chamada
-\texttt{t\_<external>}, e dois métodos obrigatórios: \texttt{<external>\_setup()}
-e \texttt{<external>\_new()}. A convenção de nomes utilizada no Pure Data é de
-que toda função deve ser nomeada da forma
-\texttt{<external>\_<metodo>(<argumentos>)}.
+A infraestrutura mínima para o funcionamento de um external (de nome, digamos,
+\texttt{<external>}) consiste em uma estrutura de dados para a representação
+de uma classe, que deve ter nome \texttt{t\_<external>}, e dois métodos
+obrigatórios, chamados \texttt{<external>\_setup()} e
+\texttt{<external>\_new()}. Note que a convenção de nomes utilizada no Pure
+Data é de que toda função deve ser nomeada da forma
+\texttt{<contexto>\_<funcao>()}.
 
 A estutura de dados que representa uma classe do Pure Data deve
 obrigatoriamente possuir o primeiro atributo do tipo \texttt{t\_object}, no
-qual é armazenado o objeto instanciado no momento da instanciação.  Outros
+qual é armazenado o objeto criado no momento da instanciação.  Outros
 atributos podem ser adicionados a esta estrutura de maneira que cada instância
 da mesma classe possua os atributos necessários para seu funcionamento. Uma
 classe que acessa um arquivo, por exemplo, pode possuir como atributos uma
@@ -34,21 +35,21 @@ string para guardar o caminho e um inteiro para guardar o descritor do
 arquivo.
 
 Um exemplo de estrutura de dados para representação de uma classe chamada
-\texttt{example01} consiste no seguinte:
+\texttt{example1} consiste no seguinte:
 
 \vspace{1em}
 \begin{lstlisting}
-static t_class *example01_class;
+static t_class *example1_class;
 
-typedef struct _example01 {
+typedef struct _example1 {
   t_object x_obj;
-} t_example01;
+} t_example1;
 \end{lstlisting}
 
 Sempre que um \external é carregado pelo Pure Data, o método de nome
 \texttt{<external>\_setup()} é executado. No exemplo dado acima, o Pure
-Data irá procurar, no arquivo binário \texttt{example01.pd\_linux} que contém
-a biblioteca compartilhada, o método de nome \texttt{example01\_setup(void)}.
+Data irá procurar, no arquivo binário \texttt{example1.pd\_linux} que contém
+a biblioteca compartilhada, o método de nome \texttt{example1\_setup(void)}.
 Este método é utilizado para realizar a inicialização da classe, informando ao
 Pure Data da existência de uma nova classe no sistema e associando a ela os
 métodos de instanciação e destruição, além de outras informações:
@@ -69,7 +70,7 @@ void example1_setup(void) {
 
 Dentro do método \texttt{<external>\_setup()} não há limite para o número de
 classes a definir, de forma que é possível definir apenas uma classe (como no
-exemplo 01) ou uma biblioteca inteira com várias classes (como no exemplo 03).
+exemplo 1) ou uma biblioteca inteira com várias classes (como no exemplo 3).
 A introdução de uma nova classe no sistema é realizada pela função
 \texttt{class\_new()}. São parâmetros da função \texttt{class\_new()}:
 
@@ -99,7 +100,7 @@ arquivos, preencher vetores, alocar memória, etc.
 \vspace{1em}
 \begin{lstlisting}
 // Construtor da classe
-void * example01_new(void) {
+void * example1_new(void) {
     t_example1 *x = (t_example1 *) pd_new(example1_class);
     return (void *) x;
 }
@@ -120,55 +121,61 @@ resultado pode ser visto na figura \ref{fig:example01working}.
 \section{Uma biblioteca simples}
 
 Um mesmo método \texttt{<external>\_setup()} pode definir várias classes
-diferentes. A isto damos o nome de biblioteca. Para isto, o método
-\texttt{<external>\_setup()} terá o mesmo nome do arquivo com a biblioteca mas
-as classes  podem ter outros nomes. Veja o exemplo 03.
+diferentes. A isto damos o nome de biblioteca. Neste cenário, o método
+\texttt{<external>\_setup()} possui o mesmo nome do arquivo com a biblioteca,
+mas cada classe podem ter um nome diferente (veja o exemplo 3).
 
 \vspace{1em}
 \begin{lstlisting}
 void example3_setup(void) {
-    post("Initializing my library");
+  post("Initializing my library");
 
-    myobj1_class = class_new(gensym("myobj1"),
-            (t_newmethod) myobj1_new, // Constructor
-            0,
-            sizeof (t_myobj1),
-	    CLASS_NOINLET,
-            0);
-    class_sethelpsymbol(myobj1_class, 
-	gensym("myobj1-help"));
+  myobj1_class = class_new(
+    gensym("myobj1"),
+    (t_newmethod) myobj1_new, // Constructor
+    0,
+    sizeof (t_myobj1),
+    CLASS_NOINLET,
+    0);
+  class_sethelpsymbol(myobj1_class, gensym("myobj1-help"));
 
-    myobj2_class = class_new(gensym("myobj2"),
-            (t_newmethod) myobj2_new, // Constructor
-            0,
-            sizeof (t_myobj2),
-	    CLASS_NOINLET,
-            0);
-    class_sethelpsymbol(myobj2_class, 
-	gensym("myobj2-help"));
-
+  myobj2_class = class_new(
+    gensym("myobj2"),
+    (t_newmethod) myobj2_new, // Constructor
+    0,
+    sizeof (t_myobj2),
+    CLASS_NOINLET,
+    0);
+  class_sethelpsymbol(myobj2_class, gensym("myobj2-help"));
 }
 \end{lstlisting}
 
-Se o arquivo foi feito corretamente, compilado corretamente e adicionado ao
-caminho do PureData, teremos o resultado.
+Se o arquivo foi preenchido corretamente, compilado corretamente e adicionado
+ao caminho do PureData, teremos o resultado visto na figura \ref{fig:exemplo3}.
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.7\textwidth]{example3}
-	\caption{Nosso primeiro \external do PD. Ainda inútil.:-)}
+	\caption{Nosso segundo \external do PD. Ainda inútil. :-$\left.\right)$}
+        \label{fig:exemplo3}
 \end{figure}
 
 
-No caso da biblioteca, podemos ter um arquivo de help para cada \external. Esta
-associação é feita pela função:
+Dentro do Pure Data, um clique com o botão direito em um objeto abre um menu
+no qual uma das opções é \texttt{Ajuda}. Quando esta opção é selecionada, o
+Pure Data abre um patch associado ao objeto, que deve conter instruções e
+exemplos de uso. Por padrão, o Pure Data procura um arquivo com o mesmo nome
+que o external (acrescido da extensão \texttt{.pd}) no diretório padrão de
+documentação (\texttt{doc/5.reference}). Para associar um arquivo diferente do
+padrão, basta utilizar a função \texttt{class\_sethelpsymbol}:
 
 \vspace{1em}
 \begin{lstlisting}
 class_sethelpsymbol(myclass_class, gensym("my_class-help"));
 \end{lstlisting}
 
-Um objeto pode ainda ter outros nomes ou alias. Para definir isto podemo utilizar a função class\_addcreator. Veja o exemplo:
+Um objeto pode ainda ter outros nomes (\emph{aliases}). Para definir isto
+podemos utilizar a função \texttt{class\_addcreator()}. Veja o exemplo:
 
 \vspace{1em}
 \begin{lstlisting}
@@ -177,9 +184,12 @@ class_addcreator((t_newmethod)medusa_new, gensym("med"), 0);
 
 \section{Variáveis globais}
 
-Você pode usar uma variável global para armazenar dados pelos seus \externals.
-Esta variável será visível para todas as intâncias do \external e todas podem
-alterar seu valor. Isto pode ser útil ou um desastre. (Veja o exemplo16).
+É possível utilizar variáveis globais para armazenar dados de um \external.
+Estas variáveis são visíveis para todas as intâncias de objetos do \external e
+todas podem alterar seus valores. Isto pode ser útil ou um desastre (veja o
+exemplo16). Por exemplo, cada instância do \external \texttt{example16}
+definido a partir do código a seguir incrementa em uma unidade o valor do
+contador, como pode ser visto na figura \ref{fig:counter}:
 
 \vspace{1em}
 \begin{lstlisting}
@@ -194,15 +204,18 @@ void * example16_new(void) {
 \end{lstlisting}
 
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.7\textwidth]{example16}
-	\caption{Repare no output da janela principal.}
+  \centering
+  \includegraphics[width=0.7\textwidth]{example16}
+  \caption{Repare na saída da janela principal.}
+  \label{fig:counter}
 \end{figure}
 
-Caso isto não seja desejável, o ideal é colocar suas variáveis dentro da
-struct do objeto. Assim cada instância terá seu próprio contador.
+Caso isto não seja desejável, o ideal é incluir as variáveis dentro da
+estrutura do objeto. Assim, neste exemplo cada instância terá seu próprio
+contador:
 
 \vspace{1em}
+\nopagebreak{
 \begin{lstlisting}
 static t_class *example_class;
 
@@ -214,9 +227,8 @@ typedef struct _example {
 void * example_new(void) {
     t_example *x = (t_example *) pd_new(example_class);
     post("Counter value: %d",x->counter);
-    counter++;
+    x->counter++;
     return (void *) x;
 }
-
 \end{lstlisting}
-
+}
