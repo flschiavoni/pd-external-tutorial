@@ -1,0 +1,48 @@
+% ----------------------------------------------------------------------------
+% ORIENTAÇÃO A OBJETOS
+% ----------------------------------------------------------------------------
+
+\chapter{Orientação a Objetos}
+
+Parte do texto foi retirada de http://www.katjaas.nl/pitchshift/soundtouch~.html.
+
+Este cara é um exemplo de external que utiliza uma biblioteca OO:
+http://pure-data.svn.sourceforge.net/viewvc/pure-data/trunk/externals/fftw/fftw~.c?revision=6017&view=markup
+No caso, a bibliteca utilizada é a FFTW3. Outro exemplo é o PDCUDA do Drebs!
+
+Outro exemplo que utilizad OO em external é o pixopencv.
+
+http://pure-data.svn.sourceforge.net/viewvc/pure-data/trunk/externals/pix_opencv/
+
+É possível criar externals utilizando C++ e orientação a objetos. A parte crítica de tal implementação é garantir que o PD consiga enxergar as funções dentro do objeto compilado do C++. É necessário pensar nisto não apenas como uma alternativa para criar externals em C++ mas também para utilizar bibliotecas C++ para a criação de externals. Utilizar estas bibliotecas torna necessário que a mesma seja compilada na forma como símbolos em C. Para garantir isto é necessário utilizar a definição extern "C".
+
+TERMINAR ESTE EXEMPLO. COMO FAZER PARA O MAKEFILE FUNCIONAR TAMBÉM PARA ARQUIVOS .H e .CPP?
+
+
+\begin{lstlisting}
+extern "C" void example18_setup(void) {
+    example18_class = class_new(gensym("example18"),
+            (t_newmethod) example18_new, // Constructor
+            0,
+            sizeof (t_example18),
+	    CLASS_NOINLET,
+            0);
+};
+\end{lstlisting}
+
+Usando o setup "externalizado" o mesmo passa a ser exportado e compilado em um objeto com esta função "visível". Deve ser o suficiente para compilar o external com sua API utilizando C++. Para compilar, usados um compilador C++ como o g++ do Linux.
+
+\begin{lstlisting}
+LINUXCFLAGS = -msse -DPD -DUNIX -DICECAST -O3 -funroll-loops -fomit-frame-pointer -fcheck-new \
+    -Wall -W -Wshadow \
+    -Wno-unused -Wno-parentheses -Wno-switch -fvisibility=hidden
+
+LINUXINCLUDE =  -I ./include
+
+	g++ $(LINUXCFLAGS) $(LINUXINCLUDE) -c *.cpp 
+	g++ --export-dynamic -shared -o $*.pd_linux *.o -lc -lm -lstdc++ 
+	strip --strip-unneeded $(NAME).pd_linux
+	rm -f *.o ../$(NAME).pd_linux
+\end{lstlisting}
+
+
