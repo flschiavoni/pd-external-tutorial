@@ -80,7 +80,7 @@ Data. A versão Linux pode ser feita com os comandos:
 EXTNAME=meu-external
 cc -DPD -fPIC -Wall -o ${EXTNAME}.o -c ${EXTNAME}.c
 ld -shared -lc -lm -o ${EXTNAME}.pd_linux ${EXTNAME}.o
-rm example1.o
+rm ${EXTNAME}.o
 \end{lstlisting}
 
 Para facilitar a compilação, o ideal é utilizar um \texttt{makefile}. Os

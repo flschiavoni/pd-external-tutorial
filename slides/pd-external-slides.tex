@@ -26,6 +26,8 @@
 \usepackage{colortbl}
 \usepackage{url}
 \usepackage{color}
+\usepackage{listings}             % Include the listings-package
+
 
 % figuras
 \usepackage{tikz}
@@ -44,9 +46,6 @@
 \definecolor{meuazul}{RGB}{40,40,140}
 \newcommand{\enfase}[1]{{\color{meuvermelho}#1}}
 \newcommand{\enfasel}[1]{{\color{meuazul}#1}}
-\newcommand{\Pe}{{\color{meuazul}\ensuremath{P}}\xspace}
-\newcommand{\Petil}{{\color{meuazul}\ensuremath{\tilde{P}}}\xspace}
-\newcommand{\Ve}{{\color{meuvermelho}\ensuremath{V}}\xspace}
 \newcommand{\inlet}{\emph{inlet}}
 \newcommand{\inlets}{\emph{inlets}}
 \newcommand{\outlet}{\emph{outlet}}
@@ -55,6 +54,10 @@
 \newcommand{\Inlets}{\emph{Inlets}}
 \newcommand{\Outlet}{\emph{Outlet}}
 \newcommand{\Outlets}{\emph{Outlets}}
+\newcommand{\external}{\emph{external}\xspace}
+\newcommand{\externals}{\emph{\enfase{externals}}\xspace}
+\newcommand{\External}{\emph{External}\xspace}
+\newcommand{\Externals}{\emph{Externals}\xspace}
 
 
 %-----------------------------------------------------------------------------
@@ -80,6 +83,33 @@
 }
 
 \date{\today}
+
+
+\lstset{ %
+language=C,                % the language of the code
+basicstyle=\footnotesize\ttfamily,       % the size of the fonts that are used for the code
+numbers=left,                   % where to put the line-numbers
+numberstyle=\tiny,      % the size of the fonts that are used for the line-numbers
+%stepnumber=2,                   % the step between two line-numbers. If it's 1, each line 
+                                % will be numbered
+numbersep=8pt,                  % how far the line-numbers are from the code
+backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,                   % adds a frame around the code
+tabsize=2,                      % sets default tabsize to 2 spaces
+captionpos=b,                   % sets the caption-position to bottom
+breaklines=true,                % sets automatic line breaking
+breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                % also try caption instead of title
+escapeinside={\%*}{*)},         % if you want to add a comment within your code
+%xleftmargin={2em},
+%xrightmargin={2em},
+columns=fixed,
+morekeywords={*,...}            % if you want to add more keywords to the set
+}
 
 
 %-----------------------------------------------------------------------------

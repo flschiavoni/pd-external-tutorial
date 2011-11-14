@@ -1,0 +1,101 @@
+\section{Introdução}
+
+\begin{frame}{Pure Data}
+\begin{figure}
+\centering
+\includegraphics[width=0.7\textwidth]{../images/pd-facil}
+%\caption{Um Arduino.}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Formas de estender o Pure Data}
+Existem algumas formas de estender as funcionalidades do Pure Data:
+\begin{itemize}
+\item Subpatches.
+\item \enfasel{Externals}.
+\item Alterações no código-fonte.
+\end{itemize}
+\pause
+\vspace{1em}
+Este seminário trata da extensão do Pure Data através da criação de
+\externals em C.
+\end{frame}
+
+
+\begin{frame}[fragile]{Organização do código e compilação}
+\begin{itemize}
+\item \texttt{meu-external.c}: \\
+  \hspace{1em}\texttt{\#include <m\_pd.h>}
+\item Compilação: \\
+  \hspace{1em}\texttt{meu-external.c} $\rightarrow$ \texttt{meu-external.pd\_linux} \\
+  \hspace{1em}\texttt{meu-external.c} $\rightarrow$ \texttt{meu-external.pd\_irix5} \\
+  \hspace{1em}\texttt{meu-external.c} $\rightarrow$ \texttt{meu-external.pd\_darwin} \\
+  \hspace{1em}\texttt{meu-external.c} $\rightarrow$ \texttt{meu-external.dll} \\
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Compilação}
+\begin{lstlisting}
+EXTNAME=meu-external
+cc -DPD -fPIC -Wall -o ${EXTNAME}.o -c ${EXTNAME}.c
+ld -shared -lc -lm -o ${EXTNAME}.pd_linux ${EXTNAME}.o
+rm ${EXTNAME}.o
+\end{lstlisting}
+O Pure Data procura por objetos com nomes diferentes em cada sistema:
+\begin{itemize}
+  \item \texttt{meu-external.\enfase{pd\_linux}} (GNU/Linux).
+  \item \texttt{meu-external.\enfase{pd\_irix5}} (Irix 5).
+  \item \texttt{meu-external.\enfase{pd\_darwin}} (Mac OS X).
+  \item \texttt{meu-external.\enfase{dll}} (MS Windows).
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Arquivos de ajuda}
+Um arquivo de ajuda é um patch do Pure Data com:
+\begin{itemize}
+\item Um nome informativo: \texttt{meu-external\enfase{-help}.pd}.
+\item Instruções de uso.
+\item Exemplos de utilização.
+\end{itemize}
+\vspace{2em}
+A seguinte função associa um arquivo de ajuda a uma classe de \external:
+\begin{lstlisting}
+class_sethelpsymbol(meu-external_class, gensym("meu-external_class-help"));
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}{Utilizando \externals}
+Passos para utilizar um \external no Pure Data:
+\begin{enumerate}
+\item Escreva um arquivo \texttt{.c} com as funções, classes e métodos.
+\item Compile o código-fonte para criar uma biblioteca compartilhada.
+\item Informe ao Pure Data o caminho para o \external através de uma das
+opções abaixo:
+  \begin{enumerate}
+    \item Na linha de comando, utilize a opção \enfasel{\texttt{-path
+    <caminho>}}.
+    \item Na interface gráfica, acesse a opção \enfasel{\texttt{File} $\rightarrow$
+    \texttt{Path...}}.
+    \item Na criação do objeto, insira o caminho completo (relativou ou
+    absoluto) para o objeto do \external.
+  \end{enumerate}
+\item Crie um objeto com o nome do arquivo do \external, sem a extensão.
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{Utilizando \externals}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.7\textwidth]{../images/path}
+  \caption{Adicionando o diretório de um \external ao caminho de busca do Pure Data.}
+  \label{fig:search-path}
+\end{figure}
+\begin{itemize}
+\item
+\end{itemize}
+\end{frame}
