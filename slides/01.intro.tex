@@ -4,7 +4,6 @@
 \begin{figure}
 \centering
 \includegraphics[width=0.7\textwidth]{../images/pd-facil}
-%\caption{Um Arduino.}
 \end{figure}
 \end{frame}
 
@@ -23,15 +22,15 @@ Este seminário trata da extensão do Pure Data através da criação de
 \end{frame}
 
 
-\begin{frame}[fragile]{Organização do código e compilação}
+\begin{frame}[fragile]{Organização do código-fonte}
+Algumas informações sobre o código do Pure Data:
 \begin{itemize}
-\item \texttt{meu-external.c}: \\
-  \hspace{1em}\texttt{\#include <m\_pd.h>}
-\item Compilação: \\
-  \hspace{1em}\texttt{meu-external.c} $\rightarrow$ \texttt{meu-external.pd\_linux} \\
-  \hspace{1em}\texttt{meu-external.c} $\rightarrow$ \texttt{meu-external.pd\_irix5} \\
-  \hspace{1em}\texttt{meu-external.c} $\rightarrow$ \texttt{meu-external.pd\_darwin} \\
-  \hspace{1em}\texttt{meu-external.c} $\rightarrow$ \texttt{meu-external.dll} \\
+\item Publicado sob a licença \enfasel{Standard Improved BSD License}.
+\item Organizado de forma orientada a objetos.
+\item Classes são tipos.
+\item Objetos (gráficos) do Pure Data são instâncias de classes.
+\item Existe um arquivo de cabeçalho com constantes, tipos, estruturas de
+dados e assinaturas de funções: \texttt{m\_pd.h}.
 \end{itemize}
 \end{frame}
 
