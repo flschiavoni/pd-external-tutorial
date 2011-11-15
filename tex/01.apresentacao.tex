@@ -71,21 +71,54 @@ corresponder à arquitetura do sistema utilizado.
 \section{Compilação}
 \label{sec:compiling}
 
-Um \external precisa ser primeiro compilado e em seguida transformado em
-objeto compartilhado, para poder ser carregado em tempo de execução pelo Pure
-Data. A versão Linux pode ser feita com os comandos:
+Para criar um objeto binário que pode ser carregado no Pure Data em tempo de
+execução, primeiro compilamos o código fonte, criando assim um ou mais objetos
+intermediários, e em seguida utilizamos um ligador (\emph{linker}) para criar
+um objeto de biblioteca compartilhada.
+
+No GNU/Linux, uma forma de realizar o processo
+\texttt{example01.c} $\rightarrow$ \texttt{example01.o} $\rightarrow$
+\texttt{example01.pd\_linux} é a seguinte:
 
 \vspace{1em}
 \begin{lstlisting}
-EXTNAME=meu-external
+EXTNAME=example01
 cc -DPD -fPIC -Wall -o ${EXTNAME}.o -c ${EXTNAME}.c
 ld -shared -lc -lm -o ${EXTNAME}.pd_linux ${EXTNAME}.o
 rm ${EXTNAME}.o
 \end{lstlisting}
 
-Para facilitar a compilação, o ideal é utilizar um \texttt{makefile}. Os
+A opção de compilação \texttt{-fPIC} resulta na criação de código binário que
+roda independente de sua posição na memória, adequado para geração de
+bibliotecas compartilhadas. A opção \texttt{-shared} passada para o ligador
+determina a criação de uma biblioteca compartilhada.
+
+Para facilitar a compilação, é interessante utilizar um \texttt{makefile}. Os
 exemplos deste tutorial estão acompanhadas de um \texttt{makefile} produzido
-pelo professor Marcelo Queiroz, adaptado para esta ocasião.
+pelo professor Marcelo Queiroz e adaptado para este tutorial.
+
+\subsection{Misturando código C e C++}
+
+Existem algumas diferenças entre compiladores C e C++ que tornam a sintaxe das
+linguagens incompatíveis, gerando resultados diferentes para um mesmo trecho
+de código. Um exemplo disso que influencia o funcionamento de \externals no
+Pure Data é a geração da tabela de símbolos dos objetos binários.
+
+Compiladores C++ realizam um processo chamado \emph{name mangling} (ou
+``dilaceramento de nomes"), que consiste em alterar o nome de funções,
+estruturas, classes, etc, incluindo informações sobre o espaço de nomes do
+objeto em questão. Isto resulta em nome diferentes gravados nas tabelas de
+símbolos dos objetos binários, o que pode confundir o Pure Data no momento do
+carregamento de um \external.
+
+Para garantir que um compilador C++ gere nomes compatíveis com objetos
+binários C, utilize a expressão \texttt{extern "C"} na frente dos nomes das
+funções que serão chamadas pelo Pure Data:
+
+\begin{lstlisting}
+extern "C" example01_setup(void);
+extern "C" example01_new(void);
+\end{lstlisting}
 
 \section{Arquivos de ajuda}
 
