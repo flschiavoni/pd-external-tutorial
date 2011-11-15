@@ -12,7 +12,7 @@ typedef struct _example1 {
 } t_example1;
 \end{lstlisting}
 2. Uma função de inicialização da classe:
-\begin{lstlisting}
+\begin{lstlisting}[firstnumber=last]
 void example1_setup(void) {
   example1_class = class_new(
     gensym("example1"),         // Nome simbolico
@@ -30,7 +30,7 @@ void example1_setup(void) {
 \begin{frame}[fragile]{O mínimo para um \external (2/2)}
 \noindent
 3. Um método construtor:
-\begin{lstlisting}
+\begin{lstlisting}[firstnumber=last]
 // Construtor da classe
 void * example1_new(void) {
     t_example1 *x = (t_example1 *) pd_new(example1_class);
@@ -41,7 +41,7 @@ void * example1_new(void) {
 
 
 \begin{frame}[fragile]{Bibliotecas}
-Podemos definir diversas classes em uma mesma função de inicialização:
+Podemos definir diversas classes numa mesma função de inicialização:
 \begin{lstlisting}
 void example2_setup(void) {
   post("Initializing my library");
