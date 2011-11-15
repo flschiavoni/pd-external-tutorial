@@ -1,0 +1,68 @@
+\section{Tipos de dados}
+
+
+\begin{frame}{Tipos definidos no arquivo \texttt{m\_pd.h}}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+tipo do pd & descrição \\
+\hline
+\texttt{t\_atom} & átomo \\
+\texttt{t\_float} & valor de ponto flutuante \\
+\texttt{t\_symbol} & símbolo \\
+\texttt{t\_gpointer} & ponteiro (para objetos gráficos) \\
+\texttt{t\_int} & valor inteiro \\
+\texttt{t\_signal} & estrutura de um sinal \\
+\texttt{t\_sample} & valor de um sinal de áudio (ponto flutuante) \\
+\texttt{t\_outlet} & \emph{outlet} de um objeto \\
+\texttt{t\_inlet} & \emph{inlet} de um objeto \\
+\texttt{t\_object} & objeto gráfico \\
+\texttt{t\_class} & uma classe do pd \\
+\texttt{t\_method} & um método de uma classe \\
+\texttt{t\_newmethod} & ponteiro para um construtor (uma função \texttt{\_new}) \\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Símbolos}
+Um símbolo é um valor constante de uma \emph{string}:
+\begin{itemize}
+\item Os símbolos são mantidos em uma tabela por razões de performance.
+\item A função \texttt{gensym(char *)} faz a busca/criação de símbolos.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Mensagens}
+Uma mensagem é composta de um seletor e uma lista de átomos.
+
+\vspace{1em}
+Seletores:
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+  seletor & rotina de busca & endereço de busca \\
+\hline
+  \texttt{bang} & \texttt{gensym("bang")} & \texttt{\&s\_bang} \\
+  \texttt{float} & \texttt{gensym("float")} & \texttt{\&s\_float} \\
+  \texttt{symbol} & \texttt{gensym("symbol")} & \texttt{\&s\_symbol} \\
+  \texttt{pointer} & \texttt{gensym("pointer")} & \texttt{\&s\_pointer} \\
+  \texttt{list} & \texttt{gensym("list")} & \texttt{\&s\_list} \\
+  \texttt{--}  (signal) & \texttt{gensym("signal")} & \texttt{\&s\_symbol} \\
+\hline
+\end{tabular}
+\end{center}
+
+Tipos de átomos:
+\begin{itemize}
+\item \texttt{A\_FLOAT}: um valor numérico (de ponto flutuante).
+\item \texttt{A\_SYMBOL}: um valor simbólico (string).
+\item \texttt{A\_POINTER}: um ponteiro.
+\end{itemize}
+
+\end{frame}
+
+

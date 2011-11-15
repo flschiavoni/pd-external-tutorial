@@ -19,42 +19,39 @@ simples. Em geral, os tipos do pd têm nome iniciado por \texttt{t\_}.
 \begin{center}
 \begin{tabular}{|l|l|}
 \hline
-pd-type & description \\
+tipo do pd & descrição \\
 \hline
-\texttt{t\_atom} & \texttt{atom} \\
-\texttt{t\_float} & \texttt{floatingpoint value} \\
-\texttt{t\_symbol} & \texttt{symbol} \\
-\texttt{t\_gpointer} & \texttt{pointer (to graphical objects)} \\
-\texttt{t\_int} & \texttt{integer value} \\
-\texttt{t\_signal} & \texttt{structure of a signal} \\
-\texttt{t\_sample} & \texttt{audiosignal-value (floatingpoint)} \\
-\texttt{t\_outlet} & \texttt{outletof an object} \\
-\texttt{t\_inlet} & \texttt{inlet of an object} \\
-\texttt{t\_object} & \texttt{object-interna} \\
-\texttt{t\_class} & \texttt{a pd-class} \\
-\texttt{t\_method} & \texttt{class-method} \\
-\texttt{t\_newmethod} & \texttt{pointer to a constructor (new-routine)} \\
+\texttt{t\_atom} & átomo \\
+\texttt{t\_float} & valor de ponto flutuante \\
+\texttt{t\_symbol} & símbolo \\
+\texttt{t\_gpointer} & ponteiro (para objetos gráficos) \\
+\texttt{t\_int} & valor inteiro \\
+\texttt{t\_signal} & estrutura de um sinal \\
+\texttt{t\_sample} & valor de um sinal de áudio (ponto flutuante) \\
+\texttt{t\_outlet} & \emph{outlet} de um objeto \\
+\texttt{t\_inlet} & \emph{inlet} de um objeto \\
+\texttt{t\_object} & objeto gráfico \\
+\texttt{t\_class} & uma classe do pd \\
+\texttt{t\_method} & um método de uma classe \\
+\texttt{t\_newmethod} & ponteiro para um construtor (uma função \texttt{\_new}) \\
 \hline
 \end{tabular}
 \end{center}
 
 \section{Símbolos}
 
-Um símbolo corresponde a um valor constante de uma \emph{string}, ou seja, a
-uma sequência de letras que formam uma palavra.
+Um símbolo corresponde a um valor constante de uma \emph{string}, ou seja,
+uma sequência de letras que formam uma palavra única.
 
 Cada símbolo é armazenado em uma tabela de busca por razões de performance. A
 função \texttt{gensym(char *)} procura por uma string em uma tabela de busca e
 retorna o endereço daquele símbolo. Se a string não foi encontrada na tabela,
 um novo símbolo é adicionado.
 
-
-\texttt{t\_symbol} e \texttt{*gensym}
-
 \section{Mensagens}
 
 Dados que não correspondem a áudio são distribuídos via um sistema de
-mensagens. Cada mensagem consiste em um ``seletor" e uma lista de átomos.
+mensagens. Cada mensagem é composta de um ``seletor" e uma lista de átomos.
 
 \subsection{Átomos}
 
@@ -100,7 +97,7 @@ necessidade da utilização de \texttt{gensym}:
 \begin{center}
 \begin{tabular}{|l|l|l|}
 \hline
-  selector & lookup-routine & lookup-address \\
+  seletor & rotina de busca & endereço de busca \\
 \hline
   \texttt{bang} & \texttt{gensym("bang")} & \texttt{\&s\_bang} \\
   \texttt{float} & \texttt{gensym("float")} & \texttt{\&s\_float} \\
