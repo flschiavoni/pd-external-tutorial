@@ -13,7 +13,7 @@ typedef struct _myobj2 {
 } t_myobj2;
 
 
-// Constructos of the class
+// Constructor of the class
 void * myobj1_new(t_symbol * arg1, t_floatarg arg2) {
     t_myobj1 *x = (t_myobj1 *) pd_new(myobj1_class);
     post("My OBJ 1");
@@ -22,7 +22,7 @@ void * myobj1_new(t_symbol * arg1, t_floatarg arg2) {
     return (void *) x;
 }
 
-// Constructos of the class
+// Constructor of the class
 void * myobj2_new(t_symbol * arg1, t_floatarg arg2) {
     t_myobj2 *x = (t_myobj2 *) pd_new(myobj2_class);
     post("My OBJ 2");

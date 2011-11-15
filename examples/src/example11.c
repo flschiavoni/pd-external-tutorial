@@ -9,7 +9,7 @@ typedef struct _example11 {
 } t_example11;
 
 
-// Constructos of the class
+// Constructor of the class
 void * example11_new(t_symbol *s, int argc, t_atom * argv) {
     t_example11 *x = (t_example11 *) pd_new(example11_class);
     inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal); // second signal inlet
@@ -24,24 +24,18 @@ void example11_destroy(t_example11 *x) {
 }
 
 static t_int * example11_perform(t_int *w){
-   t_float *in1 = (t_float *)(w[1]);
-   t_float *in2 = (t_float *)(w[2]);
-   t_float *in3 = (t_float *)(w[3]);
-   t_float *in4 = (t_float *)(w[4]);
-   int n = (int)(w[5]);
-   t_example11 *x = (t_example11 *)(w[6]);
+  t_float *in1 = (t_float *)(w[1]);
+  t_float *in2 = (t_float *)(w[2]);
+  t_float *in3 = (t_float *)(w[3]);
+  t_float *in4 = (t_float *)(w[4]);
+  int n = (int)(w[5]);
+  t_example11 *x = (t_example11 *)(w[6]);
   return (w + 7); // proximo bloco
 }
 
 static void example11_dsp(t_example11 *x, t_signal **sp){
-  dsp_add(example11_perform, 6, sp[0]->s_vec, sp[0]->s_n, x); //adiciona um metodo para tratar o dsp. Será executado a cada bloco de execução do PD.
-  // Pelo que entendi:
-  // 3 - qtd de argumentos
-  // sp[0]->s_vec - vetor de saida
-  // sp[0]->s_n - tamanho do vetor
-  // x - referencia a minha classe
+  dsp_add(example11_perform, 6, sp[0]->s_vec, sp[0]->s_n, x);
 }
-
 
 void example11_setup(void) {
     example11_class = class_new(gensym("example11"),

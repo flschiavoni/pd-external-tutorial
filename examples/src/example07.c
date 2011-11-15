@@ -22,7 +22,7 @@ void example07_anything(t_example07 *x, t_symbol *s, int argc, t_atom *argv){
 	post("ANYTHING!");
 }
 
-// Constructos of the class
+// Constructor of the class
 void * example07_new(t_symbol * arg1, t_floatarg arg2) {
     t_example07 *x = (t_example07 *) pd_new(example07_class);
     post("First arg: %s", arg1->s_name);

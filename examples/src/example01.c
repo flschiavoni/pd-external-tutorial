@@ -8,7 +8,7 @@ typedef struct _example01 {
 } t_example01;
 
 
-// Constructos of the class
+// Constructor of the class
 void * example01_new(void) {
     t_example01 *x = (t_example01 *) pd_new(example01_class);
     return (void *) x;

@@ -12,7 +12,7 @@ typedef struct _example14 {
 } t_example14;
 
 
-// Constructos of the class
+// Constructor of the class
 void * example14_new(t_symbol *s, int argc, t_atom * argv) {
     t_example14 *x = (t_example14 *) pd_new(example14_class);
 

@@ -8,7 +8,7 @@ typedef struct _example09 {
 } t_example09;
 
 
-// Constructos of the class
+// Constructor of the class
 void * example09_new(t_symbol *s, int argc, t_atom * argv) {
     t_example09 *x = (t_example09 *) pd_new(example09_class);
     post("%d parameters received",argc);
