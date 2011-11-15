@@ -47,17 +47,12 @@ void binbuf_print(t_binbuf *x);
 int binbuf_getnatom(t_binbuf *x);
 t_atom *binbuf_getvec(t_binbuf *x);
 void binbuf_eval(t_binbuf *x, t_pd *target, int argc, t_atom *argv);
-int binbuf_read(t_binbuf *b, char *filename, char *dirname,
-    int crflag);
-int binbuf_read_via_canvas(t_binbuf *b, char *filename, t_canvas *canvas,
-    int crflag);
-int binbuf_read_via_path(t_binbuf *b, char *filename, char *dirname,
-    int crflag);
-int binbuf_write(t_binbuf *x, char *filename, char *dir,
-    int crflag);
+int binbuf_read(t_binbuf *b, char *filename, char *dirname, int crflag);
+int binbuf_read_via_canvas(t_binbuf *b, char *filename, t_canvas *canvas, int crflag);
+int binbuf_read_via_path(t_binbuf *b, char *filename, char *dirname, int crflag);
+int binbuf_write(t_binbuf *x, char *filename, char *dir, int crflag);
 void binbuf_evalfile(t_symbol *name, t_symbol *dir);
-t_symbol *binbuf_realizedollsym(t_symbol *s, int ac, t_atom *av,
-    int tonew);
+t_symbol *binbuf_realizedollsym(t_symbol *s, int ac, t_atom *av, int tonew);
 \end{lstlisting}
 
 \section{Clocks}
@@ -102,8 +97,7 @@ int gpointer_check(const t_gpointer *gp, int headok);
 
 \section{Inlets and outlets}
 \begin{lstlisting}
-t_inlet *inlet_new(t_object *owner, t_pd *dest, t_symbol *s1,
-    t_symbol *s2);
+t_inlet *inlet_new(t_object *owner, t_pd *dest, t_symbol *s1, t_symbol *s2);
 t_inlet *pointerinlet_new(t_object *owner, t_gpointer *gp);
 t_inlet *floatinlet_new(t_object *owner, t_float *fp);
 t_inlet *symbolinlet_new(t_object *owner, t_symbol **sp);
@@ -130,26 +124,21 @@ void canvas_setargs(int argc, t_atom *argv);
 void canvas_getargs(int *argcp, t_atom **argvp);
 t_symbol *canvas_getcurrentdir(void);
 t_glist *canvas_getcurrent(void);
-void canvas_makefilename(t_glist *c, char *file,
-    char *result,int resultsize);
+void canvas_makefilename(t_glist *c, char *file, char *result,int resultsize);
 t_symbol *canvas_getdir(t_glist *x);
 char sys_font[]; /* default typeface set in s_main.c */
 char sys_fontweight[]; /* default font weight set in s_main.c */
 int sys_fontwidth(int fontsize);
 int sys_fontheight(int fontsize);
 void canvas_dataproperties(t_glist *x, t_scalar *sc, t_binbuf *b);
-int canvas_open(t_canvas *x, const char *name, const char *ext,
-    char *dirresult, char **nameresult, unsigned int size, int bin);
+int canvas_open(t_canvas *x, const char *name, const char *ext, char *dirresult, char **nameresult, unsigned int size, int bin);
 \end{lstlisting}
 
 \section{Classes}
 \begin{lstlisting}
-t_class *class_new(t_symbol *name, t_newmethod newmethod,
-    t_method freemethod, size_t size, int flags, t_atomtype arg1, ...);
-void class_addcreator(t_newmethod newmethod, t_symbol *s, 
-    t_atomtype type1, ...);
-void class_addmethod(t_class *c, t_method fn, t_symbol *sel,
-    t_atomtype arg1, ...);
+t_class *class_new(t_symbol *name, t_newmethod newmethod, t_method freemethod, size_t size, int flags, t_atomtype arg1, ...);
+void class_addcreator(t_newmethod newmethod, t_symbol *s, t_atomtype type1, ...);
+void class_addmethod(t_class *c, t_method fn, t_symbol *sel, t_atomtype arg1, ...);
 void class_addbang(t_class *c, t_method fn);
 void class_addpointer(t_class *c, t_method fn);
 void class_doaddfloat(t_class *c, t_method fn);
@@ -198,8 +187,7 @@ int sys_isreadablefile(const char *name);
 int sys_isabsolutepath(const char *dir);
 void sys_bashfilename(const char *from, char *to);
 void sys_unbashfilename(const char *from, char *to);
-int open_via_path(const char *name, const char *ext, const char *dir,
-    char *dirresult, char **nameresult, unsigned int size, int bin);
+int open_via_path(const char *name, const char *ext, const char *dir, char *dirresult, char **nameresult, unsigned int size, int bin);
 int sched_geteventno(void);
 double sys_getrealtime(void);
 int (*sys_idlehook)(void);   /* hook to add idle time computation */
