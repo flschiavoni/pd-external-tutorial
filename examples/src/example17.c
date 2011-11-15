@@ -11,11 +11,21 @@ typedef struct _example17 {
 
 
 // Constructos of the class
-void * example17_new(t_symbol *s, t_int inlet_counter, t_int outlet_counter) {
+void * example17_new(t_symbol *s, t_floatarg inlet_counter, t_floatarg outlet_counter) {
     t_example17 *x = (t_example17 *) pd_new(example17_class);
 
-    post("inlet counter %d",inlet_counter);
-    post("outlet counter %d",outlet_counter);
+    post("inlet counter %f", inlet_counter);
+    post("outlet counter %f", outlet_counter);
+
+    x->inlet_counter = inlet_counter;
+    x->outlet_counter = outlet_counter;
+
+    int i;
+    for(i = 0 ; i < inlet_counter ; i++)
+	inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
+
+    for(i = 0 ; i < outlet_counter ; i++)
+	outlet_new(&x->x_obj, &s_signal);
 
     return (void *) x;
 }
@@ -25,28 +35,26 @@ void example17_destroy(t_example17 *x) {
    post("You say good bye and I say hello");
 }
 
-/*
+
 static t_int * example17_perform(t_int *w){
-   t_float *in1 = (t_float *)(w[1]);
-   t_float *in2 = (t_float *)(w[2]);
-   t_float *in3 = (t_float *)(w[3]);
-   t_float *in4 = (t_float *)(w[4]);
-   t_float *out1 = (t_float *)(w[5]);
-   t_float *out2 = (t_float *)(w[6]);
-   t_float *out3 = (t_float *)(w[7]);
-   t_float *out4 = (t_float *)(w[8]);
-   int n = (int)(w[9]);
-   t_example17 *x = (t_example17 *)(w[10]);
-  return (w + 11); // proximo bloco
+   t_example17 *x = (t_example17 *)(w[1]);
+   int n = (int)(w[2]);
+
+   int i;
+   for(i = 0 ; i < x->inlet_counter ; i++){
+	// DO something with the input
+	}
+
+   for(i = 0 ; i < x->outlet_counter ; i++){
+	// DO something with the output
+	}
+
+  return (w + (2 + x->inlet_counter + x->outlet_counter +1));
 }
-*/
+
 static void example17_dsp(t_example17 *x, t_signal **sp){
-  //dsp_add(example17_perform, 10, sp[0]->s_vec, sp[0]->s_n, x); //adiciona um metodo para tratar o dsp. Será executado a cada bloco de execução do PD.
-  // Pelo que entendi:
-  // 3 - qtd de argumentos
-  // sp[0]->s_vec - vetor de saida
-  // sp[0]->s_n - tamanho do vetor
-  // x - referencia a minha classe
+  int qtd = x->inlet_counter + x->outlet_counter + 2;
+  dsp_add(example17_perform, qtd , x, sp[0]->s_n, sp[0]->s_vec);
 }
 
 
@@ -56,8 +64,8 @@ void example17_setup(void) {
             (t_method) example17_destroy, // Destructor
             sizeof (t_example17),
 	    CLASS_NOINLET,
-	    A_FLOAT, // # of inlets
-	    A_FLOAT, // # of outlets
+	    A_DEFFLOAT, // # of inlets
+	    A_DEFFLOAT, // # of outlets
             0); // LAST argument is ALWAYS zero
 
     class_addmethod(example17_class, (t_method) example17_dsp, gensym("dsp"), 0);

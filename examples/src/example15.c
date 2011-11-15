@@ -50,13 +50,13 @@ static void my_vis(t_gobj *z, t_glist *glist, int vis){
 	sys_vgui("proc do_something {} {\n set name [.x%x.c.s%xtx get]\n puts \"OIA: $name\" \n}\n",canvas,x);
 	sys_vgui("proc do_otherthing {val} {\n set name [.x%x.c.s%xtx get]\n puts \"OIA: $name\" \n}\n",canvas,x);
     	// The text field
-	sys_vgui("entry .x%x.c.s%xtx -width 20 -bg yellow \n", canvas,x);
+	sys_vgui("entry .x%x.c.s%xtx -width 12 -bg yellow \n", canvas,x);
 	// The button
 	sys_vgui("button .x%x.c.s%xbb -text {click} -command do_something\n", canvas,x);
 	// The radio button	
 	sys_vgui("radiobutton .x%x.c.s%xrb -value 1 -command do_something\n", canvas,x);
 	// The h slider
-	sys_vgui("scale .x%x.c.s%xsb  -command do_otherthing \n", canvas,x);
+	sys_vgui("scale .x%x.c.s%xsb -orient horizontal -command do_otherthing \n", canvas,x);
 	// A checkbutton
 	sys_vgui("checkbutton .x%x.c.s%xcb -foreground blue -background yellow -command do_something\n", canvas,x);
 	// The red rectangle
@@ -64,15 +64,15 @@ static void my_vis(t_gobj *z, t_glist *glist, int vis){
 		glist_getcanvas(glist),
 		x->x_obj.te_xpix,
 		x->x_obj.te_ypix,
-		x->x_obj.te_xpix + 70,
-		x->x_obj.te_ypix + 50,
+		x->x_obj.te_xpix + 170,
+		x->x_obj.te_ypix + 150,
 		x
 		);
-	// A window to dhe button (bb)
+	// A window to the button (bb)
 	sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%xbb -tags %xbb\n",
 		canvas,
 		x->x_obj.te_xpix + 70,
-		x->x_obj.te_ypix + 30,
+		x->x_obj.te_ypix + 120,
 		canvas,
 		x,
 		x);
@@ -138,10 +138,10 @@ void my_displace(t_gobj *z, t_glist *glist,int dx, int dy){
 		x,
 		x->x_obj.te_xpix,
 		x->x_obj.te_ypix,
-		x->x_obj.te_xpix + 70,
-		x->x_obj.te_ypix + 50
+		x->x_obj.te_xpix + 170,
+		x->x_obj.te_ypix + 150
 		);
-        sys_vgui(".x%x.c coords %xrr %d %d %d %d\n",canvas,x,x->x_obj.te_xpix,x->x_obj.te_ypix,x->x_obj.te_xpix + 70,x->x_obj.te_ypix + 50);
+        sys_vgui(".x%x.c coords %xrr %d %d %d %d\n",canvas,x,x->x_obj.te_xpix,x->x_obj.te_ypix,x->x_obj.te_xpix + 170,x->x_obj.te_ypix + 150);
         sys_vgui(".x%x.c coords %xbb %d %d \n",canvas,x,x->x_obj.te_xpix,x->x_obj.te_ypix);
         sys_vgui(".x%x.c coords %xcb %d %d \n",canvas,x,x->x_obj.te_xpix + 30,x->x_obj.te_ypix);
         sys_vgui(".x%x.c coords %xsb %d %d \n",canvas,x,x->x_obj.te_xpix,x->x_obj.te_ypix + 80);
@@ -160,8 +160,8 @@ static void my_select(t_gobj *z, t_glist *glist, int state){
 		glist_getcanvas(glist),
 		x->x_obj.te_xpix,
 		x->x_obj.te_ypix,
-		x->x_obj.te_xpix + 70,
-		x->x_obj.te_ypix + 50,
+		x->x_obj.te_xpix + 170,
+		x->x_obj.te_ypix + 150,
 		x
 		);
 	}else {

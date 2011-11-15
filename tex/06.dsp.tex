@@ -3,7 +3,7 @@
 % ----------------------------------------------------------------------------
 
 \chapter{DSP}
- (Precisa mudar o nome dos exemplos para exemplo~. Neste caso, a função setup deve ser renomeada para "tilde\_setup")
+\todo{Precisa mudar o nome dos exemplos para exemplo~. Neste caso, a função setup deve ser renomeada para "tilde\_setup")}
 
 Enfim chegamos no processamento de áudio propriamente dito. Digital Signal Processing ou processamento de sinal digital. O PD tem inlets especiais para o processamento de sinal. É fácil reconhecer. Eles são pintados de preto.
 \begin{figure}[h!]
@@ -95,6 +95,8 @@ static t_int * example10_perform(t_int *w){
   return (w + 4); // proximo bloco
 }
 \end{lstlisting}
+
+\todo{O que raios há na posição w[0]?}
 
 O método perform receberá como parâmetro um array com os dados que definimos no
 método anterior. Neste caso na posição 0 algo que eu não sei o que é, na
@@ -259,11 +261,143 @@ static t_int * example13_perform(t_int *w){
 
 Podemos definir um parâmetro no construtor que nos diga a quantidade de inlets
 e/ou de outlets DSP que um external terá. Neste caso, temos algumas
-possibilidades. A primeira é usarmos uma variável para dizer quantos inlets e
-outlets teremos na função dsp.
+possibilidades. A primeira é passarmos para o construtor a informação de quantos inlets e
+outlets teremos na função dsp (veja o exemplo 17) e armazenarmos na nossa estrutura de dados.
 
-Exemplo 17
+\begin{lstlisting}
+typedef struct _example17 {
+    t_object x_obj;
+    t_int outlet_counter;
+    t_int inlet_counter;
+} t_example17;
 
-A segunda é usar outro método. Exemplo 18 - abordagem da medusa.
+void * example17_new(t_symbol *s, t_int inlet_counter, t_int outlet_counter) {
+    t_example17 *x = (t_example17 *) pd_new(example17_class);
+
+    post("inlet counter %d",inlet_counter);
+    post("outlet counter %d",outlet_counter);
+
+    x->inlet_counter = inlet_counter;
+    x->outlet_counter = outlet_counter;
+
+    int i;
+    // Let's create the inlets and outlets
+    for(i = 0 ; i < inlet_counter ; i++)
+	inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
+
+    for(i = 0 ; i < outlet_counter ; i++)
+	outlet_new(&x->x_obj, &s_signal);
+
+    return (void *) x;
+}
+\end{lstlisting}
+
+Na passagem de parâmetro para o DSP usamos estas variáveis para contar quantos parâmetros serão usados.
+
+\begin{lstlisting}
+static t_int * example17_perform(t_int *w){
+   t_example17 *x = (t_example17 *)(w[1]);
+   int n = (int)(w[2]);
+
+   int i;
+   for(i = 0 ; i < x->inlet_counter ; i++){
+	// DO something with the input
+	}
+
+   for(i = 0 ; i < x->outlet_counter ; i++){
+	// DO something with the output
+	}
+
+  return (w + 2 + x->inlet_counter + x->outlet_counter + 1);
+}
+
+static void example17_dsp(t_example17 *x, t_signal **sp){
+  int qtd = x->inlet_counter + x->outlet_counter + 2;
+  dsp_add(example17_perform, qtd , x, sp[0]->s_n, sp[0]->s_vec);
+}
+\end{lstlisting}
 
 
+A segunda é usar outro método que baseia-se no modelo de alocação de memória do pd. Criamos um vetor e 
+apontamos este vetor para o dado da entrada / saída do external. Assim podemos utilizar a estrutura
+amarrada ao external para produzir / consumir o dado. Veja o exemplo 19.
+
+\begin{lstlisting}
+void example19_setup(void) {
+    example19_class = class_new(gensym("example19"),
+            (t_newmethod) example19_new, // Constructor
+            (t_method) example19_destroy, // Destructor
+            sizeof (t_example19),
+	    CLASS_NOINLET,
+	    A_DEFFLOAT, // # of inlets
+            0); // LAST argument is ALWAYS zero
+
+    class_addmethod(example19_class, (t_method) example19_dsp, gensym("dsp"), 0);
+}
+\end{lstlisting}
+
+Neste ponto, esta solução é bastante parecida com a anterior e poderia ser usada também com uma quantidade
+variável de outlets. A alteração está na estrutura da classe.
+
+\begin{lstlisting}
+typedef struct _example19 {
+    t_object x_obj;
+    t_sample * outvec[64]; // 64 is a magic number!
+    t_int inlet_counter;
+} t_example19;
+\end{lstlisting}
+
+Ok. 64 não é um número mágico. Ele é o tamanho de bloco padrão do Pd. Para que esta solução
+seja genérica o suficiente é melhor usar a função sys\_getblksize() para verificarmos o tamanho
+do bloco e alocarmos isto corretamente. Deste jeito isto pode dar estouro de ponteiro. 
+
+\begin{lstlisting}
+void * example19_new(t_symbol *s, t_floatarg inlet_counter, t_floatarg outlet_counter) {
+    t_example19 *x = (t_example19 *) pd_new(example19_class);
+
+    post("inlet counter %f", inlet_counter);
+
+    x->inlet_counter = inlet_counter;
+
+    int i;
+    for(i = 0 ; i < inlet_counter ; i++)
+	inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
+
+    return (void *) x;
+}
+\end{lstlisting}
+
+O construtor continua criando a quantidade de outlets que precisamos. Neste ponto poderia
+ser utilizado a função malloc para alocar o vetor com os dados de maneira inteligente em 
+vez de usar o 64 mágico.
+
+\begin{lstlisting}
+static void example19_dsp(t_example19 *x, t_signal **sp){
+    short i;
+    for (i = 0; i < x->inlet_counter; i++)
+        x->outvec[i] = sp[i]->s_vec; // Put the inlets data into my structure
+  dsp_add(example19_perform, 1 , x);
+}
+\end{lstlisting}
+
+O método DSP não fará mais que passar o próprio objeto ao método perform. Poderia não passar nem o objeto.
+
+\begin{lstlisting}
+static t_int * example19_perform(t_int *w){
+   t_example19 *x = (t_example19 *)(w[1]);
+   // Call DSP function or start DSP thread
+  return (w + 2);
+}
+\end{lstlisting}
+
+A função perform não precisa necessariamente fazer mais do que despertar o processo consumidor e
+liberar o processamento no Pd. E este é um ponto que considero importante para levantar outro questionamento.
+
+O Pd precisa que os blocos terminem em determinado tempo. Qual seria este tempo? Imaginemos que o bloco seja de 
+64 amostras. Se tivermos uma amostragem de áudio de 44.100 amostras por segundo precisamos que o bloco encerre seu 
+processamento em um pouco mais de 1 milisegundo. Parece rápido mas seu computador é mais rápido que isto.
+Criar um processo consumidor e fazê-lo liberando o bloco de processamento
+pode ser uma abordagem melhor para processos baseados em fluxo, como escrita em arquivos. Para isto precisamos utilizar outra
+função em outra thread e este é nosso próximo assunto.
+
+\todo{Vale a pena mostrar como fazer o loop entre as amostras ou é óbvio?}

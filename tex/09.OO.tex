@@ -7,12 +7,12 @@
 Parte do texto foi retirada de http://www.katjaas.nl/pitchshift/soundtouch~.html.
 
 Este cara é um exemplo de external que utiliza uma biblioteca OO:
-http://pure-data.svn.sourceforge.net/viewvc/pure-data/trunk/externals/fftw/fftw~.c?revision=6017&view=markup
+http://pure-data.svn.sourceforge.net/viewvc/pure-data/trunk/externals/fftw/
 No caso, a bibliteca utilizada é a FFTW3. Outro exemplo é o PDCUDA do Drebs!
 
 Outro exemplo que utilizad OO em external é o pixopencv.
 
-http://pure-data.svn.sourceforge.net/viewvc/pure-data/trunk/externals/pix_opencv/
+http://pure-data.svn.sourceforge.net/viewvc/pure-data/trunk/externals/pix\_opencv/
 
 É possível criar externals utilizando C++ e orientação a objetos. A parte crítica de tal implementação é garantir que o PD consiga enxergar as funções dentro do objeto compilado do C++. É necessário pensar nisto não apenas como uma alternativa para criar externals em C++ mas também para utilizar bibliotecas C++ para a criação de externals. Utilizar estas bibliotecas torna necessário que a mesma seja compilada na forma como símbolos em C. Para garantir isto é necessário utilizar a definição extern "C".
 

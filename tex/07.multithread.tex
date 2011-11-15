@@ -4,4 +4,111 @@
 
 \chapter{Multithreading}
 
+Como visto no capítulo anterior, o bloco de processamento do Pd possui um tempo máximo para
+a execução. Caso tenhamos um processo tipo produtor / consumidor, por exemplo, que consuma
+um tempo maior que o bloco possa permitir é ideal usarmos threads para isto.
 
+A programação multithread não é exatamente comum no Pure Data mas pode ser útil para várias
+coisas como escrita de arquivo, envio para a rede ou atualização na GUI (que veremos a seguir).
+
+Apesar de existir várias bibliotecas que permitam a criação de programação paralela, como o 
+comando fork do Linux, é desejável que os externals do Pure Data sejam compatíveis com outros
+sistemas operacionais. Pesquisando entre os repositórios do autor, Miller Puckette, encontramos
+que o mesmo utiliza threads POSIX da biblioteca pthread \footnote{Para maiores informações, visite:
+ https://computing.llnl.gov/tutorials/pthreads/}.
+
+Note que esta solução, que em muito se aproxima da última forma de criar inlets e outlets DSP
+implica em não trabalharmos mais em tempo real. Implementações deste tipo não podem ser pensadas
+para processamentos aonde a entrada de áudio será processada e devolvida na saída de áudio no
+mesmo bloco de processamento do Pd.
+
+\section{Criando threads}
+
+Para utilizarmos a biblioteca de threads do POSIX é necessário importá-la. Depois disto, para 
+termos controle sobre as threads que criamos, é necessário criarmos uma variável
+que armazene esta thread (Veja o exemplo 20).
+
+\begin{lstlisting}
+#include <pthread.h>
+
+...
+typedef struct _example20 {
+    t_object x_obj;
+    pthread_t example20_thread;
+} t_example20;
+
+\end{lstlisting}
+
+O próximo passo é criarmos uma função que seja associada a esta thread e a criação da thread 
+propriamente dita. A criação da thread pode ser feita na função DSP. Isto implica criar a thread
+e iniciá-la toda vez que o DSP do Pd for iniciado.
+
+\begin{lstlisting}
+void * example20_thread_function(void * arg) {
+    t_example20 *x = (t_example20 *) arg;
+    while(1){
+            //DO SOMETHING
+	    printf("Threading running!\n");
+	    sleep(1);
+	}
+    return 0;
+}
+
+static void example20_dsp(t_example20 *x, t_signal **sp){
+  pthread_create(&x->example20_thread, NULL, example20_thread_function, x);
+  dsp_add(example20_perform, 1 , x);
+}
+\end{lstlisting}
+
+A função de criação da thread irá receber a variável aonde a thread será armazenada (ID), 
+o os atributos desta thread (no caso de NULL, serão o default)
+\footnote{Para uma lista completa dos atributos, visite: 
+http://sourceware.org/pthreads-win32/manual/pthread\_attr\_init.html} ,
+ a função de inicialização associada a esta thread e os argumentos passados para esta função. 
+
+Caso seja passado mais de um argumento, é recomendado que se crie uma estrutura de dados (struct)
+e que a mesma seja passada como argumento para a thread.
+
+\section{Gerenciamento de threads}
+
+Há várias funções para o gerenciamento de uma thread definida na biblioteca pthread.h. Entre elas:
+\begin{itemize}
+\item pthread\_detach(threadid) - Indica para a implementação que o armazenamento da thread pode ser recuperado 
+quando a mesma se encontra terminada
+\item pthread\_join(threadid,status) - Indica para o trecho de código que chamou a thread que o mesmo deve esperar
+que a mesma tenha terminado sua execução.
+\item pthread\_exit(void *value\_ptr) - Encerra a execução de uma thread e libera sua alocação de memória.
+\end{itemize}
+
+Em princípio, threads POSIX não possuem funções para pausar e continuar a execução. Apesar disto, é possível 
+implementar estes comandos por meio dos mutex que veremos a seguir.
+
+\section{Controle de concorrência}
+
+Uma das dificuldades de implementarmos com threads é controlar a concorrência por recursos entre threads.
+Situação clara de Race Condition, é necessário que controlemos o acesso de threads concorrentes a trechos 
+de código que acessam dados comuns. Isto é feito por meio de Mutex (mutual exclusion), sistemas de controle
+atômicos que garantem que apenas uma thread será executada sobre um trecho de código por vez.
+
+Imaginemos os Mutex definidos assim:
+
+\begin{lstlisting}
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+int play = 0;
+\end{lstlisting}
+
+O controle ao trecho de código pode ser feito da seguinte forma:
+
+\begin{lstlisting}
+for(;;) { /* Playback loop */
+    pthread_mutex_lock(&lock);
+    while(!play) { /* We're paused */
+        pthread_cond_wait(&cond, &lock); /* Wait for play signal */
+    }
+    pthread_mutex_unlock(&lock);
+    /* Continue playback */
+}
+\end{lstlisting}
+
+\todo{Creio que seria mais útil um exemplo funcional...}
