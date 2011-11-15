@@ -4,11 +4,124 @@
 
 \chapter{Os tipos de dados do PD}
 
-Você pode usar os tipos de dados padrões do C, como int, float ou char. O
-difícil é entender o que chamamos de tipos de dados padrões do C já que estes
-tipos podem variar de acordo com o sistema operacional, compilador e outras
-coisas. Por isto, para o external possa se comportar da mesma maneira em
-qualquer sistema, é bastante recomendado que usemos os tipos do pure data.
+Uma vez que o Pure Data é utilizado em diversas plataformas, muitos tipos
+comuns de variáveis, como \texttt{int}, são redefinidos. Para escrever um
+\external que seja portável para qualquer plataforma, é razoável que você
+utilize os tipos providos pelo Pure Data. Como dissemos na seção
+\ref{sec:organizacao}, para escrever um \external, é necessário incluir o
+arquivo \texttt{m\_pd.h} que possui definições de constantes (versão do Pure
+Data, sistema operacional, compilador, etc), estruturas, assinaturas de
+funções e tipos de dados.
 
-Os tipos do pure data nada mais são que um
+Existem muitos tipos predefinidos que devem fazer a vida do programador mais
+simples. Em geral, os tipos do pd têm nome iniciado por \texttt{t\_}.
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+pd-type & description \\
+\hline
+\texttt{t\_atom} & \texttt{atom} \\
+\texttt{t\_float} & \texttt{floatingpoint value} \\
+\texttt{t\_symbol} & \texttt{symbol} \\
+\texttt{t\_gpointer} & \texttt{pointer (to graphical objects)} \\
+\texttt{t\_int} & \texttt{integer value} \\
+\texttt{t\_signal} & \texttt{structure of a signal} \\
+\texttt{t\_sample} & \texttt{audiosignal-value (floatingpoint)} \\
+\texttt{t\_outlet} & \texttt{outletof an object} \\
+\texttt{t\_inlet} & \texttt{inlet of an object} \\
+\texttt{t\_object} & \texttt{object-interna} \\
+\texttt{t\_class} & \texttt{a pd-class} \\
+\texttt{t\_method} & \texttt{class-method} \\
+\texttt{t\_newmethod} & \texttt{pointer to a constructor (new-routine)} \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Símbolos}
+
+Um símbolo corresponde a um valor constante de uma \emph{string}, ou seja, a
+uma sequência de letras que formam uma palavra.
+
+Cada símbolo é armazenado em uma tabela de busca por razões de performance. A
+função \texttt{gensym(char *)} procura por uma string em uma tabela de busca e
+retorna o endereço daquele símbolo. Se a string não foi encontrada na tabela,
+um novo símbolo é adicionado.
+
+
+\texttt{t\_symbol} e \texttt{*gensym}
+
+\section{Mensagens}
+
+Dados que não correspondem a áudio são distribuídos via um sistema de
+mensagens. Cada mensagem consiste em um ``seletor" e uma lista de átomos.
+
+\subsection{Átomos}
+
+Existem três tipos de átomos:
+
+\begin{itemize}
+\item \texttt{A\_FLOAT}: um valor numérico (de ponto flutuante).
+\item \texttt{A\_SYMBOL}: um valor simbólico (string).
+\item \texttt{A\_POINTER}: um ponteiro.
+\end{itemize}
+
+Valores numéricos são sempre considerados valores de ponto flutuante
+(\texttt{t\_float}), mesmo que possam ser exibidos como valores inteiros.
+
+Átomos do tipo \texttt{A\_POINTER} não são muito importantes (para \externals
+simples).
+Since pd is used on several plattforms, many ordinary types of variables, like int, are re-defined. To write portable code, it is reasonable to use types provided by pd.
+
+O tipo de um átomo \texttt{a} é armazenado no elemento da estrutura
+\texttt{a.a\_type}.
+
+\subsection{Seletores}
+
+Um seletor é um símbolo que define o tipo de uma mensagem. Existe cinco
+seletores pré-definidos:
+
+\begin{itemize}
+  \item \texttt{bang}: rotula um gatilho de evento. Uma mensagem de
+    \texttt{bang} consiste somente do seletor e não contém uma lista de átomos.
+  \item \texttt{float} rotula um valor numérico. A lista de uma mensagem
+    \texttt{float} contém um único átomo de tipo \texttt{A\_FLOAT}.
+  \item \texttt{symbol} rotula um valor simbólico. A lista de uma mensagem
+    \texttt{symbol} consiste em um único átimo do tipo \texttt{A\_SYMBOL}.
+  \item \texttt{pointer} rotula um valor de ponteiro. A lista de uma mensagem do
+    tipo \texttt{pointer} contém um único átimo do tipo \texttt{A\_POINTER}.
+  \item \texttt{list} rotula uma lista de um ou mais átomos de tipos arbitrários.
+\end{itemize}
+
+Uma vez que os símbolos para estes seletores são utilizados com frequência,
+seu endereço na tabela de símbolos pode ser utilizado diretamente, sem a
+necessidade da utilização de \texttt{gensym}:
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+  selector & lookup-routine & lookup-address \\
+\hline
+  \texttt{bang} & \texttt{gensym("bang")} & \texttt{\&s\_bang} \\
+  \texttt{float} & \texttt{gensym("float")} & \texttt{\&s\_float} \\
+  \texttt{symbol} & \texttt{gensym("symbol")} & \texttt{\&s\_symbol} \\
+  \texttt{pointer} & \texttt{gensym("pointer")} & \texttt{\&s\_pointer} \\
+  \texttt{list} & \texttt{gensym("list")} & \texttt{\&s\_list} \\
+  \texttt{--}  (signal) & \texttt{gensym("signal")} & \texttt{\&s\_symbol} \\
+\hline
+\end{tabular}
+\end{center}
+
+Outros seletores também podem ser utilizados. A classe receptora tem que
+prover um médodo para um seletor específico ou para \texttt{anything}, que
+corresponde a qualquer seletor arbitrário.
+
+Mensagens que não possuem seletor explícito e começam com um valor numérico
+são reconhecidas automaticamente como mensagens \texttt{float} (se consistirem
+de apenas um átomo) ou como mensagens \texttt{list} (se forem compostas de
+diversos átomos).
+
+Por exemplo, as mensagens \texttt{12.429} e \texttt{float 12.429} são
+idênticas. Da mesma forma, as mensagens \texttt{list 1 para voce} é idêntica a
+\texttt{1 para voce}.
 
