@@ -4,14 +4,14 @@
  
 \chapter{Introdução}
 
-Pure Data é um ambiente visual de programação musical que permite a criação de
+Pure Data, ou simplesmente Pd, é um ambiente visual de programação musical que permite a criação de
 aplicações musicais complexas a partir da combinação de componentes visuais
 mais simples chamados \textbf{objetos}. As distribuições oficiais do Pure Data
 contêm diversos objetos prontos para o uso, mas também permitem a extensão de
 suas funcionalidades através da criação de novos objetos utilizando C/C++.
 Desta forma, novas linhas de código escritas pelo usuário são compilados como
 bibliotecas dinâmicas e podem ser carregadas pelo programa em tempo de
-execução. Objetos desta forma levam o nome de \textbf{\\externals}.
+execução. Objetos desta forma levam o nome de \textbf{\externals}.
 
 Este é um tutorial prático para o desenvolvimento de \externals em C para o
 Pure Data. A iniciativa de escrever este documento surgiu no primeiro semestre
@@ -47,6 +47,22 @@ partir da leitura do código-fonte de \externals contidos no repositório
 oficial do Pure
 Data\footnote{http://pure-data.svn.sourceforge.net/viewvc/pure-data/trunk/externals/}.
 
+Navegando pelos códigos-fonte deste repositório você poderá notar que os programadores
+que escreveram os externals que hoje estão disponível para o Pd seguiram estas convenções
+e por isto a leitura destes códigos-fonte pode ser didática e simples.
+
+Por esta razão, o primeiro conselho que damos para quem irá escrever \externals é seguir
+estas convenções, mesmo que as mesmas não sejam a maneira como você está acostumado a 
+programar deste jeito pois assim seu código também será didático e simples de entender.
+
+Este tutorial não pretende cobrir os algoritmos de processamento de sinais mas explicar
+como implementar estes algoritmos como objetos do Pd. Para processamento de sinais há
+uma vasta bibliografia disponível que possui os algoritmos e o ferramental matemático
+necessário para sua implementação.
+
+\todo{Será que podemos citar aqui algum livro ou material para DSP?}
+ 
+
 \section{Organização do código-fonte e do objeto compilado}
 \label{sec:organizacao}
 
@@ -68,6 +84,11 @@ Windows), \texttt{.pd\_irix5} (SGI Irix) ou \texttt{.pd\_darwin} (Mac OS X).
 obrigatório, mas o nome do objeto compilado com a biblioteca dinâmica deve
 sempre corresponder ao nome da classe, assim como sua extensão deve sempre
 corresponder à arquitetura do sistema utilizado.
+
+O mesmo cuidado é recomendado para os métodos que serão definidos internamente
+no objeto. Os nomes de métodos que serão apresentados neste material seguem o padrão
+encontrado no repositório do Pd. É fortemente recomendado que o mesmo padrão seja
+utilizado em seu texto.
 
 \section{Compilação}
 \label{sec:compiling}
@@ -98,6 +119,12 @@ Para facilitar a compilação, é interessante utilizar um \texttt{makefile}. Os
 exemplos deste tutorial estão acompanhadas de um \texttt{makefile} produzido
 pelo professor Marcelo Queiroz e adaptado para este tutorial.
 
+Tem uma dezena de jeito de compilar pro Windows, usando o Mingw ou o C++ Builder.
+Aqui\footnote{http://puredata.hurleur.com/sujet-1029-problem-compiling-external-windows}
+ temos exemplos e muitas discussões de como compilar externals no Windows.
+
+\todo{Será que compensa testarmos isto tudo?}
+
 \subsection{Misturando código C e C++}
 
 Existem algumas diferenças entre compiladores C e C++ que tornam a sintaxe das
@@ -120,6 +147,7 @@ funções que serão chamadas pelo Pure Data:
 extern "C" example01_setup(void);
 extern "C" example01_new(void);
 \end{lstlisting}
+
 
 \section{Arquivos de ajuda}
 
