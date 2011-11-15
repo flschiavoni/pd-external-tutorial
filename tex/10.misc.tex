@@ -3,18 +3,320 @@
 % ----------------------------------------------------------------------------
 
 \chapter{Miscelâneas}
-Como saber se um objeto existe?
-pd\_findbyclass
 
-Exemplo: http://pure-data.svn.sourceforge.net/viewvc/pure-data/trunk/pd/src/d\_array.c?revision=10432\&view=markup 
+Aqui temos uma lista de funções definidas pela biblioteca que permite criarmos externals 
+(m\_pd.h). Não se trata de todas as funções mas de algumas que podem ser útil termos descrito
+como material de referência.
 
-Linha 82
+\section{Gerenciamento de memória}
+\begin{lstlisting}
+void *getbytes(size_t nbytes);
+void *getzbytes(size_t nbytes);
+void *copybytes(void *src, size_t nbytes);
+void freebytes(void *x, size_t nbytes);
+void *resizebytes(void *x, size_t oldsize, size_t newsize);
+\end{lstlisting}
 
+\section{Atoms}
+\begin{lstlisting}
+t_float atom_getfloat(t_atom *a);
+t_int atom_getint(t_atom *a);
+t_symbol *atom_getsymbol(t_atom *a);
+t_symbol *atom_gensym(t_atom *a);
+t_float atom_getfloatarg(int which, int argc, t_atom *argv);
+t_int atom_getintarg(int which, int argc, t_atom *argv);
+t_symbol *atom_getsymbolarg(int which, int argc, t_atom *argv);
+void atom_string(t_atom *a, char *buf, unsigned int bufsize);
+\end{lstlisting}
 
-post
+\section{Binbufs}
+\begin{lstlisting}
+t_binbuf *binbuf_new(void);
+void binbuf_free(t_binbuf *x);
+t_binbuf *binbuf_duplicate(t_binbuf *y);
 
-error
+void binbuf_text(t_binbuf *x, char *text, size_t size);
+void binbuf_gettext(t_binbuf *x, char **bufp, int *lengthp);
+void binbuf_clear(t_binbuf *x);
+void binbuf_add(t_binbuf *x, int argc, t_atom *argv);
+void binbuf_addv(t_binbuf *x, char *fmt, ...);
+void binbuf_addbinbuf(t_binbuf *x, t_binbuf *y);
+void binbuf_addsemi(t_binbuf *x);
+void binbuf_restore(t_binbuf *x, int argc, t_atom *argv);
+void binbuf_print(t_binbuf *x);
+int binbuf_getnatom(t_binbuf *x);
+t_atom *binbuf_getvec(t_binbuf *x);
+void binbuf_eval(t_binbuf *x, t_pd *target, int argc, t_atom *argv);
+int binbuf_read(t_binbuf *b, char *filename, char *dirname,
+    int crflag);
+int binbuf_read_via_canvas(t_binbuf *b, char *filename, t_canvas *canvas,
+    int crflag);
+int binbuf_read_via_path(t_binbuf *b, char *filename, char *dirname,
+    int crflag);
+int binbuf_write(t_binbuf *x, char *filename, char *dir,
+    int crflag);
+void binbuf_evalfile(t_symbol *name, t_symbol *dir);
+t_symbol *binbuf_realizedollsym(t_symbol *s, int ac, t_atom *av,
+    int tonew);
+\end{lstlisting}
 
-sys\_getblksize();
+\section{Clocks}
+\begin{lstlisting}
+t_clock *clock_new(void *owner, t_method fn);
+void clock_set(t_clock *x, double systime);
+void clock_delay(t_clock *x, double delaytime);
+void clock_unset(t_clock *x);
+double clock_getlogicaltime(void);
+double clock_getsystime(void); /* OBSOLETE; use clock_getlogicaltime() */
+double clock_gettimesince(double prevsystime);
+double clock_getsystimeafter(double delaytime);
+void clock_free(t_clock *x);
+\end{lstlisting}
 
-sys\_getsr()
+\section{Pure data}
+\begin{lstlisting}
+t_pd *pd_new(t_class *cls);
+void pd_free(t_pd *x);
+void pd_bind(t_pd *x, t_symbol *s);
+void pd_unbind(t_pd *x, t_symbol *s);
+t_pd *pd_findbyclass(t_symbol *s, t_class *c); Verifica se ha um objeto desta classe instanciado
+void pd_pushsym(t_pd *x);
+void pd_popsym(t_pd *x);
+t_symbol *pd_getfilename(void);
+t_symbol *pd_getdirname(void);
+void pd_bang(t_pd *x);
+void pd_pointer(t_pd *x, t_gpointer *gp);
+void pd_float(t_pd *x, t_float f);
+void pd_symbol(t_pd *x, t_symbol *s);
+void pd_list(t_pd *x, t_symbol *s, int argc, t_atom *argv);
+void pd_anything(t_pd *x, t_symbol *s, int argc, t_atom *argv);
+\end{lstlisting}
+
+\section{Pointers}
+\begin{lstlisting}
+void gpointer_init(t_gpointer *gp);
+void gpointer_copy(const t_gpointer *gpfrom, t_gpointer *gpto);
+void gpointer_unset(t_gpointer *gp);
+int gpointer_check(const t_gpointer *gp, int headok);
+\end{lstlisting}
+
+\section{Inlets and outlets}
+\begin{lstlisting}
+t_inlet *inlet_new(t_object *owner, t_pd *dest, t_symbol *s1,
+    t_symbol *s2);
+t_inlet *pointerinlet_new(t_object *owner, t_gpointer *gp);
+t_inlet *floatinlet_new(t_object *owner, t_float *fp);
+t_inlet *symbolinlet_new(t_object *owner, t_symbol **sp);
+t_inlet *signalinlet_new(t_object *owner, t_float f);
+void inlet_free(t_inlet *x);
+
+t_outlet *outlet_new(t_object *owner, t_symbol *s);
+void outlet_bang(t_outlet *x);
+void outlet_pointer(t_outlet *x, t_gpointer *gp);
+void outlet_float(t_outlet *x, t_float f);
+void outlet_symbol(t_outlet *x, t_symbol *s);
+void outlet_list(t_outlet *x, t_symbol *s, int argc, t_atom *argv);
+void outlet_anything(t_outlet *x, t_symbol *s, int argc, t_atom *argv);
+t_symbol *outlet_getsymbol(t_outlet *x);
+void outlet_free(t_outlet *x);
+t_object *pd_checkobject(t_pd *x);
+\end{lstlisting}
+
+\section{Canvases}
+\begin{lstlisting}
+void glob_setfilename(void *dummy, t_symbol *name, t_symbol *dir);
+
+void canvas_setargs(int argc, t_atom *argv);
+void canvas_getargs(int *argcp, t_atom **argvp);
+t_symbol *canvas_getcurrentdir(void);
+t_glist *canvas_getcurrent(void);
+void canvas_makefilename(t_glist *c, char *file,
+    char *result,int resultsize);
+t_symbol *canvas_getdir(t_glist *x);
+char sys_font[]; /* default typeface set in s_main.c */
+char sys_fontweight[]; /* default font weight set in s_main.c */
+int sys_fontwidth(int fontsize);
+int sys_fontheight(int fontsize);
+void canvas_dataproperties(t_glist *x, t_scalar *sc, t_binbuf *b);
+int canvas_open(t_canvas *x, const char *name, const char *ext,
+    char *dirresult, char **nameresult, unsigned int size, int bin);
+\end{lstlisting}
+
+\section{Classes}
+\begin{lstlisting}
+t_class *class_new(t_symbol *name, t_newmethod newmethod,
+    t_method freemethod, size_t size, int flags, t_atomtype arg1, ...);
+void class_addcreator(t_newmethod newmethod, t_symbol *s, 
+    t_atomtype type1, ...);
+void class_addmethod(t_class *c, t_method fn, t_symbol *sel,
+    t_atomtype arg1, ...);
+void class_addbang(t_class *c, t_method fn);
+void class_addpointer(t_class *c, t_method fn);
+void class_doaddfloat(t_class *c, t_method fn);
+void class_addsymbol(t_class *c, t_method fn);
+void class_addlist(t_class *c, t_method fn);
+void class_addanything(t_class *c, t_method fn);
+void class_sethelpsymbol(t_class *c, t_symbol *s);
+void class_setwidget(t_class *c, t_widgetbehavior *w);
+void class_setparentwidget(t_class *c, t_parentwidgetbehavior *w);
+t_parentwidgetbehavior *class_parentwidget(t_class *c);
+char *class_getname(t_class *c);
+char *class_gethelpname(t_class *c);
+void class_setdrawcommand(t_class *c);
+int class_isdrawcommand(t_class *c);
+void class_domainsignalin(t_class *c, int onset);
+void class_set_extern_dir(t_symbol *s);
+
+void class_setsavefn(t_class *c, t_savefn f);
+t_savefn class_getsavefn(t_class *c);
+
+void class_setpropertiesfn(t_class *c, t_propertiesfn f);
+t_propertiesfn class_getpropertiesfn(t_class *c);
+
+\end{lstlisting}
+
+\section{Printing}
+\begin{lstlisting}
+void post(const char *fmt, ...);
+void startpost(const char *fmt, ...);
+void poststring(const char *s);
+void postfloat(t_floatarg f);
+void postatom(int argc, t_atom *argv);
+void endpost(void);
+void error(const char *fmt, ...);
+void verbose(int level, const char *fmt, ...);
+void bug(const char *fmt, ...);
+void pd_error(void *object, const char *fmt, ...);
+void sys_logerror(const char *object, const char *s);
+void sys_unixerror(const char *object);
+void sys_ouch(void);
+\end{lstlisting}
+
+\section{System interface routines}
+\begin{lstlisting}
+int sys_isreadablefile(const char *name);
+int sys_isabsolutepath(const char *dir);
+void sys_bashfilename(const char *from, char *to);
+void sys_unbashfilename(const char *from, char *to);
+int open_via_path(const char *name, const char *ext, const char *dir,
+    char *dirresult, char **nameresult, unsigned int size, int bin);
+int sched_geteventno(void);
+double sys_getrealtime(void);
+int (*sys_idlehook)(void);   /* hook to add idle time computation */
+\end{lstlisting}
+
+\section{Threading}
+\begin{lstlisting}
+void sys_lock(void);
+void sys_unlock(void);
+int sys_trylock(void);
+\end{lstlisting}
+
+\section{Signals}
+\begin{lstlisting}
+t_int *plus_perform(t_int *args);
+t_int *zero_perform(t_int *args);
+t_int *copy_perform(t_int *args);
+
+void dsp_add_plus(t_sample *in1, t_sample *in2, t_sample *out, int n);
+void dsp_add_copy(t_sample *in, t_sample *out, int n);
+void dsp_add_scalarcopy(t_float *in, t_sample *out, int n);
+void dsp_add_zero(t_sample *out, int n);
+
+int sys_getblksize(void);
+t_float sys_getsr(void);
+int sys_get_inchannels(void);
+int sys_get_outchannels(void);
+
+void dsp_add(t_perfroutine f, int n, ...);
+void dsp_addv(t_perfroutine f, int n, t_int *vec);
+void pd_fft(t_float *buf, int npoints, int inverse);
+int ilog2(int n);
+
+void mayer_fht(t_sample *fz, int n);
+void mayer_fft(int n, t_sample *real, t_sample *imag);
+void mayer_ifft(int n, t_sample *real, t_sample *imag);
+void mayer_realfft(int n, t_sample *real);
+void mayer_realifft(int n, t_sample *real);
+
+float *cos_table;
+
+int canvas_suspend_dsp(void);
+void canvas_resume_dsp(int oldstate);
+void canvas_update_dsp(void);
+int canvas_dspstate;
+
+typedef struct _resample
+{
+  int method;       /* up/downsampling method ID */
+
+  t_int downsample; /* downsampling factor */
+  t_int upsample;   /* upsampling factor */
+
+  t_sample *s_vec;   /* here we hold the resampled data */
+  int      s_n;
+
+  t_sample *coeffs;  /* coefficients for filtering... */
+  int      coefsize;
+
+  t_sample *buffer;  /* buffer for filtering */
+  int      bufsize;
+} t_resample;
+
+void resample_init(t_resample *x);
+void resample_free(t_resample *x);
+
+void resample_dsp(t_resample *x, t_sample *in, int insize, t_sample *out, int outsize, int method);
+void resamplefrom_dsp(t_resample *x, t_sample *in, int insize, int outsize, int method);
+void resampleto_dsp(t_resample *x, t_sample *out, int insize, int outsize, int method);
+\end{lstlisting}
+
+\section{Utility functions for signals}
+\begin{lstlisting}
+t_float mtof(t_float);
+t_float ftom(t_float);
+t_float rmstodb(t_float);
+t_float powtodb(t_float);
+t_float dbtorms(t_float);
+t_float dbtopow(t_float);
+
+t_float q8_sqrt(t_float);
+t_float q8_rsqrt(t_float);
+\end{lstlisting}
+
+\section{Data}
+\begin{lstlisting}
+t_class *garray_class;
+int garray_getfloatarray(t_garray *x, int *size, t_float **vec);
+int garray_getfloatwords(t_garray *x, int *size, t_word **vec);
+t_float garray_get(t_garray *x, t_symbol *s, t_int indx);
+void garray_redraw(t_garray *x);
+int garray_npoints(t_garray *x);
+char *garray_vec(t_garray *x);
+void garray_resize(t_garray *x, t_floatarg f);
+void garray_usedindsp(t_garray *x);
+void garray_setsaveit(t_garray *x, int saveit);
+t_class *scalar_class;
+
+t_float *value_get(t_symbol *s);
+void value_release(t_symbol *s);
+int value_getfloat(t_symbol *s, t_float *f);
+int value_setfloat(t_symbol *s, t_float f);
+\end{lstlisting}
+
+\section{GUI interface - functions to send strings to TK}
+\begin{lstlisting}
+void sys_vgui(char *fmt, ...);
+void sys_gui(char *s);
+void sys_pretendguibytes(int n);
+void sys_queuegui(void *client, t_glist *glist, t_guicallbackfn f);
+void sys_unqueuegui(void *client);
+
+    /* dialog window creation and destruction */
+void gfxstub_new(t_pd *owner, void *key, const char *cmd);
+void gfxstub_deleteforkey(void *key);
+
+t_class *glob_pdobject;  /* object to send "pd" messages */
+
+\end{lstlisting}
+
