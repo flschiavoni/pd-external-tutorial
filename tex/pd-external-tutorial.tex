@@ -13,6 +13,7 @@
 \usepackage{xspace}
 \usepackage{colortbl}
 \usepackage{listings}             % Include the listings-package
+
 \lstset{numbers=left, stepnumber=1, frame=single, rulesepcolor=\color{blue}, language=C}
 
 \graphicspath{{./../images/}}
@@ -24,6 +25,7 @@
 \newcommand{\External}{\emph{External}\xspace}
 \newcommand{\patch}{\emph{patch}\xspace}
 \newcommand{\patches}{\emph{patches}\xspace}
+\newcommand{\todo}[1]{\fbox{\color{red}\Large\bf  #1}}
 
 % listings configuration
 \lstset{ %
@@ -66,7 +68,8 @@ morekeywords={*,...}            % if you want to add more keywords to the set
 \input{06.dsp}
 \input{07.multithread}
 \input{08.gui}
-\input{09.misc}
+\input{09.OO}
+\input{10.misc}
 
 \end{document}
 
