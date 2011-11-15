@@ -21,7 +21,6 @@ métodos class\_new() quanto na definição da função construtora. (Veja o
 exemplo02).
 
 \begin{lstlisting}
-
 // Constructos of the class
 void * example2_new(t_symbol * arg1, t_floatarg arg2) {
     t_example2 *x = (t_example2 *) pd_new(example2_class);
@@ -37,65 +36,50 @@ void example2_setup(void) {
             sizeof (t_example2),
 	    CLASS_NOINLET,
             A_DEFFLOAT, // First Constructor parameter
-            A_DEFSYMBOL, // Second Consctructo parameter
+            A_DEFSYMBOL, // Second Constructor parameter
             0);
 }
 \end{lstlisting}
 
 Notem que os parâmetros são definidos com um tipo e são recebidos com outro.
-São tipos padrões do Pure Data. Estes tipos são chamados atom e alguns estão
-documentados no tutorial do IOHannes. Eles são:
+Como explicado na seção \ref{sec:mensagens}, todos os dados que não
+correspondem a sinais de áudio são transmitidos como mensagens, compostas de
+átomos. Para ver os tipos de átomo que podem ser utilizados na passagem de
+parâmetros, veja a seção \ref{sec:atomos}.
 
-\begin{itemize}
-\item A\_NULL,
-\item A\_FLOAT,
-\item A\_SYMBOL,
-\item A\_POINTER,
-\item A\_SEMI,
-\item A\_COMMA,
-\item A\_DEFFLOAT,
-\item A\_DEFSYM,
-\item A\_DOLLAR, 
-\item A\_DOLLSYM,
-\item A\_GIMME,
-\item A\_CANT
-\end{itemize}
-(Retirado do arquivo m\_pd.h)
-
-*** Nunca usei todos eles. Pra que será que servem?
-
-Entre estes tipos, um deles pode aceitar qualquer quantidade e tipo de
-parâmetros. É o A\_GIMME. (Veja o exemplo09). 
+Para aceitar qualquer tipo de átomo na passagem de um parâmetro específico,
+utilize o tipo de átomo \texttt{A\_GIMME} (veja o exemplo09).
 
 \begin{lstlisting}
-
-// Constructos of the class
+// Constructor of the class
 void * example9_new(t_symbol *s, int argc, t_atom * argv) {
-    t_example9 *x = (t_example9 *) pd_new(example9_class);
-    post("%d parameters received",argc);
-    return (void *) x;
+   t_example9 *x = (t_example9 *) pd_new(example9_class);
+   post("%d parameters received",argc);
+   return (void *) x;
 }
 
-
 void example9_setup(void) {
-    example9_class = class_new(gensym("example9"),
-            (t_newmethod) example9_new, // Constructor
-            (t_method) example9_destroy, // Destructor
-            sizeof (t_example9),
-	    CLASS_NOINLET,
-	    A_GIMME, // Allows various parameters
-            0); // LAST argument is ALWAYS zero
+   example9_class = class_new(gensym("example9"),
+     (t_newmethod) example9_new, // Constructor
+     (t_method) example9_destroy, // Destructor
+     sizeof (t_example9),
+     CLASS_NOINLET,
+     A_GIMME, // Allows various parameters
+     0); // LAST argument is ALWAYS zero
 }
 \end{lstlisting}
 
-Quando utilizamos o A\_GIMME a função construtora trabalha como um programa
-main em C. Recebe os parâmetros argv e argc, um com uma lista de atoms e outro
-com a quantidade de atoms nesta lista.
+Quando utilizamos o tipo de átomo \texttt{A\_GIMME} o método construtor
+funciona como uma função \texttt{main()} em C: ela recebe os parâmetros
+\texttt{argc}, que indica o número de átomos na lista, e \texttt{*argv}, que
+aponta para a lista de átomos de fato. Veja o exemplo na figura
+\ref{fig:construtor-parametros}.
 
 \begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.7\textwidth]{example9}
-	\caption{Diferente da linguagem C, o primeiro parâmetro não é o nome do external.}
+\centering
+\includegraphics[width=0.7\textwidth]{example9}
+\caption{Diferente da linguagem C, o primeiro parâmetro não é o nome do external.}
+\label{fig:construtor-parametros}
 \end{figure}
 
 Note que o Pure Data não obriga que o usuário passe parâmetros para o objeto. É
@@ -105,27 +89,29 @@ recebidos são em quantidade, tipo e valor esperado e, caso não seja, abortar a
 construção do objeto e não retornar sua instância.
 
 \section{Destrutor}
-O destrutor de uma classe permite liberar a memória do Pure Data dos dados que foram alocados. (Veja o exemplo07)
+
+O destrutor de uma classe permite liberar alguma memória eventualmente alocada
+pelo construtor ou por outras funções do \external (veja o exemplo 07).
+
 \begin{lstlisting}
-// Destroy the class
+// Destroy the object
 void example9_destroy(t_example9 *x) {
-   post("You say good bye and I say hello");
+  post("You say good bye and I say hello");
 }
 
 void example9_setup(void) {
-    example9_class = class_new(gensym("example9"),
-            (t_newmethod) example9_new, // Constructor
-            (t_method) example9_destroy, // Destructor
-            sizeof (t_example9),
-	    CLASS_NOINLET,
-	    A_GIMME, // Allows various parameters
-            0); // LAST argument is ALWAYS zero
+   example9_class = class_new(gensym("example9"),
+     (t_newmethod) example9_new, // Constructor
+     (t_method) example9_destroy, // Destructor
+     sizeof (t_example9),
+     CLASS_NOINLET,
+     A_GIMME, // Allows various parameters
+     0); // LAST argument is ALWAYS zero
 }
-
 \end{lstlisting}
 
-A liberação da memória pode ser feita com a função freebytes() definida na API
-do Pure Data.
+A liberação da memória pode ser feita utilizando a função \texttt{freebytes()}
+definida na API do Pure Data.
 
 \begin{lstlisting}
 void freebytes(void *x, size_t nbytes)

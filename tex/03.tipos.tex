@@ -49,13 +49,15 @@ retorna o endereço daquele símbolo. Se a string não foi encontrada na tabela,
 um novo símbolo é adicionado.
 
 \section{Mensagens}
+\label{sec:mensagens}
 
 Dados que não correspondem a áudio são distribuídos via um sistema de
 mensagens. Cada mensagem é composta de um ``seletor" e uma lista de átomos.
 
 \subsection{Átomos}
+\label{sec:atomos}
 
-Existem três tipos de átomos:
+Os tipos de átomo mais utilizados são:
 
 \begin{itemize}
 \item \texttt{A\_FLOAT}: um valor numérico (de ponto flutuante).
@@ -68,10 +70,26 @@ Valores numéricos são sempre considerados valores de ponto flutuante
 
 Átomos do tipo \texttt{A\_POINTER} não são muito importantes (para \externals
 simples).
-Since pd is used on several plattforms, many ordinary types of variables, like int, are re-defined. To write portable code, it is reasonable to use types provided by pd.
 
 O tipo de um átomo \texttt{a} é armazenado no elemento da estrutura
 \texttt{a.a\_type}.
+
+Outros tipos de átomo definidos no arquivo \texttt{m\_pd.h} são:
+
+\begin{itemize}
+\item A\_NULL,
+\item A\_FLOAT,
+\item A\_SYMBOL,
+\item A\_POINTER,
+\item A\_SEMI,
+\item A\_COMMA,
+\item A\_DEFFLOAT,
+\item A\_DEFSYM,
+\item A\_DOLLAR, 
+\item A\_DOLLSYM,
+\item A\_GIMME,
+\item A\_CANT
+\end{itemize}
 
 \subsection{Seletores}
 
