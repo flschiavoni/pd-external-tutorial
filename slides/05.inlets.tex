@@ -41,8 +41,8 @@ As funções para criar os inlets passivos dos tipos mais comuns são:
 
 
 \begin{frame}[fragile]{Inlets ativos}
-\begin{lstlisting}
-// all inlet-methods receive the object as their first argument.
+\begin{lstlisting}[language=C]
+// inlet-methods receive the object as first argument.
 void example5_bang(t_example5 *x) { 
   post("BANGED!");
   post("My_float value: %f",x->my_float);
@@ -55,9 +55,7 @@ void example5_anything(t_example5 *x, t_symbol *s, int argc, t_atom *argv){
 void example5_setup(void) {
   example5_class = class_new(gensym("example5"),
     (t_newmethod) example5_new, // Constructor
-    0, 
-    sizeof (t_example5),
-    CLASS_DEFAULT,
+    0,  sizeof (t_example5), CLASS_DEFAULT,
     0); // LAST argument is ALWAYS zero
   class_addbang(example5_class, example5_bang);
   class_addanything(example5_class, example5_anything);
