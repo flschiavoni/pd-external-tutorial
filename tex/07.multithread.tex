@@ -126,3 +126,13 @@ for(;;) { /* Playback loop */
 \end{lstlisting}
 
 \todo{Creio que seria mais útil um exemplo funcional...}
+
+\section{Controle via Pure Data}
+Além de podermos trabalhar threads para nosso external, na biblioteca do
+Pd há funções para que possamos criar mutex no Pd. São elas:
+
+\begin{itemize}
+\item \texttt{void sys\_lock(void);}
+\item \texttt{void sys\_unlock(void);}
+\item \texttt{int sys\_trylock(void);}
+\end{itemize}
