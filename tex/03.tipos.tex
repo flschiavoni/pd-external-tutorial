@@ -48,6 +48,9 @@ função \texttt{gensym(char *)} procura por uma string em uma tabela de busca e
 retorna o endereço daquele símbolo. Se a string não foi encontrada na tabela,
 um novo símbolo é adicionado.
 
+Estes símbolos serão usados para várias coisas como para criar e associar mensagens 
+entre objetos, definir ações esperadas para mensagens recebidas por inlets, criar 
+comunicação entre a GUI e o Pd, entre outras.
 \section{Mensagens}
 \label{sec:mensagens}
 
@@ -90,6 +93,8 @@ Outros tipos de átomo definidos no arquivo \texttt{m\_pd.h} são:
 \item A\_GIMME,
 \item A\_CANT
 \end{itemize}
+
+\todo{Verificar para que estes átomos servem e montar exemplos com eles.}
 
 \subsection{Seletores}
 

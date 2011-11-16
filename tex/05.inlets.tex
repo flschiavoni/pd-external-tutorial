@@ -6,11 +6,12 @@
 
 Os objetos que criamos até agora são inúteis. Não servem para nada, pois não
 se comunicam com outros objetos nem modificam sinais de áudio. Para dar
-utilidade a um \external, é necessáiro que ele comunique com outros objetos
+utilidade a um \external, é necessário que ele comunique com outros objetos
 do Pure Data. Isto é feito por meio de \emph{inlets} e \emph{outlets}, portas
 de entrada e saída (respectivamente) de sinais de áudio e/ou mensagens.
 
-Existem dois tipos de inlets: passivos e ativos. Inlets \textbf{passivos} são
+Neste capítulo vamos tratar exclusivamente de inlets e outlets de mensagens.
+Entre os inlets de mensagem há os tipos passivos e ativos. Inlets \textbf{passivos} são
 inlets cujo valor recebido é associada diretamente a um atributo do objeto.
 São chamados de passivos pois a alteração do seu valor não resulta na chamada
 de um método e a atribuição do valor recebido ao atributo do objeto é feita
@@ -40,6 +41,10 @@ void * example4_new(t_symbol * arg1, t_floatarg arg2) {
   return (void *) x;
 }
 \end{lstlisting}
+
+Neste exemplo, o atributo my\_float do objeto é associado a um inlet do tipo float. Isto 
+significa que, caso tenhamos uma mensagem float ligada a este objeto, o valor
+desta mensagem ficará armazenada no atributo my\_float.
 
 Um inlet passivo é associado a um tipo do Pure Data, e requer que o atributo
 associado seja do mesmo tipo do valor recebido através do inlet. Para cada
@@ -122,7 +127,7 @@ inlet \\
 
 É possível associar átomos a métodos e executar métodos diferentes dependendo
 do conteúdo das mensagens recebidas pelo primeiro inlet. Isto é feito através da
-função \texttt{add\_method()} veja o exemplo 08).
+função \texttt{add\_method()} (veja o exemplo 08).
 
 \begin{lstlisting}
 // Constructor of the class
@@ -235,8 +240,20 @@ recebe um bang (veja a figura \ref{fig:outlet-bang}).
 \label{fig:outlet-bang}
 \end{figure}
 
+Há funções definidas para enviar vários tipos diferentes para um outlet.
+São elas:
+
+\begin{itemize}
+\item void outlet\_bang(t\_outlet *x);
+\item void outlet\_pointer(t\_outlet *x, t\_gpointer *gp);
+\item void outlet\_float(t\_outlet *x, t\_float f);
+\item void outlet\_symbol(t\_outlet *x, t\_symbol *s);
+\item void outlet\_list(t\_outlet *x, t\_symbol *s, int argc, t\_atom *argv);
+\item void outlet\_anything(t\_outlet *x, t\_symbol *s, int argc, t\_atom *argv);
+\end{itemize}
+
 \todo{Tem um tipo de inlet/outlet que utiliza um sistema de proxy para que os
-mesmos possam ser definidos on the fly. Nunca usei mas acho que seria legal abordar.
- Ele baseia-se em definir um método em outro objeto (o proxy) e associar
-este novo inlet ao proxy. Assim podemos instanciar vários proxys e tratar vários
-inlets passivos, por exemplo.}
+mesmos possam ser definidos on the fly. Ele baseia-se em definir um método em
+outro objeto (o proxy) e associar este novo inlet ao proxy. Assim podemos 
+instanciar vários proxys e tratar vários inlets passivos, por exemplo.}
+

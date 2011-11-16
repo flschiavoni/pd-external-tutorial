@@ -4,7 +4,7 @@
 
 \chapter{Processamento de Sinais Digitais}
 
-\todo{Precisa mudar o nome dos exemplos para exemplo~. Neste caso, a função setup deve ser renomeada para "tilde\_setup")}
+\todo{Precisa mudar o nome dos exemplos para exemplo$\sim$. Neste caso, a função setup deve ser renomeada para "tilde\_setup")}
 
 Enfim chegamos no processamento de áudio propriamente dito: \emph{Digital
 Signal Processing} ou processamento de sinal digital. O Pure Data possui
@@ -29,7 +29,7 @@ Se o \external necessita de apenas um inlet DSP, a macro
 \texttt{CLASS\_MAINSIGNALIN()} define um inlet DSP no primeiro inlet da
 esquerda. Para esta macro funcionar, é necessário que a classe seja do tipo
 \texttt{CLASS\_DEFAULT}, e que um método seja associado à mensagem ``dsp", de
-forma que será executado qunado o DSP for iniciado. A forma de declaração de
+forma que será executado quando o DSP for iniciado. A forma de declaração de
 outros inlets DSP será vista logo adiante.
 
 \lstinputlisting[name=Exemplo 10,linerange=36-49,firstnumber=last]{../examples/src/example10.c}
@@ -58,16 +58,18 @@ em qual ordem. O próximo passo é criar o método perform propriamente dito.
 
 \lstinputlisting[name=Exemplo 10,linerange=23-29,firstnumber=last]{../examples/src/example10.c}
 
-\todo{O que raios há na posição w[0]? Resposta: o endereço da própria função
+\todo{Pergunta: O que raios há na posição w[0]? Resposta: o endereço da própria função
 perform.}
 
 O método perform receberá como parâmetro um vetor com os valores definidos no
 método \texttt{dsp\_add()}. A posição 0 deste vetor sempre conterá o endereço
-para a própria função \texttt{\_perform()}. Na posição 1, o sinal de entrada;
+para a própria função \texttt{\_perform()}. Nas próximas posições devemos rever
+o que definimos na função DSP acima. Na posição 1, o sinal de entrada;
 na posição 2 o tamanho do vetor de entrada e na posição 3 a estrutura de dados
-correspondente ao objeto. Este método deve retornar a próxima posição do
-vetor, ou seja, o endereço dado na chamada somado com a quantidade de
-atributos do método mais um.
+correspondente ao objeto. Note que podemos enviar estes dados em outra ordem ou
+ainda enviar outros dados para a função \texttt{perform()}.
+Este método deve retornar a próxima posição do vetor, ou seja, o endereço dado 
+na chamada somado com a quantidade de atributos do método mais um.
 
 \section{Vários inlets DSP}
 
