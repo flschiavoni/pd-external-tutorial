@@ -48,16 +48,14 @@ static void example17_dsp(t_example17 *x, t_signal **sp){
 }
 
 void example17_setup(void) {
-    example17_class = class_new(gensym("example17"),
-            (t_newmethod) example17_new, // Constructor
-            (t_method) example17_destroy, // Destructor
-            sizeof (t_example17),
-	    CLASS_NOINLET,
-	    A_DEFFLOAT, // # of inlets
-	    A_DEFFLOAT, // # of outlets
-            0); // LAST argument is ALWAYS zero
-
+  example17_class = class_new(gensym("example17"),
+    (t_newmethod) example17_new, // Constructor
+    (t_method) example17_destroy, // Destructor
+    sizeof (t_example17),
+    CLASS_NOINLET,
+    A_DEFFLOAT, // # of inlets
+    A_DEFFLOAT, // # of outlets
+    0); // LAST argument is ALWAYS zero
     class_addmethod(example17_class, (t_method) example17_dsp, gensym("dsp"), 0);
-
 }
 

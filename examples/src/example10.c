@@ -5,7 +5,7 @@ static t_class *example10_class;
 
 typedef struct _example10 {
     t_object x_obj;
-    t_float x_f;          /* place to hold inlet's value if it's set by message */
+    t_float x_f; /* inlet value when set by message */
 } t_example10;
 
 // Constructor of the class
@@ -37,13 +37,9 @@ void example10_setup(void) {
   example10_class = class_new(gensym("example10"),
     (t_newmethod) example10_new, // Constructor
     (t_method) example10_destroy, // Destructor
-    sizeof (t_example10),
-    CLASS_DEFAULT,
-    A_GIMME, // Allows various parameters
-    0); // LAST argument is ALWAYS zero
-
-  // this is magic to declare that the leftmost, "main" inlet
-  // takes signals; other signal inlets are done differently...
+    sizeof (t_example10), CLASS_DEFAULT, A_GIMME, 0);
+  // this declares the leftmost, "main" inlet
+  // as taking signals.
   CLASS_MAINSIGNALIN(example10_class, t_example10, x_f);
   class_addmethod(example10_class, (t_method) example10_dsp, gensym("dsp"), 0);
 }
