@@ -132,11 +132,10 @@ O resultado pode ser visto na figura \ref{fig:primeiro-outlet}.
 
 Nosso próximo exemplo (veja o exemplo 13) mistura no mesmo objeto inlets e
 outlets DSP, o que é bastante comum. Neste ponto, deve estar mais ou menos
-claro como é feita a construção de um objeto assim. Lembre-se que não é
-necessário guardar os endereços dos inlets e outlets na estrutura de dados que
-representa o objeto. É necessário apenas criar os inlets e outlets no
-construtor (lembre-se que o primeiro inlet já foi criado no método setup. Ele
-é mágico!).
+claro como é feita a construção de um objeto assim. Não é necessário guardar 
+os endereços dos inlets e outlets na estrutura de dados que representa o objeto. 
+É necessário apenas criar os inlets e outlets no construtor (lembre-se que o 
+primeiro inlet já foi criado no método setup. Ele é mágico!).
 
 \lstinputlisting[name=Exemplo 13,linerange=12-25]{../examples/src/example13.c}
 
@@ -218,10 +217,9 @@ O Pd precisa que o processamento dos blocos termine em determinado tempo. Qual
 seria este tempo? Para um bloco de 64 amostras e taxa de amostragem 44.100
 amostras por segundo, é necessário que todo o processamento para um bloco
 termine em um pouco mais de 1 milisegundo. Parece rápido mas seu computador é
-mais rápido que isto. Criar um processo consumidor e fazê-lo liberando
-\todo{``fazê-lo liberando"?} o bloco de processamento pode ser uma abordagem
-melhor para processos baseados em fluxo, como escrita em arquivos. Para isto
-precisamos utilizar outra função em outra thread e este é nosso próximo
-assunto.
+mais rápido que isto. Criar um processo consumidor que libere o bloco de 
+processamento pode ser uma abordagem melhor para processos baseados em fluxo,
+como escrita em arquivos. Para isto precisamos utilizar outra função em outra 
+thread e este é nosso próximo assunto.
 
 \todo{Vale a pena mostrar como fazer o loop entre as amostras ou é óbvio?}
