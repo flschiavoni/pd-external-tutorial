@@ -1,0 +1,233 @@
+\section{Funções da biblioteca \texttt{m\_pd.h}}
+
+
+\begin{frame}{Gerenciamento de memória}
+{Arquivo: \texttt{m\_memory.c}}
+\code{void *getbytes(size\_t);}
+
+\code{void *getzbytes(size\_t);}
+
+\code{void *copybytes(void *, size\_t);}
+
+\code{void freebytes(void *, size\_t);}
+
+\code{void *resizebytes(void *, size\_t, size\_t);}
+\end{frame}
+
+
+\begin{frame}{Átomos}
+{Arquivo: \code{m\_atom.c}}
+
+\code{t\_float atom\_getfloat(t\_atom *);}
+
+\code{t\_int atom\_getint(t\_atom *);}
+
+\code{t\_symbol *atom\_getsymbol(t\_atom *);}
+
+\code{t\_symbol *atom\_gensym(t\_atom *);}
+
+\code{t\_float atom\_getfloatarg(int, int, t\_atom *);}
+
+\code{t\_int atom\_getintarg(int, int, t\_atom *);}
+
+\code{t\_symbol *atom\_getsymbolarg(int, int, t\_atom *);}
+
+\code{void atom\_string(t\_atom *, char *, unsigned int);}
+\end{frame}
+
+
+\begin{frame}{Relógios}
+{Arquivo: \code{m\_sched.c}}
+\code{t\_clock *clock\_new(void *, t\_method);}
+
+\code{void clock\_set(t\_clock *, double);}
+
+\code{void clock\_delay(t\_clock *, double);}
+
+\code{void clock\_unset(t\_clock *);}
+
+\code{double clock\_getlogicaltime(void);}
+
+\code{double clock\_getsystime(void);}
+
+\code{double clock\_gettimesince(double);}
+
+\code{double clock\_getsystimeafter(double);}
+
+\code{void clock\_free(t\_clock *);}
+\end{frame}
+
+
+\begin{frame}{Inlets}
+{Arquivo: \code{m\_obj.c}}
+\code{t\_inlet *inlet\_new(t\_object *, t\_pd *, t\_symbol *, t\_symbol *);}
+
+\code{t\_inlet *pointerinlet\_new(t\_object *, t\_gpointer *);}
+
+\code{t\_inlet *floatinlet\_new(t\_object *owner, t\_float *fp);}
+
+\code{t\_inlet *symbolinlet\_new(t\_object *, t\_symbol **);}
+
+\code{t\_inlet *signalinlet\_new(t\_object *, t\_float);}
+
+\code{void inlet\_free(t\_inlet *);}
+
+\end{frame}
+
+
+\begin{frame}{Outlets}
+{Arquivo: \code{m\_obj.c}}
+\code{t\_outlet *outlet\_new(t\_object *, t\_symbol *);}
+
+\code{void outlet\_bang(t\_outlet *);}
+
+\code{void outlet\_pointer(t\_outlet *, t\_gpointer *);}
+
+\code{void outlet\_float(t\_outlet *, t\_float);}
+
+\code{void outlet\_symbol(t\_outlet *, t\_symbol *);}
+
+\code{void outlet\_list(t\_outlet *, t\_symbol *, int, t\_atom *);}
+
+\code{void outlet\_anything(t\_outlet *, t\_symbol *, int, t\_atom *);}
+
+\code{t\_symbol *outlet\_getsymbol(t\_outlet *);}
+
+\code{void outlet\_free(t\_outlet *;}
+\end{frame}
+
+
+\begin{frame}{Classes}
+{Arquivo: \code{m\_class.c}}
+
+\code{void class\_addcreator(t\_newmethod, t\_symbol *, t\_atomtype, ...);}
+
+\code{void class\_addmethod(t\_class *, t\_method, t\_symbol *, t\_atomtype, ...);} 
+
+\code{void class\_addbang(t\_class *, t\_method);}
+
+\code{void class\_addpointer(t\_class *, t\_method);}
+
+\code{void class\_doaddfloat(t\_class *, t\_method);}
+
+\code{void class\_addsymbol(t\_class *, t\_method);}
+
+\code{void class\_addlist(t\_class *, t\_method);}
+
+\code{void class\_addanything(t\_class *, t\_method);}
+
+\code{void class\_sethelpsymbol(t\_class *, t\_symbol *);}
+
+\code{char *class\_getname(t\_class *);}
+
+\code{char *class\_gethelpname(t\_class *);}
+
+\code{void class\_setsavefn(t\_class *, t\_savefn);}
+
+\code{t\_savefn class\_getsavefn(t\_class *);}
+
+\code{void class\_setpropertiesfn(t\_class *, t\_propertiesfn);}
+\end{frame}
+
+
+\begin{frame}{Saída de texto}
+{Arquivo: \code{s\_print.c}}
+\code{void post(const char *fmt, ...);}
+
+\code{void startpost(const char *fmt, ...);}
+
+\code{void poststring(const char *s);}
+
+\code{void postfloat(t\_floatarg f);}
+
+\code{void postatom(int argc, t\_atom *argv);}
+
+\code{void endpost(void);}
+
+\code{void error(const char *fmt, ...);}
+
+\code{void verbose(int level, const char *fmt, ...);}
+
+\code{void bug(const char *fmt, ...);}
+
+\code{void pd\_error(void *object, const char *fmt, ...);}
+
+\code{void sys\_logerror(const char *object, const char *s);}
+
+\code{void sys\_unixerror(const char *object);}
+
+\code{void sys\_ouch(void);}
+\end{frame}
+
+
+\begin{frame}{Aritmética de sinais}
+{Arquivo: \code{d\_arithmetic.c}}
+
+\code{t\_int *plus\_perform(t\_int *);}
+
+\code{t\_int *zero\_perform(t\_int *);}
+
+\code{t\_int *copy\_perform(t\_int *);}
+
+
+\code{void dsp\_add\_plus(t\_sample *, t\_sample *, t\_sample *, int);}
+
+\code{void dsp\_add\_copy(t\_sample *, t\_sample *, int);}
+
+\code{void dsp\_add\_scalarcopy(t\_float *, t\_sample *, int);}
+
+\code{void dsp\_add\_zero(t\_sample *, int);}
+\end{frame}
+
+
+\begin{frame}{Configurações do DSP}
+{Arquivo: \code{s\_main.c}}
+\code{int sys\_getblksize(void);}
+
+\code{t\_float sys\_getsr(void);}
+\end{frame}
+
+
+\begin{frame}{Configurações de áudio}
+{Arquivo: \code{s\_audio.c}}
+\code{int sys\_get\_inchannels(void);}
+
+\code{int sys\_get\_outchannels(void);}
+\end{frame}
+
+
+\begin{frame}{Fast Fourier Transform}
+{Arquivos: \code{d\_fft.c}, \code{d\_fft\_fftw.c}, \code{d\_fft\_mayer.c}}
+\code{void pd\_fft(t\_float *, int, int);}
+
+\code{void mayer\_fht(t\_sample *, int);}
+
+\code{void mayer\_fft(int, t\_sample *, t\_sample *);}
+
+\code{void mayer\_ifft(int, t\_sample *, t\_sample *);}
+
+\code{void mayer\_realfft(int, t\_sample *);}
+
+\code{void mayer\_realifft(int, t\_sample *);}
+
+\end{frame}
+
+
+\begin{frame}{Matemática}
+{Arquivo: \code{d\_math.c}}
+\code{t\_float mtof(t\_float);}
+
+\code{t\_float ftom(t\_float);}
+
+\code{t\_float rmstodb(t\_float);}
+
+\code{t\_float powtodb(t\_float);}
+
+\code{t\_float dbtorms(t\_float);}
+
+\code{t\_float dbtopow(t\_float);}
+
+\code{t\_float q8\_sqrt(t\_float);}
+
+\code{t\_float q8\_rsqrt(t\_float);}
+\end{frame}
