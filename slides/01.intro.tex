@@ -27,8 +27,11 @@ Algumas informações sobre o código do Pure Data:
 \begin{itemize}
 \item Publicado sob a licença \enfasel{Standard Improved BSD License}.
 \item Organizado de forma orientada a objetos.
+\begin{itemize}
 \item Classes são tipos.
 \item Objetos (gráficos) do Pure Data são instâncias de classes.
+dados e assinaturas de funções: \texttt{m\_pd.h}.
+\end{itemize}
 \item Existe um arquivo de cabeçalho com constantes, tipos, estruturas de
 dados e assinaturas de funções: \texttt{m\_pd.h}.
 \end{itemize}
@@ -37,17 +40,17 @@ dados e assinaturas de funções: \texttt{m\_pd.h}.
 
 \begin{frame}[fragile]{Compilação}
 \begin{lstlisting}
-EXTNAME=meu-external
+EXTNAME=meu_external
 cc -DPD -fPIC -Wall -o ${EXTNAME}.o -c ${EXTNAME}.c
 ld -shared -lc -lm -o ${EXTNAME}.pd_linux ${EXTNAME}.o
 rm ${EXTNAME}.o
 \end{lstlisting}
 O Pure Data procura por objetos com nomes diferentes em cada sistema:
 \begin{itemize}
-  \item \texttt{meu-external.\enfase{pd\_linux}} (GNU/Linux).
-  \item \texttt{meu-external.\enfase{pd\_irix5}} (Irix 5).
-  \item \texttt{meu-external.\enfase{pd\_darwin}} (Mac OS X).
-  \item \texttt{meu-external.\enfase{dll}} (MS Windows).
+  \item \texttt{meu\_external.\enfase{pd\_linux}} (GNU/Linux).
+  \item \texttt{meu\_external.\enfase{pd\_irix5}} (Irix 5).
+  \item \texttt{meu\_external.\enfase{pd\_darwin}} (Mac OS X).
+  \item \texttt{meu\_external.\enfase{dll}} (MS Windows).
 \end{itemize}
 \end{frame}
 
@@ -55,14 +58,14 @@ O Pure Data procura por objetos com nomes diferentes em cada sistema:
 \begin{frame}[fragile]{Arquivos de ajuda}
 Um arquivo de ajuda é um patch do Pure Data com:
 \begin{itemize}
-\item Um nome informativo: \texttt{meu-external\enfase{-help}.pd}.
+\item Um nome informativo: \texttt{meu\_external\enfase{-help}.pd}.
 \item Instruções de uso.
 \item Exemplos de utilização.
 \end{itemize}
 \vspace{2em}
 A seguinte função associa um arquivo de ajuda a uma classe de \external:
 \begin{lstlisting}
-class_sethelpsymbol(meu-external_class, gensym("meu-external_class-help"));
+class_sethelpsymbol(meu_external_class, gensym("meu_external_class-help"));
 \end{lstlisting}
 \end{frame}
 
@@ -74,15 +77,15 @@ Passos para utilizar um \external no Pure Data:
 \item Compile o código-fonte para criar uma biblioteca compartilhada.
 \item Informe ao Pure Data o caminho para o \external através de uma das
 opções abaixo:
-  \begin{enumerate}
+  \begin{itemize}
+    \item Na criação do objeto, insira o caminho completo (relativo ou
+    absoluto) para o objeto do \external.
     \item Na linha de comando, utilize a opção \enfasel{\texttt{-path
     <caminho>}}.
     \item Na interface gráfica, acesse a opção \enfasel{\texttt{File} $\rightarrow$
     \texttt{Path...}}.
-    \item Na criação do objeto, insira o caminho completo (relativou ou
-    absoluto) para o objeto do \external.
-  \end{enumerate}
-\item Crie um objeto com o nome do arquivo do \external, sem a extensão.
+  \end{itemize}
+\item Crie um objeto na interface gráfica do Pd com o nome do arquivo do \external, sem a extensão.
 \end{enumerate}
 \end{frame}
 

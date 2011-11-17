@@ -1,7 +1,7 @@
 \section{Construtor e destrutor}
 
 
-\begin{frame}{Passagem de parâmetros para um construtor}
+\begin{frame}{Construtor com parâmetros (1/2)}
 \begin{figure}
 \centering
 \includegraphics[width=0.7\textwidth]{example2}
@@ -9,7 +9,7 @@
 \end{frame}
 
 
-\begin{frame}[fragile]{Exemplo de construtor com passagem de parâmetros}
+\begin{frame}[fragile]{Construtor com parâmetros (2/2)}
 \begin{lstlisting}
 // Constructor of the class
 void *example2_new(t_symbol * arg1, t_floatarg arg2) {
@@ -20,40 +20,29 @@ void *example2_new(t_symbol * arg1, t_floatarg arg2) {
 }
 
 void example2_setup(void) {
-    example2_class = class_new(gensym("example2"),
-            (t_newmethod) example2_new, // Constructor
-            0,
-            sizeof (t_example2),
-	    CLASS_NOINLET,
-            A_DEFFLOAT, // Constructor parameter 1
-            A_DEFSYMBOL, // Constructor parameter 2
-            0);
+  example2_class = class_new(gensym("example2"),
+    (t_newmethod) example2_new, // Constructor
+    0,
+    sizeof (t_example2),
+    CLASS_NOINLET,
+    A_DEFFLOAT, // Constructor parameter 1
+    A_DEFSYMBOL, // Constructor parameter 2
+    0);
 }
 \end{lstlisting}
 \end{frame}
 
 
-\begin{frame}{Outros tipos de átomo}
-Existem diversos tipos de átomo definidos pelo arquivo \texttt{m\_pd.h} que
-podem ser utilizados na passagem de parâmetros:
-\begin{itemize}
-\item \texttt{A\_NULL},
-\item \texttt{A\_FLOAT},
-\item \texttt{A\_SYMBOL},
-\item \texttt{A\_POINTER},
-\item \texttt{A\_SEMI},
-\item \texttt{A\_COMMA},
-\item \texttt{A\_DEFFLOAT},
-\item \texttt{A\_DEFSYM},
-\item \texttt{A\_DOLLAR}, 
-\item \texttt{A\_DOLLSYM},
-\item \texttt{A\_GIMME},
-\item \texttt{A\_CANT}.
-\end{itemize}
+\begin{frame}{Construtor com \texttt{A\_GIMME} (1/2)}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth]{example9}
+\caption{Diferente da linguagem C, o primeiro parâmetro não é o nome do external.}
+\end{figure}
 \end{frame}
 
 
-\begin{frame}[fragile]{Exemplo de construtor utilizando \texttt{A\_GIMME}}
+\begin{frame}[fragile]{Construtor com \texttt{A\_GIMME} (2/2)}
 \begin{lstlisting}
 // Constructor of the class
 void *example9_new(t_symbol *s,
@@ -76,16 +65,7 @@ void example9_setup(void) {
 \end{frame}
 
 
-\begin{frame}{Exemplo de construtor com diferentes parâmetros}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.7\textwidth]{example9}
-\caption{Diferente da linguagem C, o primeiro parâmetro não é o nome do external.}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}[fragile]{Exemplo de destrutor}
+\begin{frame}[fragile]{Destrutor}
 \begin{lstlisting}
 // Destroy the object
 void example9_destroy(t_example9 *x) {

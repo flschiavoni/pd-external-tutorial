@@ -51,7 +51,7 @@ Seletores:
   \texttt{symbol} & \texttt{gensym("symbol")} & \texttt{\&s\_symbol} \\
   \texttt{pointer} & \texttt{gensym("pointer")} & \texttt{\&s\_pointer} \\
   \texttt{list} & \texttt{gensym("list")} & \texttt{\&s\_list} \\
-  \texttt{--}  (signal) & \texttt{gensym("signal")} & \texttt{\&s\_symbol} \\
+  \texttt{--}  (signal) & \texttt{gensym("signal")} & \texttt{\&s\_signal} \\
 \hline
 \end{tabular}
 \end{center}
@@ -62,7 +62,24 @@ Tipos de átomos:
 \item \texttt{A\_SYMBOL}: um valor simbólico (string).
 \item \texttt{A\_POINTER}: um ponteiro.
 \end{itemize}
-
 \end{frame}
 
 
+\begin{frame}{Outros tipos de átomo}
+Existem diversos tipos de átomo definidos pelo arquivo \texttt{m\_pd.h} que
+podem ser utilizados para passagem de parâmetros:
+\begin{itemize}
+\item \texttt{A\_NULL}
+\item \texttt{A\_FLOAT}
+\item \texttt{A\_SYMBOL}
+\item \texttt{A\_POINTER}
+\item \texttt{A\_SEMI}
+\item \texttt{A\_COMMA}
+\item \texttt{A\_DEFFLOAT}
+\item \texttt{A\_DEFSYM}
+\item \texttt{A\_DOLLAR} 
+\item \texttt{A\_DOLLSYM}
+\item \texttt{A\_GIMME}
+\item \texttt{A\_CANT}
+\end{itemize}
+\end{frame}

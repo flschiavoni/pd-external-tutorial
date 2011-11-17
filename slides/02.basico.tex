@@ -11,7 +11,7 @@ typedef struct _example1 {
   t_object x_obj;
 } t_example1;
 \end{lstlisting}
-2. Uma função de inicialização da classe:
+2. Uma função de configuração da classe:
 \begin{lstlisting}[firstnumber=last]
 void example1_setup(void) {
   example1_class = class_new(
@@ -40,7 +40,7 @@ void * example1_new(void) {
 \end{frame}
 
 
-\begin{frame}[fragile]{Bibliotecas}
+\begin{frame}[fragile]{Bibliotecas (1/2)}
 Podemos definir diversas classes numa mesma função de inicialização:
 \begin{lstlisting}
 void example2_setup(void) {
@@ -66,13 +66,21 @@ void example2_setup(void) {
 \end{frame}
 
 
+\begin{frame}[fragile]{Bibliotecas (2/2)}
+\begin{figure}
+\centering
+\includegraphics[width=0.7\textwidth]{example3}
+\end{figure}
+\end{frame}
+
+
 \begin{frame}[fragile]{Variáveis globais}
 Variáveis globais são acessadas por todas as instâncias de objetos e funções
 do \external:
 \begin{lstlisting}
 int count = 0;
 void * example4_new(void) {
-    t_example16 *x = (t_example4 *) pd_new(example4_class);
+    t_example4 *x = (t_example4 *) pd_new(example4_class);
     post("Counter value: %d",count);
     count++;
     return (void *) x;
