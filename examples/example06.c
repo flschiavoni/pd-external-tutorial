@@ -17,7 +17,11 @@ void example06_bang(t_example06 *x) {
 }
 
 void example06_anything(t_example06 *x, t_symbol *s, int argc, t_atom *argv){
-  post("ANYTHING!");
+   (void)x;
+   (void)s;
+   (void)argc;
+   (void)argv;
+   post("ANYTHING!");
 }
 
 // Constructor of the class
@@ -39,7 +43,7 @@ void example06_setup(void) {
     A_DEFFLOAT,  // 1st constructor parameter
     A_DEFSYMBOL, // 2nd constructor parameter
     0); // LAST argument is ALWAYS zero
-  // active inlet that receives bangs
+
   class_addbang(example06_class, example06_bang); // 
   class_addanything(example06_class, example06_anything);
 }

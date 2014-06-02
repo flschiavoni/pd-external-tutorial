@@ -1,0 +1,4 @@
+#N canvas 50 82 450 300 10;
+#X obj 37 37 dspbang~;
+#X obj 37 71 print;
+#X connect 0 0 1 0;

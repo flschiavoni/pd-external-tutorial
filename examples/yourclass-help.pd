@@ -1,0 +1,37 @@
+#N canvas 345 48 659 486 10;
+#X obj 25 320 yourclass;
+#X obj 33 94 cnv 15 550 140 empty empty SQL_example 20 12 0 14 -233017
+-66577 0;
+#X msg 84 119 select * from table;
+#X msg 124 211 insert into table (id \, mine \, their) values (\$1
+\, '\$2' \, '\$3');
+#X obj 124 192 pack f s s;
+#X floatatom 141 141 5 0 0 0 - - -;
+#X obj 124 158 f;
+#X obj 124 141 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X symbolatom 155 161 10 0 0 0 - - -;
+#X symbolatom 189 176 10 0 0 0 - - -;
+#X obj 164 250 cnv 15 250 80 empty empty RPN-like-language 20 12 0
+14 -233017 -66577 0;
+#X msg 192 276 123.3 475.3 *;
+#X msg 207 298 123.3 dup * 4 exch div;
+#X text 40 403 The code for this was culled from the 'x_list.c' file.
+Look at that for how they did it.;
+#X text 160 360 ...Or anything else where you might need a list on
+a 'cold' inlet.;
+#X text 31 16 the only usefulness in the 'yourclass' object is in how
+to write an external using a proxy class \, which allows you to accept
+a list with an arbitrary selector for input on a right 'cold' inlet.
+While it is probably possible to have more than one of these inlets
+\, it has not been tested.;
+#X connect 2 0 0 1;
+#X connect 3 0 0 1;
+#X connect 4 0 3 0;
+#X connect 5 0 6 1;
+#X connect 6 0 4 0;
+#X connect 7 0 6 0;
+#X connect 8 0 4 1;
+#X connect 9 0 4 2;
+#X connect 11 0 0 1;
+#X connect 12 0 0 1;

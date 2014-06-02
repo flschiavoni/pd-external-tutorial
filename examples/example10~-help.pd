@@ -1,0 +1,5 @@
+#N canvas 742 82 621 685 10;
+#X text 29 16 Example of signal inlet;
+#X obj 97 92 example10~;
+#X msg 96 47 bang;
+#X connect 2 0 1 0;

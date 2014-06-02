@@ -1,0 +1,19 @@
+#N canvas 322 236 504 279 10;
+#X obj 58 95 harmonics~;
+#X obj 58 154 dac~;
+#X msg 142 147 bang;
+#N canvas 0 0 450 300 (subpatch) 0;
+#X array \$0-array 64 float 0;
+#X coords 0 1 63 -1 160 100 1 0 0;
+#X restore 291 82 graph;
+#X obj 136 180 tabwrite~ \$0-array;
+#X obj 142 86 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 59 38 osc~ 449;
+#X obj 142 120 metro 500;
+#X connect 0 0 1 0;
+#X connect 0 0 4 0;
+#X connect 2 0 4 0;
+#X connect 5 0 7 0;
+#X connect 6 0 0 0;
+#X connect 7 0 2 0;

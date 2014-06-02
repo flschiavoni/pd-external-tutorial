@@ -18,8 +18,11 @@ void example07_bang(t_example07 *x) { // The method will always receive the clas
 }
 
 void example07_anything(t_example07 *x, t_symbol *s, int argc, t_atom *argv){
-
-	post("ANYTHING!");
+   (void)x;
+   (void)s;
+   (void)argc;
+   (void)argv;
+   post("ANYTHING!");
 }
 
 // Constructor of the class
@@ -37,6 +40,7 @@ void * example07_new(t_symbol * arg1, t_floatarg arg2) {
 
 // Destroy the class
 void example07_destroy(t_example07 *x) {
+   (void)x;
    post("You say good bye and I say hello");
 }
 
@@ -45,11 +49,12 @@ void example07_setup(void) {
             (t_newmethod) example07_new, // Constructor
             (t_method) example07_destroy, // Destructor
             sizeof (t_example07),
-	    CLASS_DEFAULT,
+            CLASS_DEFAULT,
             A_DEFFLOAT, // First Constructor parameter
             A_DEFSYMBOL, // Second Consctructo parameter
             0); // LAST argument is ALWAYS zero
-    class_addbang(example07_class, example07_bang); // ADDs an ACTIVE inlet to receive bangs. This method must be linked to a local function.
+    class_addbang(example07_class, example07_bang);
+    // ADDs an ACTIVE inlet to receive bangs. This method must be linked to a local function.
     class_addanything(example07_class, example07_anything);
 
 }

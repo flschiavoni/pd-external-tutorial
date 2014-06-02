@@ -9,10 +9,10 @@ typedef struct _example02 {
 
 
 // Constructor of the class
-void * example02_new(t_symbol * arg1, t_floatarg arg2) {
+void * example02_new(t_floatarg arg1, t_symbol * arg2) {
     t_example02 *x = (t_example02 *) pd_new(example02_class);
-    post("First arg: %s", arg1->s_name);
-    post("Second arg: %f", arg2);
+    post("First arg: %f", arg1);
+    post("Second arg: %s", arg2->s_name);
     return (void *) x;
 }
 
@@ -21,7 +21,7 @@ void example02_setup(void) {
             (t_newmethod) example02_new, // Constructor
             0,
             sizeof (t_example02),
-	    CLASS_NOINLET,
+            CLASS_NOINLET,
             A_DEFFLOAT, // First Constructor parameter
             A_DEFSYMBOL, // Second Consctructo parameter
             0);

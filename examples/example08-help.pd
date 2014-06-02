@@ -1,0 +1,18 @@
+#N canvas 218 262 442 214 10;
+#X floatatom 259 98 5 0 0 0 - - -;
+#X floatatom 315 108 5 0 0 0 - - -;
+#X msg 98 49 start;
+#X msg 167 35 open test.txt;
+#X msg 146 0 bang;
+#X msg 102 2 stop;
+#X obj 191 139 example08;
+#X msg 194 58 alfa 9;
+#X msg 278 58 beta 10;
+#X connect 0 0 6 1;
+#X connect 1 0 6 2;
+#X connect 2 0 6 0;
+#X connect 3 0 6 0;
+#X connect 4 0 6 0;
+#X connect 5 0 6 0;
+#X connect 7 0 6 0;
+#X connect 8 0 6 0;

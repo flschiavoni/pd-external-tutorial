@@ -11,12 +11,23 @@ typedef struct _example09 {
 // Constructor of the class
 void * example09_new(t_symbol *s, int argc, t_atom * argv) {
     t_example09 *x = (t_example09 *) pd_new(example09_class);
+    post("External name: %s", s->s_name);
     post("%d parameters received",argc);
+    (void) argv;
+    if(argc < 1){
+       post("Please, gimme some parameters!");
+       return NULL;
+    }
+    if(argv[0].a_type != A_FLOAT){
+      post("Please, gimme a float!");
+      return NULL;
+    }
     return (void *) x;
 }
 
 // Destroy the class
 void example09_destroy(t_example09 *x) {
+   (void) x;
    post("You say good bye and I say hello");
 }
 
@@ -26,8 +37,8 @@ void example09_setup(void) {
             (t_newmethod) example09_new, // Constructor
             (t_method) example09_destroy, // Destructor
             sizeof (t_example09),
-	    CLASS_NOINLET,
-	    A_GIMME, // Allows various parameters
+            CLASS_NOINLET,
+            A_GIMME, // Allows various parameters
             0); // LAST argument is ALWAYS zero
 }
 

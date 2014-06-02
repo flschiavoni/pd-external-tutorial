@@ -1,0 +1,6 @@
+#N canvas 744 82 621 685 10;
+#X text 95 39 This example does nothing!;
+#X text 100 60 Maybe is stupid to do an external that does nothing.
+;
+#X text 98 82 But was really nice to do this.;
+#X obj 102 112 example01;

@@ -1,0 +1,20 @@
+#N canvas 703 233 450 300 10;
+#X obj 53 85 postbox obladi oblada;
+#X obj 53 52 send obladi;
+#X obj 156 19 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 53 14 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 189 32 hsl 128 15 0 127 0 0 obladi empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X obj 156 54 send oblada;
+#X obj 72 -97 vsl 15 128 0 127 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X obj 53 114 print;
+#X msg 188 -4 test something 1 2 3;
+#X connect 0 0 7 0;
+#X connect 2 0 5 0;
+#X connect 3 0 1 0;
+#X connect 4 0 5 0;
+#X connect 6 0 1 0;
+#X connect 8 0 5 0;

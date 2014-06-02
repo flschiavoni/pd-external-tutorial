@@ -1,0 +1,9 @@
+#N canvas 742 82 621 685 10;
+#X text 29 16 Different from the c language the first argument will
+not be the name;
+#X obj 96 53 osc~ 440;
+#X obj 97 92 example11~;
+#X connect 1 0 2 0;
+#X connect 1 0 2 1;
+#X connect 1 0 2 2;
+#X connect 1 0 2 3;

@@ -1,0 +1,15 @@
+#N canvas 227 173 675 478 10;
+#X obj 37 37 example01;
+#X obj 37 66 example02 0.23 qwert;
+#X obj 39 97 myobj1;
+#X obj 41 126 myobj2;
+#X obj 40 157 example04;
+#X obj 42 195 example05;
+#X obj 236 27 example06;
+#X obj 234 53 example07;
+#X obj 445 83 example08;
+#X obj 229 123 example09;
+#X obj 228 192 example10;
+#X obj 307 123 example09 test;
+#X obj 229 165 yourclass;
+#X obj 321 187 outlet_dinamico 6;
