@@ -1,7 +1,6 @@
 % ----------------------------------------------------------------------------
 % OS TIPOS DE DADOS DO PD
 % ----------------------------------------------------------------------------
-
 \chapter{Os tipos de dados do PD}
 
 Uma vez que o Pure Data é utilizado em diversas plataformas, muitos tipos
@@ -21,23 +20,26 @@ simples. Em geral, os tipos do pd têm nome iniciado por \texttt{t\_}.
 \hline
 tipo do pd & descrição \\
 \hline
-\texttt{t\_atom} & átomo \\
-\texttt{t\_float} & valor de ponto flutuante \\
-\texttt{t\_symbol} & símbolo \\
-\texttt{t\_gpointer} & ponteiro (para objetos gráficos) \\
-\texttt{t\_int} & valor inteiro \\
-\texttt{t\_signal} & estrutura de um sinal \\
-\texttt{t\_sample} & valor de um sinal de áudio (ponto flutuante) \\
-\texttt{t\_outlet} & \emph{outlet} de um objeto \\
-\texttt{t\_inlet} & \emph{inlet} de um objeto \\
-\texttt{t\_object} & objeto gráfico \\
-\texttt{t\_class} & uma classe do pd \\
-\texttt{t\_method} & um método de uma classe \\
+\texttt{t\_atom}      & átomo \\
+\texttt{t\_float}     & valor de ponto flutuante \\
+\texttt{t\_symbol}    & símbolo \\
+\texttt{t\_gpointer}  & ponteiro (para objetos gráficos) \\
+\texttt{t\_int}       & valor inteiro \\
+\texttt{t\_signal}    & estrutura de um sinal \\
+\texttt{t\_sample}    & valor de um sinal de áudio (ponto flutuante) \\
+\texttt{t\_outlet}    & \emph{outlet} de um objeto \\
+\texttt{t\_inlet}     & \emph{inlet} de um objeto \\
+\texttt{t\_object}    & objeto gráfico \\
+\texttt{t\_class}     & uma classe do pd \\
+\texttt{t\_method}    & um método de uma classe \\
 \texttt{t\_newmethod} & ponteiro para um construtor (uma função \texttt{\_new}) \\
 \hline
 \end{tabular}
 \end{center}
 
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
 \section{Símbolos}
 
 Um símbolo corresponde a um valor constante de uma \emph{string}, ou seja,
@@ -51,15 +53,30 @@ um novo símbolo é adicionado.
 Estes símbolos serão usados para várias coisas como para criar e associar mensagens 
 entre objetos, definir ações esperadas para mensagens recebidas por inlets, criar 
 comunicação entre a GUI e o Pd, entre outras.
+
+Para imprimir, por exemplo, o valor de uma String contida em um \texttt{t\_symbol} é
+necessário acessar sua propriedade \texttt{s\_name}.
+
+Exemplo:
+
+\begin{lstlisting}[caption=Imprimindo o texto de um símbolo]
+   printf("%s\n", my_symbol->s_name);
+\end{lstlisting}
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
 \section{Mensagens}
 \label{sec:mensagens}
 
 Dados que não correspondem a áudio são distribuídos via um sistema de
-mensagens. Cada mensagem é composta de um ``seletor" e uma lista de átomos.
+mensagens.
+Cada mensagem é composta de um ``seletor" e uma lista de átomos.
 
 \subsection{Átomos}
 \label{sec:atomos}
 
+Um átomo é um tipo de dado do PD que possui um valor e uma identificação.
 Os tipos de átomo mais utilizados são:
 
 \begin{itemize}
@@ -67,6 +84,7 @@ Os tipos de átomo mais utilizados são:
 \item \texttt{A\_SYMBOL}: um valor simbólico (string).
 \item \texttt{A\_POINTER}: um ponteiro.
 \end{itemize}
+
 
 Valores numéricos são sempre considerados valores de ponto flutuante
 (\texttt{t\_float}), mesmo que possam ser exibidos como valores inteiros.
@@ -80,21 +98,98 @@ O tipo de um átomo \texttt{a} é armazenado no elemento da estrutura
 Outros tipos de átomo definidos no arquivo \texttt{m\_pd.h} são:
 
 \begin{itemize}
-\item A\_NULL,
-\item A\_FLOAT,
-\item A\_SYMBOL,
-\item A\_POINTER,
-\item A\_SEMI,
-\item A\_COMMA,
-\item A\_DEFFLOAT,
-\item A\_DEFSYM,
-\item A\_DOLLAR, 
-\item A\_DOLLSYM,
-\item A\_GIMME,
-\item A\_CANT
+\item \texttt{A\_NULL},
+\item \texttt{A\_FLOAT},
+\item \texttt{A\_SYMBOL},
+\item \texttt{A\_POINTER},
+\item \texttt{A\_SEMI},
+\item \texttt{A\_COMMA},
+\item \texttt{A\_DEFFLOAT},
+\item \texttt{A\_DEFSYM},
+\item \texttt{A\_DOLLAR},
+\item \texttt{A\_DOLLSYM},
+\item \texttt{A\_GIMME},
+\item \texttt{A\_CANT}
 \end{itemize}
 
-\todo{Verificar para que estes átomos servem e montar exemplos com eles.}
+Nem todos estes átomos são utilizados no desenvolvimento de \externals e alguns
+são representações internas do PD para símbolos reservados como vírgula, cifrão
+ou nulo.
+Assim, se um objeto precisa passar para outro objeto um valor nulo, um cifrão ou
+vírgula, estes tipos devem ser utilizado.
+
+A manipulação de átomos pode ser feita pelas seguintes funções:
+
+\subsubsection{\texttt{SETFLOAT}}
+\texttt{SETFLOAT(atom, f)}
+
+Esta macro define o tipo do átomo como \texttt{A\_FLOAT} e armazena no mesmo o valor de f.
+É necessário passar um ponteiro para o átomo.
+
+\subsubsection{\texttt{SETSYMBOL}}
+\texttt{SETSYMBOL(atom, s)}
+
+Esta macro define o tipo do átomo como \texttt{A\_SYMBOL} e armazena no mesmo um ponteiro
+para o símbolo s.
+É necessário passar um ponteiro para o átomo.
+
+\subsubsection{\texttt{SETPOINTER}}
+\texttt{SETPOINTER(atom, pt)}
+
+Esta macro define o tipo do átomo como \texttt{A\_POINTER} e armazena no mesmo o ponteiro
+pt.
+É necessário passar um ponteiro para o átomo.
+
+\subsubsection{\texttt{atom\_getfloat}}
+\texttt{t\_float atom\_getfloat(t\_atom *a)}
+
+Se o átomo for do tipo \texttt{A\_FLOAT}, retorna o valor do float, caso contrário,
+retorna 0.0.
+
+\subsubsection{\texttt{atom\_getfloatarg}}
+\texttt{t\_float atom\_getfloatarg(int which, int argc, t\_atom *argv)}
+
+Se o tipo do átomo encontrado na lista de átomos argv, de tamanho argc e na
+posição which for \texttt{A\_FLOAT}, retorna o valor deste átomo.
+Caso contrário, retorna 0.0.
+
+\subsubsection{\texttt{atom\_getint}}
+\texttt{t\_int atom\_getint(t\_atom *a)}
+
+Se o átomo for do tipo \texttt{A\_INT}, retorna o valor inteiro, caso contrário,
+retorna 0.
+
+\subsubsection{\texttt{atom\_getintarg}}
+\texttt{t\_int atom\_getintarg(int which, int argc, t\_atom *argv)}
+
+Se o tipo do átomo encontrado na lista de átomos argv, de tamanho argc e na
+posição which for \texttt{A\_INT}, retorna o valor deste átomo.
+Caso contrário, retorna 0.
+
+\subsubsection{\texttt{atom\_getsymbol}}
+\texttt{t\_symbol atom\_getsymbol(t\_atom *a)}
+
+Se o átomo for do tipo \texttt{A\_SYMBOL}, retorna um ponteiro para este símbolo, caso
+contrário, retorna ``0''.
+
+\subsubsection{\texttt{atom\_getsymbolarg}}
+\texttt{t\_symbol atom\_getsymbolarg(int which, int argc, t\_atom *argv)}
+
+Se o tipo do átomo encontrado na lista de átomos argv, de tamanho argc e na
+posição which for \texttt{A\_SYMBOL}, retorna um ponteiro para este símbolo.
+Caso contrário, retorna ``0''.
+
+\subsubsection{\texttt{atom\_gensym}}
+\texttt{t\_symbol *atom\_gensym(t\_atom *a)}
+
+Se o átomo for do tipo \texttt{A\_SYMBOL}, retorna um ponteiro para este símbolo.
+Átomos de outros tipos são convertidos de maneira ``razoável'' em string,
+adicionados na tabela de símbolos, e um ponteiro para este símbolo é retornado.
+
+\subsubsection{\texttt{atom\_string}}
+\texttt{void atom\_string(t\_atom *a, char *buf, unsigned int bufsize)}
+
+Converte um átomo em uma string (char *) previamente alocada e de tamanho bufsize.
 
 \subsection{Seletores}
 
@@ -145,3 +240,4 @@ Por exemplo, as mensagens \texttt{12.429} e \texttt{float 12.429} são
 idênticas. Da mesma forma, as mensagens \texttt{list 1 para voce} é idêntica a
 \texttt{1 para voce}.
 
+\todo{Cabe escrever sobre binbuf?}

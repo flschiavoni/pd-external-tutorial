@@ -4,66 +4,78 @@
  
 \chapter{Introdução}
 
-Pure Data, ou simplesmente Pd, é um ambiente visual de programação musical que permite a criação de
-aplicações musicais complexas a partir da combinação de componentes visuais
-mais simples chamados \textbf{objetos}. As distribuições oficiais do Pure Data
-contêm diversos objetos prontos para o uso, mas também permitem a extensão de
-suas funcionalidades através da criação de novos objetos utilizando C/C++.
+Pure Data, ou simplesmente Pd, é um ambiente visual de programação musical que
+permite a criação de aplicações musicais complexas a partir da combinação de
+componentes visuais mais simples chamados \textbf{objetos}.
+As distribuições oficiais do Pure Data contêm diversos objetos prontos para o
+uso, mas também permitem a extensão de suas funcionalidades através da criação
+de novos objetos utilizando C/C++.
 Desta forma, novas linhas de código escritas pelo usuário são compilados como
 bibliotecas dinâmicas e podem ser carregadas pelo programa em tempo de
-execução. Objetos desta forma levam o nome de \textbf{\externals}.
+execução.
+Objetos desta forma levam o nome de \textbf{\externals}.
 
 Este é um tutorial prático para o desenvolvimento de \externals em C para o
-Pure Data. A iniciativa de escrever este documento surgiu no primeiro semestre
+Pure Data.
+A iniciativa de escrever este documento surgiu no primeiro semestre
 de 2011, durante a disciplina de Computação Musical ministrada pelo professor
 Marcelo Gomes de Queiroz no Instituto de Matemática e Estatística da
-Universidade de São Paulo. A intenção deste tutorial é auxiliar programadores
-a desenvolver \externals de maneira bastante simples através de exemplos
-práticos.
+Universidade de São Paulo.
+A intenção deste tutorial é auxiliar programadores a desenvolver \externals de
+maneira bastante simples através de exemplos práticos.
 
 Mais do que ampliar a gama de objetos do Pure Data e criar novos objetos, o
 objetivo deste trabalho é também fornecer ao pesquisador de computação musical
 uma ferramenta para implementar e testar algoritmos de processamento de áudio
-para caráter de estudo. Isto significa que podemos reimplementar várias coisas
-que já existem no Pure Data simplesmente porque é didático programar e colocar
-algoritmos para funcionar.
+para caráter de estudo.
+Isto significa que podemos reimplementar várias coisas que já existem no Pure
+Data simplesmente porque é didático programar e colocar algoritmos para
+funcionar.
 
 Não é objetivo deste tutorial ensinar processamento de som, ensinar algoritmos, 
-ensinar programar em C/C++ ou ensinar a utilizar o Pure Data. Também não é objetivo
-questionar o modo como o Pd e seus externals foram feitos.
+ensinar programar em C/C++ ou ensinar a utilizar o Pure Data.
+Também não é objetivo questionar o modo como o Pd e seus externals foram feitos.
 
 \todo{Este tutorial ainda não está pronto e por isto você encontrará caixinhas
 como esta com notas do que mais temos de fazer.}
 
-Seria indevido não dizer que nada no mundo se aprende sozinho. Foi graças aos vários
-\externals escritos para o Pd, com seu código aberto e documentado que conseguimos
-reunir o conhecimento que aqui presente. Seria impossível citar todos os autores 
-de \externals que nos ajudaram sem saber. No entanto, não deixamos de agradecer ao
-que chamamos de comunidade de software livre, ao autor do Pd (seria Public Domain?), 
-Miller Puckette e ao autor do outro tutorial, IOHannes Zmölnig. Muito obrigado.
+É importante dizer que nada no mundo se aprende sozinho.
+Foi graças aos vários \externals escritos para o Pd, com seu código aberto e
+documentado que conseguimos reunir o conhecimento que aqui presente.
+Seria impossível citar todos os autores  de \externals que nos ajudaram sem
+saber.
+No entanto, não deixamos de agradecer ao que chamamos de comunidade de software
+livre, ao autor do Pd (seria Public Domain?),  Miller Puckette e ao autor do
+outro tutorial, IOHannes Zmölnig.
+Muito obrigado.
 
 Este tutorial está acompanhado de vários exemplos cujos códigos ilustram os nossos
-passos. A estes tutoriais foi adicionado exemplos de Tk e também um makefile que
+passos.
+A estes tutoriais foi adicionado exemplos de Tk e também um makefile que
 permite compilá-los em vários sistemas operacionais.
 
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
 \section{Escrevendo \externals}
 
 O código fonte do Pure Data é organizado de acordo com convenções de
-programação orientada a objetos. Para o desenvolvimento de \externals, é
-necessário seguir estas convenções e fornecer ao ambiente uma nova classe com
-alguns métodos específicos, como veremos mais adiante. Para desenvolver para o
-Pure Data, é necessário importar o arquivo de cabeçalho
-\texttt{m\_pd.h}\footnote{http://pure-data.git.sourceforge.net/git/gitweb.cgi?p=pure-data/pure-data;a=blob\_plain;f=src/m\_pd.h;hb=HEAD},
+programação orientada a objetos.
+Para o desenvolvimento de \externals, é necessário seguir estas convenções e
+fornecer ao ambiente uma nova classe com alguns métodos específicos, como
+veremos mais adiante.
+Para desenvolver para o Pure Data, é necessário importar o arquivo de cabeçalho
+\texttt{m\_pd.h}\footnote{\url{http://pure-data.git.sourceforge.net/git/gitweb.cgi?p=pure-data/pure-data;a=blob\_plain;f=src/m\_pd.h;hb=HEAD}},
 que contém definições de constantes, tipos e funções.
 
 Uma boa fonte de informação é o tutorial de
-\externals\footnote{http://iem.at/pd/externals-HOWTO/pd-externals-HOWTO.pdf}
-escrito pelo IOHannes\footnote{http://puredata.info/author/zmoelnig}, um dos
-programadores do Pure Data. Apesar de ter utilizado este documento como ponto
-de partida, boa parte do que está incluso no presente tutorial foi aprendido a
-partir da leitura do código-fonte de \externals contidos no repositório
-oficial do Pure
-Data\footnote{http://pure-data.svn.sourceforge.net/viewvc/pure-data/trunk/externals/}.
+\externals\footnote{\url{http://iem.at/pd/externals-HOWTO/pd-externals-HOWTO.pdf}}
+escrito pelo IOHannes\footnote{\url{http://puredata.info/author/zmoelnig}}, um dos
+programadores do Pure Data.
+Apesar de ter utilizado este documento como ponto de partida, boa parte do que
+está incluso no presente tutorial foi aprendido a partir da leitura do
+código-fonte de \externals contidos no repositório oficial do Pure
+Data\footnote{\url{http://pure-data.svn.sourceforge.net/viewvc/pure-data/trunk/externals/}}.
 
 Navegando pelos códigos-fonte deste repositório você poderá notar que os programadores
 que escreveram os externals que hoje estão disponível para o Pd seguiram estas convenções
@@ -79,8 +91,10 @@ uma vasta bibliografia disponível que possui os algoritmos e o ferramental mate
 necessário para sua implementação.
 
 \todo{Será que podemos citar aqui algum livro ou material para DSP?}
- 
 
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
 \section{Organização do código-fonte e do objeto compilado}
 \label{sec:organizacao}
 
@@ -90,11 +104,11 @@ em tempo de execução funcione corretamente, é necessário que o
 arquivo binário produzido possua o mesmo nome que a classe correspondente ao
 \external.
 
-Para criar, por exemplo, um \external chamado ``passa-baixas", podemos
+Para criar, por exemplo, um \external chamado ``passa-baixas'', podemos
 escrever seu código-fonte em um arquivo chamado \texttt{passa-baixas.c}, e em
 seguida compilar um objeto de biblioteca compartilhada chamado
-\texttt{passa-baixas.pd\_linux}, no caso do sistema GNU/Linux. Outras
-arquiteturas de sistema utilizam outras extensões para o nome do objeto com a
+\texttt{passa-baixas.pd\_linux}, no caso do sistema GNU/Linux.
+Outras arquiteturas de sistema utilizam outras extensões para o nome do objeto com a
 biblioteca compartilhada do \external, como por exemplo \texttt{.dll} (M\$
 Windows), \texttt{.pd\_irix5} (SGI Irix) ou \texttt{.pd\_darwin} (Mac OS X).
 
@@ -105,9 +119,16 @@ corresponder à arquitetura do sistema utilizado.
 
 O mesmo cuidado é recomendado para os métodos que serão definidos internamente
 no objeto. Os nomes de métodos que serão apresentados neste material seguem o padrão
-encontrado no repositório do Pd. É fortemente recomendado que o mesmo padrão seja
+encontrado no repositório do Pd.
+É fortemente recomendado que o mesmo padrão seja
 utilizado em seu texto.
 
+Para gerar a estrutura básica de um \external sugerimos utilizar o gerador de
+\external disponível em \url{www.ime.usp.br/~fls/PDExternal-generator/PDExternal_generator.html}.
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
 \section{Compilação}
 \label{sec:compiling}
 
@@ -121,7 +142,7 @@ No GNU/Linux, uma forma de realizar o processo
 \texttt{example01.pd\_linux} é a seguinte:
 
 \vspace{1em}
-\begin{lstlisting}
+\begin{lstlisting}[caption=Compilação de um objeto]
 EXTNAME=example01
 cc -DPD -fPIC -Wall -o ${EXTNAME}.o -c ${EXTNAME}.c
 ld -shared -lc -lm -o ${EXTNAME}.pd_linux ${EXTNAME}.o
@@ -133,15 +154,33 @@ roda independente de sua posição na memória, adequado para geração de
 bibliotecas compartilhadas. A opção \texttt{-shared} passada para o ligador
 determina a criação de uma biblioteca compartilhada.
 
-Para facilitar a compilação, é interessante utilizar um \texttt{makefile}. Os
-exemplos deste tutorial estão acompanhadas de um \texttt{makefile} produzido
-pelo professor Marcelo Queiroz e adaptado para este tutorial.
+Para facilitar a compilação, é interessante utilizar um \texttt{makefile}.
+Os exemplos deste tutorial estão acompanhadas de um \texttt{makefile} encontrado
+na seção de desenvolvedores do Pure
+Data~\footnote{\url{http://puredata.info/docs/developer/MakefileTemplate}}.
 
+Para compilar \externals no MacOS é necessário instalar o XCode.
 Tem uma dezena de jeito de compilar pro Windows, usando o Mingw ou o C++ Builder.
-Aqui\footnote{http://puredata.hurleur.com/sujet-1029-problem-compiling-external-windows}
- temos exemplos e muitas discussões de como compilar externals no Windows.
+Aqui\footnote{\url{http://puredata.hurleur.com/sujet-1029-problem-compiling-external-windows}}
+temos exemplos e muitas discussões de como compilar externals no Windows.
 
-\todo{Será que compensa testarmos isto tudo?}
+\todo{Não testamos. Faltou coragem. Será que compensa testarmos isto tudo?}
+
+\subsection{Debugando códigos}
+
+Para verificar um erro, inicie o PD com seu patch de teste pelo terminal dentro do 
+ambiente gdb com o comando
+
+gdb --args pd -path caminho-do-external
+
+run
+
+Caso o PD tenha algum problema em sua execução o GDB pode te ajudar a encontrá-lo.
+
+Outros comandos básicos do gdb são \textbf{where} (que apresenta o arquivo e a linha onde
+o erro ocorreu) e \textbf{list} (que mostra o código deste trecho).
+Para navegar entre os arquivos, utilize \textbf{up} e \textbf{down}.
+Para maiores informações, procure um tutorial sobre o gdb.
 
 \subsection{Misturando código C e C++}
 
@@ -151,7 +190,7 @@ de código. Um exemplo disso que influencia o funcionamento de \externals no
 Pure Data é a geração da tabela de símbolos dos objetos binários.
 
 Compiladores C++ realizam um processo chamado \emph{name mangling} (ou
-``dilaceramento de nomes"), que consiste em alterar o nome de funções,
+``dilaceramento de nomes''), que consiste em alterar o nome de funções,
 estruturas, classes, etc, incluindo informações sobre o espaço de nomes do
 objeto em questão. Isto resulta em nome diferentes gravados nas tabelas de
 símbolos dos objetos binários, o que pode confundir o Pure Data no momento do
@@ -161,12 +200,15 @@ Para garantir que um compilador C++ gere nomes compatíveis com objetos
 binários C, utilize a expressão \texttt{extern "C"} na frente dos nomes das
 funções que serão chamadas pelo Pure Data:
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=Externalização de código C++]
 extern "C" example01_setup(void);
 extern "C" example01_new(void);
 \end{lstlisting}
 
 
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
 \section{Arquivos de ajuda}
 
 É importante distribuir, junto com novos \externals, um arquivo de ajuda do
@@ -176,10 +218,16 @@ de ajuda deve ter o mesmo nome que o \external, acrescido do sufixo
 gera o objeto \texttt{example01.pd\_linux}, escrevemos também o arquivo
 \texttt{example01-help.pd}.
 
+% error: 'medusa_meter~.pd' is a deprecated name format for a help patch.
+%	Please rename to 'medusa_meter~-help.pd'!
+
 No próximo capítulo veremos uma forma de associar o arquivo de ajuda com a
 opção de ajuda que aparece no menu contextual com um clique do botão direito
 no objeto do external dentro do Pure Data.
 
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
 \section{Utilizando \externals}
 \label{sec:using}
 
@@ -199,7 +247,7 @@ como pode ser visto na figura \ref{fig:search-path}.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.7\textwidth]{path}
+  \includegraphics[scale=\Mysize]{path}
   \caption{Adicionando o diretório de um \external ao caminho de busca do Pure Data.}
   \label{fig:search-path}
 \end{figure}
@@ -212,8 +260,16 @@ também graficamente através do menu \texttt{File} $\rightarrow$
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.7\textwidth]{startup}
+  \includegraphics[scale=\Mysize]{startup}
   \caption{Adicionando uma biblioteca ao Pure Data.}
   \label{fig:lib}
 \end{figure}
 
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Exemplos}
+Este tutorial é acompanhado de diversos exemplos de \externals que ilustram o
+conteúdo coberto pelo mesmo.
+Vale lembrar que muitos destes objetos são de utilidade duvidosa e servem apenas
+como exemplos didáticos.

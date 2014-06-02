@@ -15,6 +15,13 @@
 \usepackage{listings}             % Include the listings-package
 \usepackage{todonotes}
 
+\usepackage{comment}
+
+\usepackage{url}      % Para URL com link
+\usepackage{hyperref} % Para sumario com link
+
+\newcommand{\Mysize}{0.6}
+
 \lstset{numbers=left, stepnumber=1, frame=single, rulesepcolor=\color{blue}, language=C}
 
 \graphicspath{{./../images/}}
@@ -57,19 +64,47 @@ morekeywords={*,...}            % if you want to add more keywords to the set
 
 \begin{document}
 
+% ---------------------------------------------------------------------------- %
+% CAPA
+% Nota: O título para as dissertações/teses do IME-USP devem caber em um
+% orifício de 10,7cm de largura x 6,0cm de altura que há na capa fornecida pela SPG.
+\thispagestyle{empty}
+\begin{center}
+    \vspace*{2.3cm}
+    \vskip 8cm
+    \textbf{\Large{Tutorial prático para o desenvolvimento de \externals em C para o
+Pure Data}}\\
+
+    \vspace*{1.2cm}
+    \vskip 5cm
+    \Large{Flávio Luiz Schiavoni - André Bianchi}
+
+    \vskip 5cm
+
+    \vskip 0.5cm
+    \normalsize{São Paulo, \today}
+\end{center}
+
 \tableofcontents
 
 % chapters
+\part{Primeiros passos}
 \input{01.apresentacao}
 \input{02.basico}
 \input{03.tipos}
 \input{04.construtor}
 \input{05.inlets}
 \input{06.dsp}
+\part{Avançando...}
 \input{07.multithread}
+%\input{09.OO} % Não vale a pena gastar tempo com isto.
+\input{09.Send_receive}
+\input{11.clock}
+\part{GUI}
+\input{08.1.GUI}
 \input{08.gui}
-\input{09.OO}
 \input{10.misc}
-
+\part{Usando o PD para construir aplicações}
+\input{12.de_patch_para_c}
 \end{document}
 

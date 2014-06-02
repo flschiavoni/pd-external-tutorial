@@ -4,6 +4,7 @@
 
 \chapter{Multithreading}
 
+\todo{Explicar que o PD não suporta multithread}
 Como vimos no capítulo anterior, o bloco de processamento do Pd possui um
 limite de tempo para a execução. É possível utilizar threads para separar
 processos que consumam mais tempo do que o o período do bloco DSP, como por
@@ -130,6 +131,8 @@ for(;;) { /* Playback loop */
 \section{Controle via Pure Data}
 Além de podermos trabalhar threads para nosso external, na biblioteca do
 Pd há funções para que possamos criar mutex no Pd. São elas:
+
+\todo{integrando multithread com o pd}
 
 \begin{itemize}
 \item \texttt{void sys\_lock(void);}
