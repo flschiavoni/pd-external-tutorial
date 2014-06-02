@@ -1,3 +1,0 @@
-#N canvas 0 0 450 300 10;
-#X obj 40 40 myobj1;
-#X obj 218 48 myobj2;

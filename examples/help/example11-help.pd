@@ -1,4 +1,0 @@
-#N canvas 1024 19 621 732 10;
-#X text 29 16 Different from the c language the first argument will
-not be the name;
-#X obj 97 92 ../obj/example11;
