@@ -1,16 +1,16 @@
 \chapter{Send e Receive}
 
 A comunicação do PD com \externals nem sempre é feita por conexões explícitas.
-Outra maneira de permitir a comunicação entre objetos é por meio de send e
-receive.
-Esta opção está presente em objetos gráficos como o toggle e bang, por exemplo.
+Outra maneira de permitir a comunicação entre objetos é por meio de \texttt{send} e
+\texttt{receive}.
+Esta opção está presente em objetos gráficos como o \texttt{toggle} e \texttt{bang}, por exemplo.
 Para utilizar tal tipo de mensagem é necessário definir o nome da mensagem que
 o objeto pretende receber.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=\Mysize]{toggle}
-\caption{Exemplo de configuração de um toggle para envio e recebimento de mensagens}
+\caption{Exemplo de configuração de um \texttt{toggle} para envio e recebimento de mensagens}
 \end{figure}
 
 Neste capítulo vamos verificar como enviar e receber mensagens.
@@ -24,7 +24,8 @@ objetos send e receive no repositório do PD\footnote{
 % -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
 \section{Enviando mensagens}
 
-O envio de mensagem pode ser feito por meio de algumas funções:
+O envio de utiliza funções distintas dependendo do tipo da mensagem a ser enviada.
+As funções para envio de mensagem são:
 
 \begin{itemize}
 \item \texttt{pd\_bang(t\_pd *x)}
@@ -36,12 +37,12 @@ O envio de mensagem pode ser feito por meio de algumas funções:
 \end{itemize}
 
 A última função, que não define tipo para a mensagem, é uma espécie de ``anything''.
-O primeiro parâmetro para todas as funções pode ser conseguido em um símbolo
-em seu atributo \texttt{s\_thing}.
+O primeiro parâmetro para todas as funções define o nome da mensagem e pode ser
+conseguido de um \texttt{symbol} em seu atributo \texttt{s\_thing}.
 
 No exemplo mailman.c, o objeto envia mensagens para um conjunto de diferentes 
 seletores recebidos como parâmetro.
-As mensagens são do tipo bang e enviadas quando o objeto recebe um bang.
+As mensagens são do tipo \texttt{bang} e enviadas quando o objeto recebe um \texttt{bang}.
 
 \begin{lstlisting}[caption=Envio de mensagens bang por send]
 void mailman_bang(t_mailman *x){
@@ -58,6 +59,7 @@ O resultado pode ser visto na Figura \ref{fig:mailman}.
 \centering
 \includegraphics[scale=\Mysize]{mailman}
 \caption{Envio de mensagens por send}
+\label{fig:mailman}
 \end{figure}
 
 
@@ -75,7 +77,7 @@ O recebimento de mensagens junto ao PD ocorre por meio de uma função
 \end{itemize}
 
 Nestas funções, o primeiro parâmetro é seu objeto e o segundo parâmetro é a
-mensagem que vc espera receber.
+mensagem que esperada receber.
 
 \begin{lstlisting}[caption=Exemplo de objeto que recebe várias mensagens]
 void * postbox_new(t_symbol *s, int argc, t_atom *argv){
@@ -126,7 +128,7 @@ Uma vez associado o recebimento de um determinado símbolo, é necessário defin
 qual método será chamado para cada tipo de mensagem recebida.
 A definição destes métodos é similar a definição dos inlets ativos.
 É ideal que um objeto que possua um receive possua métodos para receber todos
-os tipos de mensagens do PD, mesmo que tais métodos não sejam implementados.
+os tipos de mensagens do PD, mesmo que tais métodos não sejam utilizados.
 
 \begin{lstlisting}[caption=Associando métodos para receber mensagens]
 void postbox_list_method(t_postbox *x, t_symbol *s, int argc, t_atom *argv){
@@ -148,10 +150,10 @@ void postbox_setup(void) {
 }
 \end{lstlisting}
 
-Note que este objeto (postobox.c) não possui inlets e por isto tais métodos
+Note que este objeto (postobox.c) não possui \texttt{inlets} e por isto tais métodos
 só serão usados para mensagens.
-Caso o mesmo possua inlets, o tratamento de mensagens recebidas pelo inlet ou
-pelo receive será exatamente o mesmo, o que é muito bacana.
+Caso o mesmo possua \texttt{inlets}, o tratamento de mensagens recebidas pelo \texttt{inlet} ou
+por \texttt{receive} será exatamente o mesmo, o que é muito bacana.
 
 
 % -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
@@ -167,8 +169,8 @@ de teclado, entradas MIDI e assim por diante.
 Com isto, é possível desenvolver um \external que envia eventos de teclado ou
 que recebe eventos de teclado diretamente.
 
-Alguns exemplos de mensagens internas do PD que são trocadas por send / receive
-são:
+Alguns exemplos de mensagens internas do PD que são trocadas por \texttt{send} /
+\texttt{receive} são:
 
 \begin{itemize}
    \item Eventos de teclado\footnote{Retirados de: \url{https://github.com/libpd/libpd/blob/master/pure-data/src/x_gui.c}}
