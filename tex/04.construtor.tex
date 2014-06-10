@@ -3,6 +3,13 @@
 % ----------------------------------------------------------------------------
 \chapter{Construtor e destrutor}
 
+\example{
+\begin{itemize}
+\item \texttt{example02.c}
+\item \texttt{example09.c}
+\end{itemize}
+}
+
 Um objeto em PD pode precisar de determinados parâmetros para ser iniciado.
 Por exemplo, para criar um oscilador é necessário passar para este objeto a
 frequência que o mesmo irá funcionar.
@@ -69,11 +76,11 @@ void * example02_new(t_floatarg arg1, t_symbol * arg2) {
     return (void *) x;
 }
 
-void example2_setup(void) {
-    example2_class = class_new(gensym("example2"),
-            (t_newmethod) example2_new, // Constructor
+void example02_setup(void) {
+    example02_class = class_new(gensym("example02"),
+            (t_newmethod) example02_new, // Constructor
             0,
-            sizeof (t_example2),
+            sizeof (t_example02),
             CLASS_NOINLET,
             A_DEFFLOAT, // First Constructor parameter
             A_DEFSYMBOL, // Second Constructor parameter
@@ -93,17 +100,17 @@ utilize o tipo de átomo \texttt{A\_GIMME} (veja o exemplo09).
 
 \begin{lstlisting}[caption=Objeto que recebe qualquer tipo de parâmetro]
 // Constructor of the class
-void * example9_new(t_symbol *s, int argc, t_atom * argv) {
-   t_example9 *x = (t_example9 *) pd_new(example9_class);
+void * example09_new(t_symbol *s, int argc, t_atom * argv) {
+   t_example09 *x = (t_example09 *) pd_new(example09_class);
    post("%d parameters received",argc);
    return (void *) x;
 }
 
-void example9_setup(void) {
-   example9_class = class_new(gensym("example9"),
-     (t_newmethod) example9_new, // Constructor
-     (t_method) example9_destroy, // Destructor
-     sizeof (t_example9),
+void example09_setup(void) {
+   example09_class = class_new(gensym("example09"),
+     (t_newmethod) example09_new, // Constructor
+     (t_method) example09_destroy, // Destructor
+     sizeof (t_example09),
      CLASS_NOINLET,
      A_GIMME, // Allows various parameters
      0); // LAST argument is ALWAYS zero
@@ -142,8 +149,8 @@ retornar sua instância.
 
 \begin{lstlisting}[caption=Validando parâmetros na construção de um objeto]
 // Constructor of the class
-void * example9_new(t_symbol *s, int argc, t_atom * argv) {
-   t_example9 *x = (t_example9 *) pd_new(example9_class);
+void * example09_new(t_symbol *s, int argc, t_atom * argv) {
+   t_example09 *x = (t_example09 *) pd_new(example09_class);
    post("External name: %s", s->s_name);
    post("%d parameters received",argc);
    if(argc < 1){
@@ -197,15 +204,15 @@ pelo construtor ou por outras funções do \external (veja o exemplo 07).
 
 \begin{lstlisting}[caption=Exemplo de destrutor]
 // Destroy the object
-void example9_destroy(t_example9 *x) {
+void example09_destroy(t_example09 *x) {
   post("You say good bye and I say hello");
 }
 
-void example9_setup(void) {
-   example9_class = class_new(gensym("example9"),
-     (t_newmethod) example9_new, // Constructor
-     (t_method) example9_destroy, // Destructor
-     sizeof (t_example9),
+void example09_setup(void) {
+   example09_class = class_new(gensym("example09"),
+     (t_newmethod) example09_new, // Constructor
+     (t_method) example09_destroy, // Destructor
+     sizeof (t_example09),
      CLASS_NOINLET,
      A_GIMME, // Allows various parameters
      0); // LAST argument is ALWAYS zero

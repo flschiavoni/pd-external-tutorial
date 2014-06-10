@@ -1,0 +1,2 @@
+#N canvas 543 208 450 300 10;
+#X obj 37 37 time_post 1000;

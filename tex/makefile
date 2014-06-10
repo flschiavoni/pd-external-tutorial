@@ -10,7 +10,7 @@ $(pdfname): $(subst .pdf,.tex,$(pdfname)) *.tex
 #	pdflatex -halt-on-error -jobname $(@:.pdf=) $^
 
 clean:
-	rm -rf *.{log,bbl,aux,dvi,backup,blg,toc,bak,out,acn,acr,alg,glg,glo,gls,ist,xdy}
+	rm -rf *{log,bbl,aux,dvi,backup,blg,toc,bak,out,acn,acr,alg,glg,glo,gls,ist,xdy}
 
 
 wipe: clean

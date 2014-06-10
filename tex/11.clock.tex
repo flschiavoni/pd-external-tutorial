@@ -1,8 +1,14 @@
 \chapter{Clock}
-Clock
 
-Canvas
+Muitos eventos, quando tratamos de música, são dependentes do tempo.
+O Pure Data, segundo o autor, é perfeitamente sincronizado no tempo podendo,
+obviamente, ter problemas com o tempo real já que o mundo real não é perfeitamente
+sincronizado.
+Para sincronizar eventos discretos, o PD utiliza, internamente, seu relógio DSP.
+Isto significa que, todos os eventos são agendados para ocorrer em um determinado
+bloco de amostras podendo o usuário ajustar a precisão destes eventos alterando
+o tamanho do bloco de processamento ou a taxa de amostragem.
+Para evitar que cada \external utilize um relógio próprio para agendar eventos
+discretos, o PD conta com funções específicas para tratar o tempo.
 
-DSP
 
-Comunicação por send / receive

@@ -15,13 +15,26 @@
 \usepackage{listings}             % Include the listings-package
 \usepackage{todonotes}
 
+\usepackage{wrapfig} % Para os exemplos de codigo no texto
+\usepackage{tcolorbox}
+
+\newcommand{\example}[1]{
+\setlength{\intextsep}{1pt}%
+\begin{wrapfigure}{O}[0pt]{5cm}
+\begin{tcolorbox}
+[colback=green!5,colframe=green!40!black,title=Exemplos deste capítulo:]
+#1
+\end{tcolorbox}
+\end{wrapfigure}
+}
+
 \usepackage{comment}
 
 \usepackage{url}      % Para URL com link
 \usepackage{hyperref} % Para sumario com link
 
 \newcommand{\Mysize}{0.6}
-
+\newcommand{\til}{$\sim$}
 \lstset{numbers=left, stepnumber=1, frame=single, rulesepcolor=\color{blue}, language=C}
 
 \graphicspath{{./../images/}}

@@ -4,9 +4,21 @@
 
 \chapter{O básico de um \external}
 
+\example{
+\begin{itemize}
+\item \texttt{helloworld.c}
+\item \texttt{cowsay.c}
+\item \texttt{example01.c}
+\item \texttt{example03.c}
+\item \texttt{example16.c}
+\item \texttt{counter.c}
+\end{itemize}
+}
+
 Escrever um \external significa seguir as recomendações da API. Peço ao leitor
 bastante paciência pois este tutorial pretende andar um pouco devagar para
 mostrar os passos da escrita de um \external.
+
 
 % -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
 %      |     |     |     |     |     |     |     |     |     |     |     |     |
@@ -194,11 +206,20 @@ ao caminho do PureData, teremos o resultado visto na figura \ref{fig:exemplo3}.
         \label{fig:exemplo3}
 \end{figure}
 
+Caso seu objeto não tenha funcionado, verifique se vc utilizou o parâmetro 
+\texttt{-lib example03} para executá-lo.
+
+
 Apesar de este tipo de biblioteca ser bastante utilizado no código-fonte do PD,
 é recomendado separar os \external em arquivos individuais para simplificar
 a leitura e manutenção do código-fonte.
 Sendo assim, é recomendado que o \external ``myobj1'' esteja em um arquivo
 chamado ``myobj1.c'' e que o mesmo seja feito com o \external ``myobj2''.
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Outras informações de um \external}
 
 Dentro do Pure Data, um clique com o botão direito em um objeto abre um menu
 no qual uma das opções é \texttt{Ajuda}. Quando esta opção é selecionada, o

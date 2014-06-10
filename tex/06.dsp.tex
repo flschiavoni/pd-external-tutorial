@@ -1,15 +1,26 @@
 % ----------------------------------------------------------------------------
 % DSP
 % ----------------------------------------------------------------------------
-
 \chapter{Processamento de Sinais Digitais}
+
+\example{
+\begin{itemize}
+\item \texttt{first\til.c}
+\item \texttt{dspbang\til.c}
+\item \texttt{example10\til.c}
+\item \texttt{example11\til.c}
+\item \texttt{example12\til.c}
+\item \texttt{example13\til.c}
+\item \texttt{multigain\til.c}
+\end{itemize}
+}
 
 Enfim chegamos no processamento de áudio propriamente dito: \emph{Digital
 Signal Processing} ou processamento de sinal digital.
 O Pure Data possui inlets e outlets específicos para o processamento de sinal.
 É fácil reconhecer: eles são pintados de cinza escuro.
 Além disto, classes que operam com processamento de sinal e que possuem iolets
-DSP costumam ser nomeadas \texttt{class~}.
+DSP costumam ser nomeadas \texttt{class\til}.
 
 \begin{figure}[h!]
 \centering
@@ -28,15 +39,15 @@ O método DSP é definido como os outros métodos tendo seu símbolo associado a
 mensagem \texttt{dsp} e nenhum parâmetro.
 
 \begin{lstlisting}[caption=Adicionando um método para DSP]
-void dsponbang_tilde_setup(void) {
-   dspbang_class = class_new(gensym("dsponbang~"),
-      (t_newmethod) dsponbang_new, // Constructor
-      (t_method) dsponbang_destroy, // Destructor
-      sizeof (t_dsponbang),
+void dspbang_tilde_setup(void) {
+   dspbang_class = class_new(gensym("dspbang~"),
+      (t_newmethod) dspbang_new, // Constructor
+      (t_method) dspbang_destroy, // Destructor
+      sizeof (t_dspbang),
       CLASS_NOINLET,
       0);//Must always ends with a zero
 
-   class_addmethod(dsponbang_class, (t_method) dsponbang_dsp, gensym("dsp"), 0);
+   class_addmethod(dspbang_class, (t_method) dspbang_dsp, gensym("dsp"), 0);
 }
 \end{lstlisting}
 
@@ -46,7 +57,7 @@ Este método recebe como parâmetro um bloco de sinais do PD.
 No exemplo dspbang.c, toda vez que o DSP for ligado, o objeto irá emitir um bang.
 
 \begin{lstlisting}[caption=O método DSP]
-static void dsponbang_dsp(t_dsponbang *x, t_signal **sp){
+static void dspbang_dsp(t_dspbang *x, t_signal **sp){
    (void) sp;
    outlet_bang(x->x_outlet_output_bang);
 }

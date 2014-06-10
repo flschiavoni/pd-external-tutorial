@@ -4,6 +4,12 @@
  
 \chapter{Introdução}
 
+\example{
+\begin{itemize}
+\item \texttt{Makefile}
+\end{itemize}
+}
+
 Pure Data, ou simplesmente Pd, é um ambiente visual de programação musical que
 permite a criação de aplicações musicais complexas a partir da combinação de
 componentes visuais mais simples chamados \textbf{objetos}.
@@ -124,7 +130,7 @@ encontrado no repositório do Pd.
 utilizado em seu texto.
 
 Para gerar a estrutura básica de um \external sugerimos utilizar o gerador de
-\external disponível em \url{www.ime.usp.br/~fls/PDExternal-generator/PDExternal_generator.html}.
+\external disponível em \url{http://www.ime.usp.br/~fls/PDExternal-generator/PDExternal_generator.html}.
 
 % -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
 %      |     |     |     |     |     |     |     |     |     |     |     |     |
@@ -171,16 +177,25 @@ temos exemplos e muitas discussões de como compilar externals no Windows.
 Para verificar um erro, inicie o PD com seu patch de teste pelo terminal dentro do 
 ambiente gdb com o comando
 
+\begin{lstlisting}
 gdb --args pd -path caminho-do-external
 
 run
-
+\end{lstlisting}
 Caso o PD tenha algum problema em sua execução o GDB pode te ajudar a encontrá-lo.
 
 Outros comandos básicos do gdb são \textbf{where} (que apresenta o arquivo e a linha onde
 o erro ocorreu) e \textbf{list} (que mostra o código deste trecho).
 Para navegar entre os arquivos, utilize \textbf{up} e \textbf{down}.
 Para maiores informações, procure um tutorial sobre o gdb.
+
+Além de debugar, pode ser útil verificar se o objeto está compilado corretamente.
+Uma maneira de verificar isto é utilizar a ferramenta \texttt{nm} que lista os
+símbolos de um objeto compilado.
+
+\begin{lstlisting}
+nm -D <external>.pd_linux
+\end{lstlisting}
 
 \subsection{Misturando código C e C++}
 
@@ -273,3 +288,6 @@ Este tutorial é acompanhado de diversos exemplos de \externals que ilustram o
 conteúdo coberto pelo mesmo.
 Vale lembrar que muitos destes objetos são de utilidade duvidosa e servem apenas
 como exemplos didáticos.
+Os arquivos de exemplo estão no mesmo repositório que este material.
+No início de cada capítulo há uma caixa apresentando quais exemplos podem ser
+utilizados.

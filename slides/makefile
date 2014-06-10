@@ -1,17 +1,17 @@
 pdfname = pd-external-slides.pdf
 tmp_extensions = log bbl aux dvi backup blg toc bak out acn acr alg glg glo  \
-                 gls ist xdy nav snm
+                 gls ist xdy nav snm vrb pdf
 
 all: $(pdfname)
 
 $(pdfname): $(subst .pdf,.tex,$(pdfname)) *.tex
 	pdflatex -halt-on-error -jobname $(@:.pdf=) $^
 #	bibtex `basename $@ .pdf`
-#	pdflatex -halt-on-error -jobname $(@:.pdf=) $^
+	pdflatex -halt-on-error -jobname $(@:.pdf=) $^
 #	pdflatex -halt-on-error -jobname $(@:.pdf=) $^
 
 clean:
-	for ext in $(tmp_extensions); do rm -f *.$${ext}; done
+	for ext in $(tmp_extensions); do rm -f *$${ext}; done
 
 
 wipe: clean
