@@ -1,0 +1,27 @@
+#N canvas 206 150 922 526 10;
+#X obj 244 161 tcl_prompt canvas delete linha;
+#X obj 267 55 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 244 375 print;
+#X msg 595 20 apply button canvas.b1 -text test;
+#X msg 593 47 apply canvas create window 30 30 -window canvas.b1 -tag
+my_button;
+#X msg 591 87 apply canvas delete my_button;
+#X msg 526 -52 apply canvas.obj configure -bg yellow;
+#X msg 524 128 apply ::pdwindow::post teste;
+#X msg 536 -28 apply canvas create oval 10 10 100 200 -fill #FF0033
+-tag my_circle;
+#X msg 194 -49 apply canvas create line 0 0 500 500 -tag my_line;
+#X msg 205 -27 apply canvas coords my_line 500 1 1 500;
+#X msg 222 -6 apply canvas delete my_line;
+#X connect 0 0 2 0;
+#X connect 1 0 0 0;
+#X connect 3 0 0 0;
+#X connect 4 0 0 0;
+#X connect 5 0 0 0;
+#X connect 6 0 0 0;
+#X connect 7 0 0 0;
+#X connect 8 0 0 0;
+#X connect 9 0 0 0;
+#X connect 10 0 0 0;
+#X connect 11 0 0 0;

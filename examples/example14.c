@@ -57,20 +57,11 @@ static void my_vis(t_gobj *z, t_glist *glist, int vis){
 		x->x_obj.te_ypix + 50,
 		x
 		);
-       sys_vgui(".x%x.c create text %d %d -text {example14} -anchor w  -tags %xlb\n",
+       sys_vgui(".x%lx.c create text %d %d -text {example14} -anchor w  -tags %xlb\n",
                 canvas,
 		x->x_obj.te_xpix + 2,
 		x->x_obj.te_ypix + 12,
 		x);
-	sys_vgui("checkbutton .x%x.c.s%xcb -foreground blue -background yellow -command do_something\n", canvas,x);
-	sys_vgui(".x%x.c create window %d %d -anchor nw -tags %xbb\n",
-		canvas,
-		x->x_obj.te_xpix + 70,
-		x->x_obj.te_ypix + 120,
-		canvas,
-		x,
-		x);
-	sys_vgui("%xbb add .x%x.c.s%xcb",x,canvas,x);
 	}else{ // INVISIBLE
 		post("INVISIBLE");
 		sys_vgui(".x%x.c delete %xrr\n",canvas, x);

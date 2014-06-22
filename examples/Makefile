@@ -40,6 +40,11 @@ SOURCES = cowsay.c \
           mailman.c \
           postbox.c \
           time_post.c \
+          canvas_id.c \
+          tcl_prompt.c \
+          my_circle.c \
+          my_rect.c \
+          filter_circle.c \
 
 
 # list all pd objects (i.e. myobject.pd) files here, and their helpfiles will
