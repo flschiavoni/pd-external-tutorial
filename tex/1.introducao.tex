@@ -1,0 +1,178 @@
+% ----------------------------------------------------------------------------
+% Introdução
+% ----------------------------------------------------------------------------
+ 
+\chapter{Introdução}
+
+Pure Data, ou simplesmente Pd, é um ambiente visual de programação musical que
+permite a criação de aplicações musicais complexas a partir da combinação de
+componentes visuais mais simples chamados \textbf{objetos}.
+As distribuições oficiais do Pure Data contêm diversos objetos prontos para o
+uso, mas também permitem a extensão de suas funcionalidades através da criação
+de novos objetos utilizando o próprio Pure Data, Tcl/Tk (plugins gráficos) e C/C++.
+Desta forma, novas linhas de código escritas pelo usuário são compilados como
+bibliotecas dinâmicas e podem ser carregadas pelo programa em tempo de
+execução.
+Objetos desta forma levam o nome de \textbf{\externals}.
+
+Este é um tutorial prático para o desenvolvimento de \externals para o
+Pure Data.
+A iniciativa de escrever este documento surgiu no primeiro semestre
+de 2011, durante a disciplina de Computação Musical ministrada pelo professor
+Marcelo Gomes de Queiroz no Instituto de Matemática e Estatística da
+Universidade de São Paulo.
+A intenção deste tutorial é auxiliar programadores a desenvolver \externals de
+maneira bastante simples através de exemplos práticos.
+
+Mais do que ampliar a gama de objetos do Pure Data e criar novos objetos, o
+objetivo deste trabalho é também fornecer ao pesquisador de computação musical
+uma ferramenta para implementar e testar algoritmos de processamento de áudio
+para caráter de estudo.
+Isto significa que podemos reimplementar várias coisas que já existem no Pure
+Data simplesmente porque é didático programar e colocar algoritmos para
+funcionar.
+
+Não é objetivo deste tutorial ensinar processamento de som, ensinar algoritmos, 
+ensinar programar (C, C++, TCL/tk) ou ensinar a utilizar o Pure Data.
+Também não é objetivo questionar o modo como o Pd e seus externals foram feitos.
+
+\todo{Este tutorial ainda não está pronto e por isto você encontrará caixinhas
+como esta com notas do que mais temos de fazer.}
+
+É importante dizer que nada no mundo se aprende sozinho.
+Foi graças aos vários \externals escritos para o Pd, com seu código aberto e
+documentado que conseguimos reunir o conhecimento que aqui presente.
+Seria impossível citar todos os autores  de \externals que nos ajudaram sem
+saber.
+No entanto, não deixamos de agradecer ao que chamamos de comunidade de software
+livre, ao autor do Pd (seria Public Domain?),  Miller Puckette e ao autor de
+outro tutorial, IOHannes Zmölnig.
+Muito obrigado.
+
+Este tutorial está acompanhado de vários exemplos cujos códigos ilustram os nossos
+passos.
+
+Este tutorial é dividido em 3 partes: \externals feitos no próprio ambiente Pure
+Data, feitos em Tcl/Tk e em C.
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Sobre \Externals}
+O Pure Data possui uma distribuição do autor, chamada Vanilla.
+Nela, Miller Puckette possui internals e externals desenvolvidos em C, Tcl/tk e
+no próprio Pd.
+Os objetos desenvolvidos no Pd são comumente chamados também de abstrações.
+Independentemente de como um objeto é feito, o termo \external é utilizado para
+tudo o que não está no Vanilla, ou seja, tudo que é externo à distribuição
+oficial do autor.
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Arquivos de ajuda}
+
+É importante distribuir, junto com novos \externals, um arquivo de ajuda do
+Pure Data com instruções e exemplos de utilização. Como convenção, o arquivo
+de ajuda deve ter o mesmo nome que o \external, acrescido do sufixo
+\courier{-help.pd}. Por exemplo, para o código fonte \courier{example01.c}, que
+gera o objeto \courier{example01.pd\_linux}, escrevemos também o arquivo
+\courier{example01-help.pd}.
+
+
+No capítulo \ref{sec:basico} veremos uma forma de alterar o nome do arquivo de
+ajuda em \externals feitos em C com a opção de ajuda que aparece no menu
+contextual com um clique do botão direito no objeto do \external dentro do Pure Data.
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Utilizando \externals}
+\label{sec:using}
+
+Para que um novo \external possa ser utilizado no Pure Data, é necessário
+instalá-lo em um caminho que o Pure Data possa encontrá-lo
+\footnote{Retirado do site \url{http://puredata.info/docs/faq/how-do-i-install-externals-and-help-files}}
+.
+Há algumas pastas padrões para instalações destes objetos para que os
+mesmos possam ser instalados no Pure Data de maneira separada do programa em si.
+Isto permite que o Pure Data seja atualizado sem interferir na instalação destes
+novos \externals.
+Tais diretórios servem para instalar bibliotecas, \externals, classes de objetos,
+abstrações, pluguins GUI e arquivos de ajuda.
+
+\textbf{GNU/Linux}
+\begin{itemize}
+   \item Package manager \courier{/usr/lib/pd/extra}
+   \item Apenas para o usuário \courier{~/pd-externals}
+   \item Global \courier{/usr/local/lib/pd-externals}
+\end{itemize}
+
+\textbf{Mac OS X}
+\begin{itemize}
+   \item Apenas para o usuário \courier{~/Library/Pd}
+   \item Global \courier{/Library/Pd} (É necessário criar esta pasta)
+\end{itemize}
+
+\textbf{Windows}
+\begin{itemize}
+   \item Apenas para o usuário \courier{\%AppData\%\char`\\Pd}
+   \item Global \courier{\%CommonProgramFiles\%\char`\\Pd}
+\end{itemize}
+
+\nota{Nota para sistemas Windows:}{
+
+O diretório do Windows \courier{\%AppData\%\char`\\Pd} deverá ser algo como \\
+\courier{C:\char`\\Documents and Settings\char`\\myusername\char`\\Application Data\char`\\Pd} \\
+que também é sinônimo de \\
+\courier{\%UserProfile\%\char`\\Application Data\char`\\Pd} \\
+
+O diretório \courier{\%UserProfile\%} é seu diretório raiz, que em sistemas
+em inglês normalmente é chamado de \\
+\courier{C:\char`\\Documents and Settings\char`\\myusername}.
+
+Já o diretório \courier{\%CommonProgramFiles\%\char`\\Pd} em um windows em inglês
+normalmente se refere ao diretório \\
+\courier{C:\char`\\Program Files\char`\\Common Files\char`\\Pd}\\
+( en español: \courier{C:\char`\\Archivos de programa\char`\\Archivos comunes\char`\\Pd}, auf Deutsch: 
+\courier{C:\char`\\Programme\char`\\Gemeinsame Dateien\char`\\Pd}).
+Este diretório é sinônimo de \courier{\%ProgramFiles\%\char`\\Common Files\char`\\Pd}.
+}
+
+É possível ainda adicionar o diretório que contém o arquivo binário do \external ao
+caminho de busca do Pure Data, de forma que para acessá-lo de dentro de um
+\patch não seja necessário digitar o caminho inteiro até o objeto.
+Isto pode ser feito através da passagem de um parâmetro na linha de comando do Pure Data
+com a opção \courier{-path <caminho>}, ou de forma gráfica acessando a opção
+\courier{File} $\rightarrow$ \courier{Path...} no menu do Pure Data,
+como pode ser visto na figura \ref{fig:path}.
+
+\grafico{path}{Adicionando o diretório de um \external ao caminho de busca do Pure Data.}
+
+Para carregar uma biblioteca de \externals (mais de um \external no mesmo
+arquivo-fonte), é possível indicar o nome da bibliotecai na linha
+de comando do Pure Data utilizando a opção \courier{-lib <biblioteca>}, ou
+também graficamente através do menu \courier{File} $\rightarrow$
+\courier{Startup...}, como pode ser visto na figura \ref{fig:startup}.
+
+\grafico{startup}{Adicionando uma biblioteca ao Pure Data.}
+
+Uma vez que o novo \external está no caminho de busca do Pure Data, é possível
+carregá-lo em seu \patch.
+Para carregar um \external em um \courier{patch} do Pure Data em tempo de
+execução, basta criar um objeto (com \courier{CTRL+1} ou acessando o menu
+\courier{Put} $\rightarrow$ \courier{Object}) com o caminho (relativo ou
+absoluto) para o objeto compilado com a biblioteca compartilhada, omitindo a
+extensão.
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Exemplos}
+Este tutorial é acompanhado de diversos exemplos de \externals que ilustram o
+conteúdo coberto pelo mesmo.
+Vale lembrar que muitos destes objetos são de utilidade duvidosa e servem apenas
+como exemplos didáticos.
+Os arquivos de exemplo estão no mesmo repositório que este material.
+No início de cada capítulo há uma caixa apresentando quais exemplos podem ser
+utilizados.

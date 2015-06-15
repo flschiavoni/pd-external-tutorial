@@ -1,0 +1,172 @@
+\chapter{Introdução}
+
+\example{
+\begin{itemize}
+\item \texttt{oscillator.pd}
+\item \texttt{additive.pd}
+\item \texttt{sum.pd}
+\item \texttt{sum-help.pd}
+\item \texttt{gain\til.pd}
+\item \texttt{additive\til.pd}
+\item \texttt{volume\til.pd}
+\item \texttt{poliosc.pd}
+\end{itemize}
+}
+
+A reutilização de código é uma técnica da computação que permite o uso de um
+software existente para o desenvolvimento de um novo software.
+Com isto, mais do que reaproveitar o código escrito, é possível reaproveitar uma
+solução existente.
+A possibilidade de pensar em cada parte do código individualmente permite ainda
+dividir o trabalho a ser feito e pensar se cada código é a melhor solução para
+resolver um determinado problema.
+
+O Pure Data permite a reutilização dos \patches desenvolvidos em outros projetos
+trazendo assim um novo nível de abstração para programadores do ambiente.
+Esta reutilização permite ainda programar o PD de maneira modular ou mesmo
+distribuída no caso de uma criação coletiva, por exemplo, onde cada pessoa pode
+ficar responsável por criar uma parte do \patch.
+
+Tais códigos reutilizáveis do PD são chamados de \externals e permitem que um
+usuário estenda o ambiente com seus próprios objetos, encapsulando em novas
+abstrações trechos de código que podem ser reutilizados.
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Meu primeiro \external}
+
+A criação de um \external usando o próprio Pure Data depende de criar um \patch
+e salvá-lo com um determinado nome.
+Caso este \patch seja colocado na mesma pasta de um novo \patch ou na pasta raiz
+do Pure Data, tal objeto já pode ser reusado em outros \patches.
+
+\grafico{oscillator}{Meu primeiro \external em Pure Data.}
+
+Note na fig.\ref{fig:oscillator} que o \external foi salvo utilizando o nome
+``oscillator''.
+
+\grafico{oscillator2}{Utilizando meu primeiro \external em Pure Data.}
+
+A partir deste momento, outros \patches podem utilizá-lo chamando-o pelo nome
+(\textbf{oscillator} \obj{oscillator}), como apresentado na Fig.\ref{fig:oscillator2}
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Passando parâmetros para seu \external}
+
+Muitas vezes, para o reaproveitamento do código, é necessário a configuração do
+\external de maneira a permitir que o mesmo seja instanciado com parâmetros
+diferentes.
+Imagine, por exemplo, o caso de um filtro que pode ter sua frequência de corte
+ajustada a cada utilização.
+Uma maneira de configurar um \external escrito em Pd é a passagem de parâmetros
+para o objeto.
+Sabemos que o valor \$0 permite uma identificação única para o \patch.
+O Pd permite receber os parâmetros de inicialização de um objeto seguindo a
+mesma numeração onde o primeiro parâmetro é o \$1, o
+segundo parâmetro é o \$2 e assim por diante, conforme ilustrado na
+Fig.\ref{fig:additive}.
+
+\grafico{additive}{Recebendo parâmetros em um \external.}
+
+A Fig.\ref{fig:additive2} apresenta este objeto sendo inicializado com
+parâmetros.
+
+\grafico{additive2}{Passando parâmetros para o \external.}
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{IOLets}
+
+Um \external criado em Pd pode ainda possuir inlets e outlets, para receber
+dados de controle, e inlet\til  e outlet\til, para receber áudio.
+Para utilizá-los é necessário utilizar os objetos \obj{inlet}, \obj{outlet},
+\obj{inlet\til} e \obj{outlet\til} do Pd.
+A figura \ref{fig:sum} apresenta um externo que recebe dados.
+
+\grafico{sum}{Adicionando iolets de controle a um \external.}
+
+A Fig.\ref{fig:sum2} apresenta este objeto com seus respectivos iolets.
+
+\grafico{sum2}{Utilizando os iolets de um \external.}
+
+O mesmo serve para os iolets de áudio, conforme apresentado na
+Fig.\ref{fig:gain} e Fig.\ref{fig:gain2}.
+
+\grafico{gain}{Adicionando iolets de áudio a um \external.}
+
+É importante notar que os iolets seguem a ordem de cima para baixo, da esquerda
+para a direita, ou seja, alterar a posição dos objetos iolets em um \external
+pode alterar a ordem do recebimento de mensagens.
+
+\grafico{gain2}{Utilizando os iolets de áudio de um \external.}
+
+Desta maneira, é possível configurar um \external tanto com os parâmetros de
+inicialização quanto durante a execução do código, conforme apresentado na
+fig.\ref{fig:additivetil} e fig.\ref{fig:additivetil2}.
+
+\grafico{additivetil}{Utilizando inlets, outlets e parâmetros.}
+
+\grafico{additivetil2}{Arquivo de help do exemplo anterior.}
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Externals com interface gráfica}
+
+É possível ainda que um objeto exporte sua interface gráfica para o patch que
+o utiliza.
+Isto ocorre alterando a propriedade do objeto (clicando com o botão contrário
+sobre o mesmo e selecionando no menu contextual a opção ``properties'').
+Na caixa de diálogo de propriedades aparecerá a opção ``graph on parent'',
+conforme ilustrado pela fig.\ref{fig:volume1}.
+
+\grafico{volume1}{Janela de diálogo de preferências de um \external.}
+
+Note que é possível ainda definir se o objeto apresentará ou não seu nome e o
+tamanho de sua interface gráfica.
+
+Uma vez que tal opção for selecionada, aparecerá no objeto uma caixa vermelha
+que indica a região do objeto que será utilizada como interface gráfica,
+conforme apresentado na fig.\ref{fig:volume}.
+
+\grafico{volume}{Definição da área visível do \external.}
+
+Todos os objetos que estão inteiramente dentro desta área vermelha serão
+apresentados como interface gráfica do objeto no \patch onde o mesmo for
+utilizado, como ilustra a fig.\ref{fig:volume2}.
+
+\grafico{volume2}{Apresentação do \external no \patch.}
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Externals dinâmicos}
+
+O Pure data permite que um \patch altere seu próprio conteúdo ou o conteúdo de
+outros \patches em tempo de execução por meio do envio de determinadas
+mensagens. 
+Tal técnica, também conhecida por programação dinâmica, possibilita que um
+\external possua, por exemplo, uma quantidade de objetos que variam de acordo
+com seu parâmetro inicial.
+Apesar de bastante trabalhosa, esta técnica permite muito mais reuso dos objetos
+criados, conforme ilustra a fig.\ref{fig:poliosc2}
+
+\grafico{poliosc2}{Utilizando \externals dinâmicos.}
+
+A criação dinâmica, apresentada na fig.\ref{fig:poliosc}, utiliza o envio de
+mensagens para criação de objetos e para a conexão de objetos.
+Este exemplo cria dinamicamente osciladores e conecta-os à saída de som.
+A quantidade de osciladores e a frequência do primeiro oscilador é definida por
+parâmetros e os demais osciladores terão frequências múltiplas do primeiro.
+
+\grafico{poliosc}{Utilizando \externals dinâmicos.}
+
+Caso a intenção seja criar iolets dinamicamente, haverá um problema de que todas
+as conexões destes iolets serão perdidas quando o \patch principal é reaberto.
+Isto ocorre pois no momento de carregar o \patch principal, os iolets ainda não
+terão sido criados dinamicamente e por isto eles ainda não existem.
+

@@ -1,0 +1,5 @@
+#N canvas 192 278 378 212 10;
+#X text 30 20 Example of dynamic abstraction \; First parameter is
+the number of oscillators \; Second parameter is the first frequency
+;
+#X obj 33 68 poliosc 2 220;

@@ -1,7 +1,0 @@
-#N canvas 408 200 677 423 10;
-#X obj 184 102 filter_circle 64.85 2.31 35.74 0.88;
-#X obj 178 54 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
-#X obj 178 371 print;
-#X connect 0 0 2 0;
-#X connect 1 0 0 0;

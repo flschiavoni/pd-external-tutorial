@@ -1,0 +1,6 @@
+#N canvas 608 409 286 72 10;
+#X obj 34 17 osc~ 440;
+#X text 32 1 My First External;
+#X obj 34 39 dac~;
+#X connect 0 0 2 0;
+#X connect 0 0 2 1;

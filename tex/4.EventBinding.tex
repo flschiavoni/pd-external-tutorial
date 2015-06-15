@@ -1,0 +1,60 @@
+\chapter{Capturando eventos}
+
+\example{
+\begin{itemize}
+\item \texttt{exitbt-plugin.tcl}
+\item \texttt{tripleclick-plugin.tcl}
+\item \texttt{canvas-plugin.tcl}
+\end{itemize}
+}
+
+O Tcl/Tk utiliza a noção de eventos para o disparo de funções.
+Assim, é possível associar uma ou várias funções a um evento e com isto é
+possível que quando um determinado evento ocorra, várias funções sejam
+executadas.
+
+Mais informações em \url{https://www.tcl.tk/man/tcl8.4/TkCmd/bind.htm}.
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Eventos de janelas}
+
+
+\begin{lstlisting}
+bind PdWindow <FocusIn>                "::pd_bindings::window_focusin %W"
+bind PdWindow <FocusIn>                "::pd_bindings::window_focusin %W"
+bind PatchWindow <FocusIn>                "::pd_bindings::window_focusin %W"
+bind PatchWindow <Map>                    "::pd_bindings::map %W"
+bind PatchWindow <Unmap>                  "::pd_bindings::unmap %W"
+bind PatchWindow <Configure> "::pd_bindings::patch_configure %W %w %h %x %y"
+bind DialogWindow <Configure>              "::pd_bindings::dialog_configure %W"
+bind DialogWindow <FocusIn>                "::pd_bindings::dialog_focusin %W"
+\end{lstlisting}
+
+
+\section{Eventos de teclado}
+
+\begin{lstlisting}
+    bind all <KeyPress>         {::pd_bindings::sendkey %W 1 %K %A 0}
+    bind all <KeyRelease>       {::pd_bindings::sendkey %W 0 %K %A 0}
+    bind all <Shift-KeyPress>   {::pd_bindings::sendkey %W 1 %K %A 1}
+    bind all <Shift-KeyRelease> {::pd_bindings::sendkey %W 0 %K %A 1}
+\end{lstlisting}
+
+
+Maiúsculo ou minúsculo.
+\begin{lstlisting}
+    bind all <$::modifier-Shift-Key-B> {menu_send %W bng}
+\end{lstlisting}
+
+
+\section{Eventos de Mouse}
+
+\begin{lstlisting}
+    bind $tkcanvas <Motion>                   "pdtk_canvas_motion %W %x %y 0"
+    bind $tkcanvas <$::modifier-Motion>         "pdtk_canvas_motion %W %x %y 2"
+    bind $tkcanvas <ButtonPress-1>            "pdtk_canvas_mouse %W %x %y %b 0"
+    bind $tkcanvas <ButtonRelease-1>          "pdtk_canvas_mouseup %W %x %y %b"
+\end{lstlisting}
+

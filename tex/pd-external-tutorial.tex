@@ -20,12 +20,21 @@
 
 \newcommand{\example}[1]{
 \setlength{\intextsep}{1pt}%
-\begin{wrapfigure}{O}[0pt]{5cm}
+\begin{wrapfigure}{O}[0pt]{7cm}
 \begin{tcolorbox}
-[colback=green!5,colframe=green!40!black,title=Exemplos deste capítulo:]
+[colback=green!5,colframe=green!40!black,title=Nota:]
 #1
 \end{tcolorbox}
 \end{wrapfigure}
+}
+
+
+\newcommand{\nota}[2]{
+\setlength{\intextsep}{1pt}%
+\begin{tcolorbox}
+[colback=blue!5,colframe=blue!40!black,title=#1]
+#2
+\end{tcolorbox}
 }
 
 \usepackage{comment}
@@ -34,8 +43,19 @@
 \usepackage{hyperref} % Para sumario com link
 
 \newcommand{\Mysize}{0.6}
+\newcommand{\grafico}[2]{
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[scale=\Mysize]{#1}
+  \caption{#2}
+  \label{fig:#1}
+\end{figure}
+}
+
 \newcommand{\til}{$\sim$}
 \lstset{numbers=left, stepnumber=1, frame=single, rulesepcolor=\color{blue}, language=C}
+\renewcommand\lstlistingname{Código}
+\renewcommand\lstlistlistingname{Códigos}
 
 \graphicspath{{./../images/}}
 
@@ -47,6 +67,8 @@
 \newcommand{\patch}{\emph{patch}\xspace}
 \newcommand{\patches}{\emph{patches}\xspace}
 \newcommand{\code}[1]{\hrulefill\texttt{\\#1\\\indent}}
+\newcommand{\obj}[1]{\emph{#1}}
+\newcommand{\courier}[1]{\texttt{#1}}
 
 % listings configuration
 \lstset{ %
@@ -85,7 +107,7 @@ morekeywords={*,...}            % if you want to add more keywords to the set
 \begin{center}
     \vspace*{2.3cm}
     \vskip 8cm
-    \textbf{\Large{Tutorial prático para o desenvolvimento de \externals em C para o
+    \textbf{\Large{Tutorial prático para o desenvolvimento de \externals para o
 Pure Data}}\\
 
     \vspace*{1.2cm}
@@ -100,27 +122,37 @@ Pure Data}}\\
 
 \tableofcontents
 
-% chapters
-\part{Primeiros passos}
-\input{01.apresentacao}
-\input{02.basico}
-\input{03.tipos}
-\input{04.construtor}
-\input{05.inlets}
-\input{06.dsp}
-\part{Avançando...}
-\input{07.multithread}
-%\input{09.OO} % Não vale a pena gastar tempo com isto.
-\input{09.Send_receive}
-%\input{11.clock}
-\part{GUI}
-\input{08.1.GUI}
-\input{09.gui_plugins}
-\input{08.gui}
-\input{10.gui_propriedades}
+\input{1.introducao}
+
+\part{\Externals em Pure Data}
+\input{2.externals_em_pd}
+
+\part{\Externals em Tcl/Tk}
+\input{3.GUI}
+\input{4.EventBinding}
+\input{5.widgets}
+\input{gui_plugins}
+
+\part{\Externals em C}
+\input{apresentacao}
+\input{basico}
+\input{tipos}
+\input{construtor}
+\input{inlets}
+\input{dsp}
+\input{multithread}
+%\input{OO} % Não vale a pena gastar tempo com isto.
+\input{Send_receive}
+%\input{clock}
 %\part{Usando o PD para construir aplicações}
 %\input{12.de_patch_para_c}
+
+\part{\Externals em C + Tcl/Tk}
+\input{gui}
+\input{gui_propriedades}
+
+
 \part{Referências rápidas}
-\input{10.misc}
+\input{misc}
 \end{document}
 

@@ -1,0 +1,14 @@
+#N canvas 581 215 373 276 10;
+#X obj 36 63 volume~;
+#X text 29 13 This object receives in first inlet an audio signal \;
+in second inlet a value and that's it!;
+#X obj 35 42 osc~ 440;
+#X obj 77 253 dac~;
+#X obj 100 63 volume~;
+#X obj 99 42 osc~ 880;
+#X connect 0 0 3 0;
+#X connect 0 0 3 1;
+#X connect 2 0 0 0;
+#X connect 4 0 3 0;
+#X connect 4 0 3 1;
+#X connect 5 0 4 0;

@@ -1,0 +1,15 @@
+#N canvas 732 316 293 122 10;
+#X text 12 4 My second external;
+#X obj 19 27 osc~ \$1;
+#X obj 71 27 osc~ \$2;
+#X obj 123 27 osc~ \$3;
+#X obj 175 27 osc~ \$4;
+#X obj 110 82 dac~;
+#X connect 1 0 5 0;
+#X connect 1 0 5 1;
+#X connect 2 0 5 0;
+#X connect 2 0 5 1;
+#X connect 3 0 5 0;
+#X connect 3 0 5 1;
+#X connect 4 0 5 0;
+#X connect 4 0 5 1;

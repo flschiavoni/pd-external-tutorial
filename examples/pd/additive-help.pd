@@ -1,0 +1,4 @@
+#N canvas 662 237 298 87 10;
+#X text 20 12 This external reveives 4 parameters \; Each parameter
+is a oscillator frequency;
+#X obj 39 56 additive 440 220 110 55;

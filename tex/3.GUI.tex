@@ -1,0 +1,373 @@
+\chapter{Plugins Tcl}
+
+\example{
+\begin{itemize}
+\item \texttt{helloworld-plugin.tcl}
+\item \texttt{menucolor-plugin.tcl}
+\end{itemize}
+}
+
+O PD foi desenvolvido utilizando um modelo que separa a apresentação das
+funcionalidades.
+Para isto, utiliza 2 linguagens de programação: C para a engine e TCL/TK para as
+GUI.
+GUI e engine se comunicam por um socket que permite, inclusive, que a engine
+do PD seja executada em uma máquina e a GUI em outra.
+
+O Tcl (Tool Command Language) é uma linguagem de programação dinâmica bastante
+poderosa e simples de ser utilizada. 
+Tk é um conjunto de ferramentas para construção de GUI de aplicações desktop e é
+a GUI padrão não apenas do TCL mas de várias outras linguagens e pode ser
+executada nativamente em vários sistemas operacionais modernos como Windows, Mac
+OS X, Linux, entre outros \footnote{Visite: http://www.tcl.tk/ para maiores
+informações}.
+
+\nota{Para conhecer Tcl/Tk}{
+Para aprender Tcl/Tk indicamos um tutorial que pode ser encontrado em:\\
+\url{http://www.bin-co.com/tcl/tutorial/} \\
+Uma lista dos objetos e parâmetros pode ser encontrada em\\
+\url{http://www.tkdocs.com/widgets/index.html}
+}
+
+Um plugin TCL costuma ser visto como um plugin de GUI que permite alterar a
+aparência e funcionalidades da interface gráfica do PD.
+Um plugin de GUI é um arquivo escrito em tcl (de extensão \courier{.tcl}) e que
+\textbf{obrigatoriamente} tem o nome \courier{-plugin.tcl}.
+Ou seja, para escrever um plugin de nome \courier{teste}, o mesmo deverá estar em
+um arquivo de nome.
+
+Para testarmos o funcionamento dos comandos tcl no PD, é possível utilizarmos o
+TCL Prompt.
+No Pure Data Vanila o mesmo se encontra no Menu Help $>$ TCL Prompt, conforme
+apresentado na fig.\ref{fig:tcl_prompt}.
+
+\grafico{tcl_prompt}{Prompt Tcl do Pure Data.}
+
+Exemplos de plugins de GUI e documentações sobre os mesmos podem ser encontrados em:
+\begin{itemize}
+   \item \url{https://svn.code.sf.net/p/pure-data/svn/branches/pd-gui-rewrite/0.43/startup/}
+   \item \url{http://puredata.info/docs/guiplugins/GuiPluginsAPI}
+   \item \url{http://puredata.info/docs/guiplugins/SimpleExamples}
+   \item \url{http://puredata.info/docs/guiplugins/GUIPlugins}
+\end{itemize}
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Iniciando no Tcl/Tk - Hello World}
+
+O Pure Data fornece diversas funções TCL que podem ser utilizadas para
+manipular sua GUI.
+Tais funções permitem o acesso a todos os widgets de GUI do Pure Data.
+O primeiro exemplo plugin escreve textos no console, conforme comandos
+apresentados no Código \ref{code:console}\footnote{Exemplo retirado de \url{http://puredata.info/docs/guiplugins/GuiPluginsAPI}}.
+
+\begin{lstlisting}[caption={Escrevendo no console},label={code:console}]
+::pdwindow::verbose 1 "Hello, World!\n"
+::pdwindow::verbose 0 "Hello, World!\n"
+::pdwindow::error "Houston, we have a problem!\n"
+::pdwindow::fatal "See you on the other side.\n"
+::pdwindow::post  "This message will self destruct in five seconds.\n"
+::pdwindow::debug "Second phase initiated\n"
+\end{lstlisting}
+
+Tal código apresenta um exemplo de como utilizar a API TCL do Pure Data para
+alterar sua interface com o usuário.
+O resultado deste código pode ser visto na fig.\ref{fig:console}.
+
+\grafico{console}{Escrevendo no console}
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Conhecendo a GUI do PD}
+
+Para alterar os elementos de GUI do PD é necessário saber o nome destes objetos.
+Vale lembrar quem Tcl/Tk, os componentes gráficos são armazenados em uma variável
+de maneira hierárquica e que todo nome de variável inicia com um ponto (\courier{.}).
+A variável \courier{.} (apenas ponto) remete a aplicação principal.
+O Código \ref{code:listaprincipal} apresenta um comando que lista no terminal
+todos os filhos da aplicação principal.
+
+\begin{lstlisting}[caption=Executando o Hello World,label={code:listaprincipal}]
+foreach c [winfo children .] \
+{::pdwindow::post "[winfo name $c]\n"}
+\end{lstlisting}
+
+O resultado deste comando pode ser conferido na fig.\ref{fig:pdwindow}.
+
+\grafico{pdwindow}{Lista de widgets da janela do PD.}
+
+Com isto podemos verificar, por exemplo, que a janela principal do PD chama-se
+\courier{.pdwindow} e que a barra de menus chama-se \courier{.menubar}.
+Podemos utilizar um comando similar ao Código \ref{code:listaprincipal} para
+listar todos os elementos da janela principal do PD, conforme apresentado no
+Código \ref{code:listaPd}.
+
+\begin{lstlisting}[caption={Comando TCL para listar os elementos da janela principal},
+label={code:listaPd}]
+foreach c [winfo children .pdwindow] \
+{::pdwindow::post "[winfo name $c]\n"}
+\end{lstlisting}
+
+A saída deste comando lista os seguintes objetos:
+\begin{itemize}
+   \item menubar  -barra de menus
+   \item header   - Painel superior, onde está liga DSP
+   \item tcl      - Painel inferior onde estou executando os comandos TCL
+   \item text     - Área do Log
+   \item scroll   - barras de rolagem da área de log
+\end{itemize}
+
+Podemos continuar examinando recursivamente o nome de todos os elementos
+gráficos que compõem a GUI do PD, como os menus
+(Código \ref{code:listaMenu}), as janelas de \patch e assim por diante.
+
+\begin{lstlisting}[caption={Comando TCL para listar os elementos do menu},label={code:listaMenu}]
+foreach c [winfo children .menubar] \
+ {::pdwindow::post "[winfo name $c]\n"}
+
+Output:
+   file
+   edit
+   put
+   find
+   media
+   window
+   help
+\end{lstlisting}
+
+Com isto podemos conhecer recursivamente todos os elementos que compõe a GUI
+do PD.
+O Codigo \ref{code:listaHeader} apresenta os elementos do cabeçalho 
+(\courier{.pdwindow.header}).
+
+\begin{lstlisting}[caption={Comando TCL para listar os elementos do cabeçalho},label={code:listaHeader}]
+foreach c [winfo children .pdwindow.header] \
+ {::pdwindow::post "[winfo name $c]\n"}
+
+Output:
+   pad1
+   dsp
+   ioframe
+   loglabel
+   logmenu
+   exitButton
+\end{lstlisting}
+
+Apesar de ser possível encontrar na documentação do PD e no código-fonte o nome
+de todos os componentes, esta seção pretendeu possibilitar a exploração destes
+componentes.
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Alterando a GUI do PD}
+
+Uma vez que sabemos o nome dos elementos gráficos do Pd, podemos agora
+alterá-los e reconfigurá-los.
+O Código \ref{code:alteraMenu} apresenta exemplos que alteram as propriedades
+dos objetos menu.
+
+\begin{lstlisting}[caption={Exemplo de alteração de menus do PD com Tcl (plugin exemplo \courier{menucolor-plugin.tcl}).},
+label={code:alteraMenu}]
+.menubar configure  -foreground red
+.menubar configure  -background black
+\end{lstlisting}
+
+O resultado de algumas alterações de configuração de itens de GUI do PD podem ser
+vistos na Fig.\ref{fig:menubar}.
+
+\grafico{menubar}{Alterando a cor da barra de menus}
+
+Outro exemplo seria alterar a cor de fundo do texto ou do cabeçalho,
+como no código ~\ref{code:mudacortexto}
+
+\begin{lstlisting}[caption={Alteração da cor do texto de log e do cabeçalho.},label={code:mudacortexto}]
+.pdwindow.text configure -background green
+.pdwindow.header configure -background green
+\end{lstlisting}
+
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Variáveis Globais}
+
+Além dos componentes (widgets) gráficos, há ainda na programação TCL do PD uma
+série de variáveis globais que podem ser utilizadas pelo programador.
+Tais variáveis guardam parâmetros de inicialização e de execução da GUI do PD
+como, por exemplo, a versão, o sistema de janela (que permite identificar se
+o PD está sendo rodado em Linux / Windows / Mac), a fonte padrão do PD, entre
+outras.
+
+O código \ref{code:variavelglobal}, retirado dos arquivos fontes do PD (\courier{pd-gui.tcl}),
+lista algumas destas variáveis e seus valores no momento de inicialização do PD.
+
+\begin{lstlisting}[caption={Variáveis globais.},label={code:variavelglobal}]
+PD_MAJOR_VERSION 0
+PD_MINOR_VERSION 0
+PD_BUGFIX_VERSION 0
+PD_TEST_VERSION ""
+done_init 0
+
+TCL_MAJOR_VERSION 0
+TCL_MINOR_VERSION 0
+TCL_BUGFIX_VERSION 0
+
+# for testing which platform we are running on ("aqua", "win32", or "x11")
+windowingsystem ""
+
+# args about how much and where to log
+loglevel 2
+stderr 0
+
+# connection between 'pd' and 'pd-gui'
+host ""
+port 0
+
+# canvas font, received from pd in pdtk_pd_startup, set in s_main.c
+font_family "courier"
+font_weight "normal"
+
+# sizes of chars for each of the Pd fixed font sizes:
+#  fontsize  width(pixels)  height(pixels)
+set font_fixed_metrics {
+    8 5 11
+    9 6 12
+    10 6 13
+    12 7 16
+    14 8 17
+    16 10 19
+    18 11 22
+    24 14 29
+    30 18 37
+    36 22 44
+}
+font_measured_metrics {}
+
+# root path to lib of Pd's files, see s_main.c for more info
+sys_libdir {}
+
+# root path where the pd-gui.tcl GUI script is located
+sys_guidir {}
+
+# user-specified search path for objects, help, fonts, etc.
+sys_searchpath {}
+
+# hard-coded search patch for objects, help, plugins, etc.
+sys_staticpath {}
+
+# the path to the folder where the current plugin is being loaded from
+current_plugin_loadpath {}
+
+# list of command line flags set at startup
+startup_flags {}
+
+# list of libraries loaded on startup
+startup_libraries {}
+
+# start dirs for new files and open panels
+filenewdir [pwd]
+fileopendir [pwd]
+
+# lists of audio/midi devices and APIs for prefs dialogs
+audio_apilist {}
+audio_indevlist {}
+audio_outdevlist {}
+midi_apilist {}
+midi_indevlist {}
+midi_outdevlist {}
+pd_whichapi 0
+pd_whichmidiapi 0
+
+# current state of the DSP
+dsp 0
+
+# state of the peak meters in the Pd window
+meters 0
+
+# the toplevel window that currently is on top and has focus
+focused_window .
+
+# store that last 10 files that were opened
+recentfiles_list {}
+total_recentfiles 10
+
+# keep track of the location of popup menu for PatchWindows, in canvas coords
+popup_xcanvas 0
+popup_ycanvas 0
+
+# modifier for key commands (Ctrl/Control on most platforms, Cmd/Mod1 on MacOSX)
+modifier ""
+
+# current state of the Edit Mode menu item
+editmode_button 0
+
+# variables for holding the menubar to allow for configuration by plugins
+::pdwindow_menubar ".menubar"
+::patch_menubar   ".menubar"
+::dialog_menubar   ""
+
+# minimum size of the canvas window of a patch
+canvas_minwidth 50
+canvas_minheight 20
+
+# undo states
+::undo_action "no"
+::redo_action "no"
+::undo_toplevel "."
+
+\end{lstlisting}
+
+Tais variáveis serão utilizadas em alguns exemplos deste tutorial.
+
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+%      |     |     |     |     |     |     |     |     |     |     |     |     |
+% -----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+\section{Estilo de código}
+
+O arquivo fonte do PD \courier{pd-gui.tcl} traz algumas considerações quanto
+ao estilo de código em TCL.
+Conforme tal arquivo, estas ideias são preliminares e poderão mudar com o tempo.
+
+\begin{itemize}
+   \item Quando possível, utilizar aspas duplas para delimitar mensagens.
+   \item Utilize \courier{\$::myvar} em vez de \courier{global myvar}.
+   \item Por questões de clareza, evite códigos ``soltos''.
+   Todo código deverá estar em uma função (\courier{proc}) que é disparada pela
+   função \courier{main()}.
+   \item Se um procedimento \courier{menu\_*} abre um painel de diálogo, este
+   procedimento deve ser chamado \courier{menu\_*\_dialog}.
+   \item Utilize \courier{eq/ne} para comparações de \courier{string} e não
+   \courier{== / !=}\footnote{Retirado de \url{http://wiki.tcl.tk/15323}}.
+\end{itemize}
+
+Nome para variáveis comuns:
+
+\begin{itemize}
+   \item \courier{\$window}     = Qualquer tipo de widget Tk que pode ser uma janela
+   \item \courier{\$mytoplevel} = A identificação de uma janela feita por um comando \courier{toplevel}
+   \item \courier{\$gfxstub}    = Um id de janela de diálogo ``toplevel`` feita por \courier{gfxstub/x\_gui.c}
+   \item \courier{\$menubar}    = O ``menu'' pertencente a cada \courier{toplevel}
+   \item \courier{\$mymenu}     = O ``menu'' pertencente a uma barra de menus, como o menu Arquivo
+   \item \courier{\$tkcanvas}   = O ``canvas'' Tk que é a raiz de todos os \patches
+\end{itemize}
+
+Tipos de painéis de diálogo.
+
+\begin{itemize}
+   \item global(Há apenas um):   find, sendmessage, prefs, helpbrowser
+   \item por canvas:          font, canvas properties (Criados com uma mensagem do Pd)
+   \item por objeto:          gatom, iemgui, array, data structures (Criados com uma mensagem do Pd)
+\end{itemize}
+
+\begin{comment}
+O Pure Data permite que vários textos da sua GUI sejam internacionalizados, ou seja,
+traduzidos dependendo do idioma do sistema operacional.
+Para garantir que um texto seja traduzido utilizamos o mesmo 
+
+\begin{lstlisting}
+[_ "About Pd"]
+\end{lstlisting}
+\end{comment}
